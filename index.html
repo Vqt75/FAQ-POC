@@ -123,6 +123,11 @@
       cursor: pointer;
     }
 
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .suggestions {
       display: flex;
       flex-wrap: wrap;
@@ -145,9 +150,7 @@
       color: var(--gold);
     }
 
-    .result {
-      display: none;
-    }
+    .result { display: none; }
 
     .question {
       font-size: 0.9rem;
@@ -179,20 +182,30 @@
       color: var(--muted);
     }
 
-    .not-found {
+    .loading {
       display: none;
       color: var(--muted);
+      font-size: 0.95rem;
+      padding: 16px 0;
     }
 
-    .form-grid {
-      display: grid;
-      gap: 14px;
+    .loading-dots::after {
+      content: '';
+      animation: dots 1.2s steps(3, end) infinite;
     }
 
-    textarea {
-      min-height: 120px;
-      resize: vertical;
+    @keyframes dots {
+      0%   { content: ''; }
+      33%  { content: '.'; }
+      66%  { content: '..'; }
+      100% { content: '...'; }
     }
+
+    .not-found { display: none; color: var(--muted); }
+
+    .form-grid { display: grid; gap: 14px; }
+
+    textarea { min-height: 120px; resize: vertical; }
 
     .small {
       font-size: 0.9rem;
@@ -201,14 +214,13 @@
     }
 
     @media (max-width: 640px) {
-      .search-row {
-        grid-template-columns: 1fr;
-      }
+      .search-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
+
     <section class="top">
       <div class="eyebrow">Projet XYZ — espace d'information</div>
       <h1>Retrouvez les informations à jour sur le projet</h1>
@@ -224,7 +236,6 @@
         <input type="text" id="questionInput" placeholder="Ex. : Où est-ce qu'on va manger ?">
         <button type="button" id="askBtn">Rechercher</button>
       </div>
-
       <div class="suggestions">
         <button type="button" class="suggestion" data-question="Quand a lieu le déménagement ?">Date du déménagement</button>
         <button type="button" class="suggestion" data-question="Où est-ce qu'on va manger ?">Restauration</button>
@@ -237,6 +248,10 @@
       </div>
     </section>
 
+    <div class="box loading" id="loadingBox">
+      <span class="loading-dots">Recherche en cours</span>
+    </div>
+
     <section class="box result" id="resultBox">
       <div class="label">Réponse</div>
       <div class="question" id="resultQuestion"></div>
@@ -247,10 +262,8 @@
 
     <section class="box not-found" id="notFoundBox">
       <div class="label">Réponse indisponible</div>
-      <p>
-        Nous n'avons pas encore de réponse précise à cette question.
-        Elle pourra être intégrée dans une prochaine mise à jour de la FAQ.
-      </p>
+      <p>Nous n'avons pas encore de réponse précise à cette question.
+      Elle pourra être intégrée dans une prochaine mise à jour de la FAQ.</p>
     </section>
 
     <section class="box">
@@ -263,17 +276,112 @@
           <button type="submit">Envoyer la demande</button>
         </div>
       </form>
-      <p class="small">
-        Le formulaire n'est pas encore branché. Il pourra être relié ensuite à une boîte mail.
-      </p>
+      <p class="small">Le formulaire n'est pas encore branché. Il pourra être relié ensuite à une boîte mail.</p>
     </section>
+
   </div>
 
   <script>
+
+    // ─── CLÉ API GEMINI ──────────────────────────────────────────────────────────
+    // Remplacez cette valeur par votre propre clé depuis aistudio.google.com
+    const GEMINI_API_KEY = "COLLEZ-VOTRE-NOUVELLE-CLÉ-ICI";
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    // ─── CONTEXTE PROJET (transmis à Gemini) ─────────────────────────────────────
+    // Mettez ce texte à jour à mesure que le projet avance.
+    const PROJECT_CONTEXT = `
+Tu es l'assistant d'information du projet de déménagement d'entreprise XYZ.
+Tu réponds aux questions des collaborateurs en t'appuyant UNIQUEMENT sur les informations ci-dessous.
+Ton ton est empathique, clair, et humain. Tu reconnais les émotions quand elles sont présentes dans la question.
+Si une information n'est pas disponible dans la base ci-dessous, tu réponds honnêtement que ce point n'est pas encore arrêté, et tu invites à utiliser le formulaire de contact en bas de page.
+Tu ne dois jamais inventer de dates, de décisions ou d'engagements qui ne figurent pas dans la base.
+Tu réponds toujours en français, en 3 à 6 phrases maximum, de façon directe et utile.
+
+--- BASE DE CONNAISSANCES ---
+
+CALENDRIER
+- Le déménagement est prévu la semaine du 14 octobre.
+- Le phasage par équipe est en cours de finalisation. Toutes les équipes ne basculeront pas au même moment.
+- Les grandes étapes : information/cadrage, préparation logistique, tri/archivage, déménagement physique, installation, accompagnement post-arrivée.
+- Le jour J, une fiche pratique sera remise avec heure d'arrivée, point d'accueil, contacts sur place.
+
+AFFAIRES PERSONNELLES
+- Un guide de préparation sera transmis avant le déménagement : quoi emballer, quoi trier, ce qui est pris en charge.
+- Les objets personnels (photos, plantes) peuvent être apportés le jour J ou dans les jours suivants.
+
+RESTAURATION
+- Les modalités exactes de restauration ne sont pas encore arrêtées. Plusieurs options sont à l'étude.
+- Le dispositif de titres-restaurant ou remboursement repas n'est pas impacté par le déménagement.
+
+TRANSPORTS
+- La prise en charge des abonnements transport en commun reste inchangée.
+- Des solutions de navette ou covoiturage sont à l'étude selon les besoins identifiés.
+- Le temps de trajet est pris en compte. Les situations les plus impactantes feront l'objet d'un accompagnement.
+
+PARKING ET MOBILITÉS DOUCES
+- Des solutions de stationnement voiture sont prévues, périmètre exact à préciser.
+- Des espaces vélo sécurisés sont prévus, potentiellement avec vestiaires/douches. Modalités à préciser.
+
+TÉLÉTRAVAIL ET HORAIRES
+- Les accords de télétravail existants ne sont pas remis en cause par le déménagement.
+- Les politiques d'horaires flexibles continuent à s'appliquer.
+
+ESPACES DE TRAVAIL
+- Le nouveau site intègre des espaces de concentration (bulles, cabines phoniques, zones silencieuses).
+- Des espaces de convivialité sont prévus pour les pauses et échanges informels.
+- Des casiers ou rangements personnels sont prévus, modalités à préciser.
+- Les principes d'occupation (flex office ou postes attribués) seront communiqués.
+- Le système de réservation des salles de réunion sera précisé avant la mise en service.
+- La qualité environnementale (lumière, ventilation, acoustique, température) a été prise en compte.
+
+INFORMATIQUE ET ÉQUIPEMENTS
+- Les accès, connexion et outils IT seront opérationnels à l'arrivée. Une équipe IT sera présente les premiers jours.
+- La continuité des lignes téléphoniques est prise en compte.
+- Le déménagement peut être l'occasion de renouveler une partie du parc informatique.
+
+BADGE ET ACCÈS
+- Les modalités d'accès (badges, droits, zones) sont en cours de finalisation. Un accueil sera prévu le premier matin.
+
+VISITES DU SITE
+- Des temps de découverte du site sont prévus avant l'installation définitive. Formats variés (visites physiques, supports visuels).
+
+SERVICES SUR SITE
+- Des services sont à l'étude : conciergerie, point colis, salle de sport/bien-être, espaces parents.
+- Des espaces dédiés au bien-être physique sont prévus (salle de sport, espace détente ou repos).
+
+SITUATIONS PARTICULIÈRES
+- Les situations individuelles (handicap, mobilité réduite, contrainte de santé) seront prises en compte. Prendre contact avec son RH.
+- Le site est conforme aux normes PMR.
+- Les situations impliquant des enfants ou des contraintes familiales peuvent être remontées aux RH.
+- Des espaces de retrait (prière, repos) sont intégrés dans la réflexion sur l'aménagement.
+
+ACCOMPAGNEMENT AU CHANGEMENT
+- Un plan de communication structuré est prévu : points d'étape réguliers, communications ciblées, supports accessibles.
+- Un réseau d'ambassadeurs volontaires est mis en place pour relayer les informations et remonter les préoccupations.
+- Des ateliers de personnalisation des espaces sont prévus pour co-construire l'aménagement avec les équipes.
+- Les règles de vie dans les espaces partagés seront co-construites avec les équipes, pas imposées.
+- Des formations courtes de prise en main du site sont prévues (espaces, réservations, outils).
+- Les managers seront informés en priorité et disposeront de ressources dédiées.
+- Un accompagnement individuel est possible : entretien RH confidentiel, dispositif d'écoute psychologique si disponible.
+- Des enquêtes de satisfaction et retours post-installation sont prévus.
+- Les rumeurs peuvent être posées ici ou via le formulaire. Une réponse factuelle sera apportée.
+
+CONSULTATION ET PILOTAGE
+- Le projet est piloté par une équipe RH, Direction Immobilière et Services Généraux, avec le soutien de la Direction Générale.
+- Les instances représentatives du personnel (CSE/CSSCT) sont informées et consultées selon les obligations légales.
+- Des temps d'écoute et ateliers participatifs ont été ou seront organisés.
+
+ARCHIVAGE
+- Un plan d'archivage avec consignes de tri, numérisation et destruction sera communiqué avant le déménagement.
+- Les archives physiques à conserver seront prises en charge par les équipes de déménagement.
+`;
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    // ─── INTENTS OFFICIELS (prioritaires sur l'IA) ───────────────────────────────
     const intents = [
 
-      // ─── CALENDRIER & LOGISTIQUE ────────────────────────────────────────────
-
+      // CALENDRIER & LOGISTIQUE
       {
         name: "Date du déménagement",
         status: "Réponse confirmée",
@@ -298,55 +406,53 @@
       {
         name: "Que faire le jour J",
         status: "Réponse confirmée",
-        answer: "Le jour du déménagement, les équipes concernées recevront une fiche pratique détaillant les actions attendues : heure d'arrivée recommandée, point d'accueil dédié, contacts sur place et déroulé de la journée.\n\nL'objectif est que personne ne se retrouve seul face à l'inconnu ce jour-là. Un accompagnement physique sera assuré sur le site pour répondre aux premières questions et faciliter la prise en main des lieux.",
+        answer: "Le jour du déménagement, les équipes concernées recevront une fiche pratique détaillant les actions attendues : heure d'arrivée recommandée, point d'accueil dédié, contacts sur place et déroulé de la journée.\n\nL'objectif est que personne ne se retrouve seul face à l'inconnu ce jour-là. Un accompagnement physique sera assuré sur le site.",
         note: "Ce type de moment peut générer une certaine appréhension. Nous y sommes attentifs et souhaitons que l'arrivée soit vécue comme un vrai point de départ, pas comme une simple contrainte logistique.",
-        keywords: ["jour j", "jour demenagement", "que faire", "que faut il faire", "comment ca va se passer", "le grand jour", "premier jour"]
+        keywords: ["jour j", "jour demenagement", "que faire", "comment ca va se passer", "le grand jour", "premier jour"]
       },
       {
         name: "Que faire de mes affaires personnelles",
         status: "Réponse confirmée",
-        answer: "Un guide de préparation sera transmis avant le déménagement, précisant quoi emballer, quoi trier, et ce qui relève de la responsabilité des équipes de déménagement.\n\nLes objets personnels — photos, plantes, petits équipements — pourront être apportés le jour J ou dans les jours suivants. Nous voulons que chacun puisse s'installer à son rythme.",
+        answer: "Un guide de préparation sera transmis avant le déménagement, précisant quoi emballer, quoi trier, et ce qui relève de la responsabilité des équipes de déménagement.\n\nLes objets personnels — photos, plantes, petits équipements — pourront être apportés le jour J ou dans les jours suivants.",
         note: "S'approprier un nouveau lieu prend du temps. Il n'y a pas de bonne ou de mauvaise façon de le faire.",
-        keywords: ["affaires", "affaires personnelles", "objets", "plante", "photo", "decoration", "mes affaires", "que faire", "emballer", "carton", "cartons"]
+        keywords: ["affaires", "affaires personnelles", "objets", "plante", "photo", "decoration", "mes affaires", "emballer", "carton", "cartons"]
       },
       {
         name: "Temps de trajet vers le nouveau site",
         status: "Réponse confirmée",
-        answer: "Nous sommes conscients que le changement de site peut modifier les trajets quotidiens de certains collaborateurs — parfois de manière significative.\n\nUne analyse des temps de trajet a été réalisée pour identifier les situations les plus impactantes. Des solutions d'accompagnement sont à l'étude pour les personnes les plus éloignées du nouveau site.\n\nSi votre situation est complexe, n'hésitez pas à la signaler via le formulaire ci-dessous — chaque cas mérite attention.",
+        answer: "Nous sommes conscients que le changement de site peut modifier les trajets quotidiens de certains collaborateurs — parfois de manière significative.\n\nUne analyse des temps de trajet a été réalisée pour identifier les situations les plus impactantes. Des solutions d'accompagnement sont à l'étude pour les personnes les plus éloignées.",
         note: "Le trajet, ça compte. Ce n'est pas un détail. Nous ne voulons pas que ce sujet reste sans réponse.",
         keywords: ["trajet", "transport", "navette", "temps trajet", "loin", "proche", "distance", "chemin", "route", "rer", "metro", "bus", "train", "comment venir", "acces transports"]
       },
 
-      // ─── TÉLÉTRAVAIL & FLEXIBILITÉ ──────────────────────────────────────────
-
+      // TÉLÉTRAVAIL & FLEXIBILITÉ
       {
         name: "Télétravail et jours sur site",
         status: "Réponse confirmée",
-        answer: "Le déménagement n'entraîne pas de remise en cause des accords de télétravail en vigueur.\n\nLes règles applicables restent celles définies dans votre accord ou votre charte d'équipe. Si une évolution devait intervenir, elle ferait l'objet d'une communication dédiée et d'un dialogue avec les partenaires sociaux.\n\nLe nouveau site est conçu pour accueillir un volume de présence compatible avec les pratiques hybrides actuelles.",
+        answer: "Le déménagement n'entraîne pas de remise en cause des accords de télétravail en vigueur.\n\nLes règles applicables restent celles définies dans votre accord ou votre charte d'équipe. Le nouveau site est conçu pour accueillir un volume de présence compatible avec les pratiques hybrides actuelles.",
         note: "Le télétravail est devenu une composante importante de l'équilibre de nombreux collaborateurs. Nous en sommes conscients.",
         keywords: ["teletravail", "remote", "travail distance", "jours sur site", "hybride", "presentiel", "jours bureau", "travail maison", "chez moi", "home office"]
       },
       {
         name: "Flexibilité des horaires",
         status: "Réponse confirmée",
-        answer: "Les politiques d'horaires flexibles ne sont pas remises en cause par le déménagement.\n\nSi vous bénéficiez d'aménagements d'horaires ou d'accords de souplesse dans votre équipe, ceux-ci continuent à s'appliquer. Le nouveau site est accessible sur des plages horaires larges pour permettre à chacun de s'organiser.",
+        answer: "Les politiques d'horaires flexibles ne sont pas remises en cause par le déménagement.\n\nSi vous bénéficiez d'aménagements d'horaires ou d'accords de souplesse dans votre équipe, ceux-ci continuent à s'appliquer.",
         note: "Nous savons que la rigidité des horaires peut peser lourd quand le trajet change. Ce sujet sera pris en compte dans l'accompagnement.",
-        keywords: ["horaires", "horaires flexibles", "flexibilite", "arriver plus tot", "partir plus tard", "aménagement horaires", "souplesse"]
+        keywords: ["horaires", "horaires flexibles", "flexibilite", "arriver plus tot", "partir plus tard", "amenagement horaires", "souplesse"]
       },
 
-      // ─── ESPACES DE TRAVAIL ─────────────────────────────────────────────────
-
+      // ESPACES DE TRAVAIL
       {
         name: "Postes attribués ou flex office",
         status: "Réponse partielle",
-        answer: "Les principes d'occupation des espaces seront précisés en fonction de l'organisation retenue sur le nouveau site.\n\nSelon les cas, cela pourra inclure des postes attribués, des espaces mutualisés ou des logiques plus flexibles d'occupation.\n\nNous savons que la question du bureau personnel est loin d'être anodine. Pour beaucoup, c'est un point d'ancrage, un espace de concentration, une façon de marquer son territoire dans l'entreprise. Ce sujet sera traité avec sérieux.",
+        answer: "Les principes d'occupation des espaces seront précisés en fonction de l'organisation retenue sur le nouveau site.\n\nSelon les cas, cela pourra inclure des postes attribués, des espaces mutualisés ou des logiques plus flexibles d'occupation.\n\nNous savons que la question du bureau personnel est loin d'être anodine. Ce sujet sera traité avec sérieux.",
         note: "Une communication spécifique expliquera les règles de fonctionnement des espaces de travail.",
-        keywords: ["flex office", "flexoffice", "poste", "bureau", "place", "attribution", "desk", "placement", "poste attribue", "mon bureau", "place attiree"]
+        keywords: ["flex office", "flexoffice", "poste", "bureau", "place", "attribution", "desk", "placement", "poste attribue", "mon bureau"]
       },
       {
         name: "Espaces de concentration et calme",
         status: "Réponse confirmée",
-        answer: "Le nouveau site intègre des espaces dédiés à la concentration individuelle — bulles de travail, zones silencieuses, cabines phoniques — pour permettre à chacun de trouver l'environnement adapté à son activité du moment.\n\nNous avons entendu que le bruit et les open spaces ouverts sont source de tension pour un grand nombre de collaborateurs. Les espaces ont été pensés avec cet équilibre en tête : vivacité collective d'un côté, possibilité de retrait de l'autre.",
+        answer: "Le nouveau site intègre des espaces dédiés à la concentration individuelle — bulles de travail, zones silencieuses, cabines phoniques — pour permettre à chacun de trouver l'environnement adapté à son activité du moment.",
         note: "Travailler dans un espace trop bruyant n'est pas une fatalité. Dites-nous si vous avez des besoins spécifiques à ce sujet.",
         keywords: ["concentration", "calme", "bruit", "silence", "open space", "cabine", "bulle", "focus", "isolement", "travailler sereinement", "phonique"]
       },
@@ -355,13 +461,13 @@
         status: "Réponse partielle",
         answer: "Les salles de réunion seront intégrées dans un dispositif de réservation adapté aux usages du site.\n\nL'objectif est de permettre une utilisation lisible, simple et cohérente de ces espaces — sans que la chasse aux salles ne devienne un sport quotidien.",
         note: "Les modalités pratiques de réservation seront précisées avant la mise en service.",
-        keywords: ["salle", "salles", "reunion", "reserver", "booking", "meeting room", "salle de reunion", "reserve", "disponibilite salle"]
+        keywords: ["salle", "salles", "reunion", "reserver", "booking", "meeting room", "salle de reunion"]
       },
       {
         name: "Espaces de convivialité",
         status: "Réponse confirmée",
-        answer: "Oui. Le nouveau site intégrera plusieurs espaces pensés pour les temps informels, les pauses et les échanges du quotidien.\n\nCes lieux ont été conçus pour que les liens entre collègues puissent se tisser naturellement — pas dans les couloirs, pas par hasard, mais dans des endroits vraiment accueillants, avec de la lumière, du confort et de la vie.",
-        note: "Le déménagement peut être une occasion de recréer du lien. Certains y voient une opportunité. Nous voulons qu'elle soit réelle.",
+        answer: "Oui. Le nouveau site intégrera plusieurs espaces pensés pour les temps informels, les pauses et les échanges du quotidien.\n\nCes lieux ont été conçus pour que les liens entre collègues puissent se tisser naturellement, dans des endroits vraiment accueillants.",
+        note: "Le déménagement peut être une occasion de recréer du lien. Nous voulons qu'elle soit réelle.",
         keywords: ["convivialite", "pause", "cafe", "espace informel", "detente", "pause cafe", "conviviaux", "communs", "terrasse", "lounge"]
       },
       {
@@ -374,93 +480,90 @@
       {
         name: "Luminosité et qualité de l'environnement de travail",
         status: "Réponse confirmée",
-        answer: "Le nouveau site a fait l'objet d'une attention particulière sur la qualité environnementale : luminosité naturelle, ventilation, acoustique et confort thermique ont été pris en compte dans l'aménagement.\n\nNous savons que travailler dans un espace sombre, étouffant ou mal isolé phoniquement use les équipes sur le long terme. Ces aspects ont pesé dans les choix d'aménagement.",
+        answer: "Le nouveau site a fait l'objet d'une attention particulière sur la qualité environnementale : luminosité naturelle, ventilation, acoustique et confort thermique ont été pris en compte dans l'aménagement.",
         note: "Si vous avez des retours à faire sur l'environnement physique après l'installation, ils seront remontés aux équipes en charge du site.",
         keywords: ["lumiere", "luminosite", "fenetres", "chaleur", "froid", "temperature", "ventilation", "air", "acoustique", "confort", "environnement travail", "qualite air"]
       },
 
-      // ─── RESTAURATION & SERVICES ────────────────────────────────────────────
-
+      // RESTAURATION & SERVICES
       {
         name: "Offre de restauration",
         status: "En attente",
-        answer: "Les modalités exactes de restauration ne sont pas encore arrêtées à ce stade.\n\nPlusieurs options sont actuellement à l'étude afin de proposer une solution cohérente avec les usages du site et les rythmes de pause des collaborateurs. Nous savons que le déjeuner, c'est aussi un moment de décompression et de lien social — pas juste un ravitaillement.",
+        answer: "Les modalités exactes de restauration ne sont pas encore arrêtées à ce stade.\n\nPlusieurs options sont actuellement à l'étude. Nous savons que le déjeuner, c'est aussi un moment de décompression et de lien social — pas juste un ravitaillement.",
         note: "Nous reviendrons vers vous dès que des arbitrages plus précis auront été rendus.",
         keywords: ["restauration", "manger", "repas", "dejeuner", "cantine", "food", "restaurant", "pause dejeuner", "titres restaurant", "ticket restaurant", "tr", "lunch"]
       },
       {
         name: "Titres-restaurant et remboursement des repas",
         status: "Réponse confirmée",
-        answer: "Le dispositif de titres-restaurant ou de remboursement des repas n'est pas impacté par le déménagement.\n\nSi votre accord prévoit une prise en charge employeur sur vos repas, celle-ci continue à s'appliquer dans les mêmes conditions. Si la nouvelle offre de restauration devait modifier les modalités, cela ferait l'objet d'une communication spécifique.",
+        answer: "Le dispositif de titres-restaurant ou de remboursement des repas n'est pas impacté par le déménagement.\n\nSi votre accord prévoit une prise en charge employeur sur vos repas, celle-ci continue à s'appliquer dans les mêmes conditions.",
         note: "Le pouvoir d'achat du quotidien, ça compte. Ce sujet ne sera pas mis de côté.",
         keywords: ["ticket restaurant", "titre restaurant", "tr", "remboursement repas", "prise en charge repas", "avantage repas"]
       },
       {
         name: "Services sur le nouveau site",
         status: "Réponse partielle",
-        answer: "Le nouveau site est pensé pour intégrer des services utiles au quotidien des collaborateurs : conciergerie, point colis, salle de sport ou espace bien-être, espaces parents, salle de prière ou de repos.\n\nLa liste définitive des services proposés est en cours de finalisation. L'ambition est que le lieu de travail soit un endroit où l'on se sent bien, pas seulement un endroit où l'on vient travailler.",
+        answer: "Le nouveau site est pensé pour intégrer des services utiles au quotidien : conciergerie, point colis, salle de sport ou espace bien-être, espaces parents, salle de prière ou de repos.\n\nLa liste définitive est en cours de finalisation.",
         note: "Si vous avez des besoins ou des suggestions de services, le formulaire ci-dessous est là pour ça.",
         keywords: ["services", "conciergerie", "salle sport", "sport", "bien etre", "colis", "services sur site", "coiffeur", "pressing", "pharmacie"]
       },
       {
         name: "Salle de sport et bien-être",
         status: "Réponse partielle",
-        answer: "Des espaces dédiés au bien-être physique sont intégrés dans le projet — qu'il s'agisse d'une salle de sport, d'un espace détente ou d'une salle de repos.\n\nLes modalités d'accès, de réservation et d'utilisation seront précisées dès que le dispositif sera finalisé.",
+        answer: "Des espaces dédiés au bien-être physique sont intégrés dans le projet — salle de sport, espace détente ou salle de repos.\n\nLes modalités d'accès, de réservation et d'utilisation seront précisées dès que le dispositif sera finalisé.",
         note: "Prendre soin de soi au travail n'est pas un luxe. Ces espaces font partie d'un engagement plus large sur la qualité de vie au travail.",
         keywords: ["sport", "salle sport", "fitness", "gym", "detente", "meditation", "yoga", "bien etre", "salle repos", "sieste"]
       },
 
-      // ─── TRANSPORTS & ACCESSIBILITÉ ─────────────────────────────────────────
-
+      // TRANSPORTS & ACCESSIBILITÉ
       {
         name: "Visites du site avant l'arrivée",
         status: "Réponse confirmée",
-        answer: "Oui, le projet prévoit des temps de découverte du nouveau site avant l'installation définitive.\n\nCes moments sont importants — voir un lieu avant d'y travailler aide à se projeter, à poser des questions, à se rassurer sur ce qu'on ne sait pas encore. Le format pourra varier : visites physiques, parcours commentés, visuels ou supports partagés en amont.",
+        answer: "Oui, le projet prévoit des temps de découverte du nouveau site avant l'installation définitive.\n\nCes moments sont importants — voir un lieu avant d'y travailler aide à se projeter, à poser des questions, à se rassurer sur ce qu'on ne sait pas encore.",
         note: "Le calendrier de ces temps sera communiqué dans une prochaine étape.",
         keywords: ["visite", "visites", "voir", "decouverte", "venir voir", "visiter", "decouvrir le site", "avant d arriver"]
       },
       {
         name: "Parking voiture",
         status: "Réponse partielle",
-        answer: "Des solutions de stationnement sont prévues, mais leur périmètre exact et leurs modalités d'accès restent encore à préciser.\n\nNous comprenons que pour les collaborateurs venant en voiture — parfois faute d'alternative — c'est une question centrale. Elle sera traitée sérieusement.",
+        answer: "Des solutions de stationnement sont prévues, mais leur périmètre exact et leurs modalités d'accès restent encore à préciser.\n\nNous comprenons que pour les collaborateurs venant en voiture — parfois faute d'alternative — c'est une question centrale.",
         note: "Une information détaillée sera communiquée dès que les règles d'accès seront stabilisées.",
         keywords: ["parking", "voiture", "stationnement", "se garer", "garage", "place voiture", "place parking"]
       },
       {
         name: "Parking vélo et mobilités douces",
         status: "Réponse partielle",
-        answer: "Le projet prévoit d'intégrer des solutions adaptées aux mobilités douces, notamment pour les collaborateurs venant à vélo.\n\nCela inclut un espace de stationnement sécurisé, et potentiellement des vestiaires ou des douches pour ceux qui viennent à vélo ou à pied sur de plus longues distances. Les modalités précises sont en cours de cadrage.",
+        answer: "Le projet prévoit d'intégrer des solutions adaptées aux mobilités douces, notamment pour les collaborateurs venant à vélo.\n\nCela inclut un espace de stationnement sécurisé, et potentiellement des vestiaires ou des douches.",
         note: "Des précisions seront apportées dès que le dispositif final sera stabilisé.",
         keywords: ["velo", "parking velo", "mobilite", "mobilite douce", "trottinette", "deux roues", "cycliste", "bicyclette", "douche", "vestiaire"]
       },
       {
         name: "Remboursement des transports",
         status: "Réponse confirmée",
-        answer: "La prise en charge des abonnements de transport en commun reste applicable dans les mêmes conditions qu'aujourd'hui.\n\nSi le changement de site entraîne une modification de votre abonnement ou un surcoût, rapprochez-vous de votre RH : des ajustements pourront être examinés au cas par cas, notamment pour les situations les plus impactantes.",
+        answer: "La prise en charge des abonnements de transport en commun reste applicable dans les mêmes conditions qu'aujourd'hui.\n\nSi le changement de site entraîne un surcoût, rapprochez-vous de votre RH : des ajustements pourront être examinés au cas par cas.",
         note: "Le coût du trajet ne doit pas devenir une charge supplémentaire. Ce sujet mérite d'être posé clairement.",
-        keywords: ["transport", "navigo", "abonnement transport", "remboursement transport", "prise en charge transport", "frais transport", "pass navigo", "metro", "rer", "bus", "train"]
+        keywords: ["transport", "navigo", "abonnement transport", "remboursement transport", "prise en charge transport", "frais transport", "pass navigo"]
       },
       {
         name: "Navette ou covoiturage",
         status: "En attente",
-        answer: "Des solutions de mobilité collective — navette depuis une gare proche, plateforme de covoiturage entre collègues — sont à l'étude selon la localisation du site et les besoins identifiés.\n\nSi vous êtes dans une situation où les transports en commun ne couvrent pas bien votre trajet, signalez-le. Ces remontées permettent de dimensionner les solutions.",
-        note: "Nous préférons construire les bonnes solutions en fonction des vrais besoins plutôt que de proposer une navette que personne n'utilise.",
+        answer: "Des solutions de mobilité collective — navette depuis une gare proche, plateforme de covoiturage entre collègues — sont à l'étude selon la localisation du site et les besoins identifiés.\n\nSi les transports en commun ne couvrent pas bien votre trajet, signalez-le.",
+        note: "Nous préférons construire les bonnes solutions en fonction des vrais besoins.",
         keywords: ["navette", "covoiturage", "carpooling", "transport collectif", "shuttle", "bus navette", "blablacar", "partager voiture"]
       },
       {
         name: "Badge et accès au nouveau site",
         status: "En attente",
-        answer: "Les modalités d'accès au nouveau site sont en cours de stabilisation.\n\nCela concerne notamment les badges, les droits d'accès, les modalités d'entrée et, le cas échéant, les règles propres à certaines zones. Un accueil sera organisé pour les premières arrivées afin que personne ne se retrouve bloqué le premier matin.",
+        answer: "Les modalités d'accès au nouveau site sont en cours de stabilisation.\n\nCela concerne notamment les badges, les droits d'accès et les modalités d'entrée. Un accueil sera organisé pour les premières arrivées afin que personne ne se retrouve bloqué le premier matin.",
         note: "Une communication dédiée précisera les conditions d'accès avant l'arrivée sur site.",
         keywords: ["badge", "acces", "entrer", "entree", "controle acces", "droits acces", "ouverture", "acces site"]
       },
 
-      // ─── INFORMATIQUE & ÉQUIPEMENTS ─────────────────────────────────────────
-
+      // INFORMATIQUE & ÉQUIPEMENTS
       {
         name: "Connexion et outils IT à l'arrivée",
         status: "Réponse confirmée",
-        answer: "Tout est mis en œuvre pour que les accès, la connexion et les outils de travail soient opérationnels à l'arrivée sur le nouveau site.\n\nL'objectif est que les équipes puissent reprendre leur activité dans les meilleures conditions possibles. Une équipe IT sera présente les premiers jours pour traiter les problèmes en temps réel.",
+        answer: "Tout est mis en œuvre pour que les accès, la connexion et les outils de travail soient opérationnels à l'arrivée sur le nouveau site.\n\nUne équipe IT sera présente les premiers jours pour traiter les problèmes en temps réel.",
         note: "Si certains ajustements devaient intervenir au démarrage, ils seraient signalés clairement et traités en priorité.",
         keywords: ["wifi", "connexion", "reseau", "outlook", "teams", "outils", "informatique", "it", "equipements", "equipement", "materiel", "ordinateur", "telephone", "poste informatique"]
       },
@@ -479,180 +582,168 @@
         keywords: ["telephone fixe", "numero telephone", "ligne fixe", "poste telephone", "telephonie", "numero", "appels", "softphone", "dect"]
       },
 
-      // ─── VIE QUOTIDIENNE & BIEN-ÊTRE ────────────────────────────────────────
-
+      // VIE QUOTIDIENNE & BIEN-ÊTRE
       {
         name: "Espaces parents et crèche",
         status: "En attente",
-        answer: "La question de la parentalité dans le nouveau contexte est identifiée.\n\nSelon la localisation et la taille du site, des solutions peuvent être explorées : espace d'allaitement, accès à une crèche inter-entreprises, ou dispositifs de garde partenaires. Ces points seront précisés dès que les options seront arbitrées.",
+        answer: "La question de la parentalité dans le nouveau contexte est identifiée.\n\nSelon la localisation et la taille du site, des solutions peuvent être explorées : espace d'allaitement, accès à une crèche inter-entreprises, ou dispositifs de garde partenaires.",
         note: "Le changement de site peut impacter les organisations familiales. Ce n'est pas un sujet secondaire.",
         keywords: ["creche", "parent", "enfant", "garde enfant", "allaitement", "parentalite", "famille", "bebe", "ecole"]
       },
       {
         name: "Salle de prière ou de repos",
         status: "En attente",
-        answer: "La question des espaces de retrait — pour se reposer, prier, ou simplement s'isoler un moment — est intégrée dans la réflexion sur l'aménagement.\n\nNous souhaitons que le nouveau site puisse accueillir chacun dans le respect de ses besoins, dans la mesure du possible et dans le respect des règles en vigueur.",
+        answer: "La question des espaces de retrait — pour se reposer, prier, ou simplement s'isoler un moment — est intégrée dans la réflexion sur l'aménagement.\n\nNous souhaitons que le nouveau site puisse accueillir chacun dans le respect de ses besoins.",
         note: "Ces sujets peuvent être sensibles. Ils méritent d'être posés clairement et traités avec respect.",
-        keywords: ["priere", "salle priere", "religion", "repos", "sieste", "espace retrait", "isolement", "moment"]
+        keywords: ["priere", "salle priere", "religion", "repos", "sieste", "espace retrait", "isolement"]
       },
       {
         name: "Situations individuelles particulières",
         status: "En attente",
-        answer: "Les situations individuelles nécessitant une attention particulière — handicap, mobilité réduite, contrainte de santé, situation familiale spécifique — seront prises en compte dans le cadre du projet.\n\nSi vous estimez avoir un besoin spécifique, nous vous encourageons à vous signaler auprès de votre RH ou de votre manager. Aucune demande ne sera ignorée.",
+        answer: "Les situations individuelles nécessitant une attention particulière — handicap, mobilité réduite, contrainte de santé, situation familiale spécifique — seront prises en compte.\n\nSi vous estimez avoir un besoin spécifique, signalez-le auprès de votre RH ou de votre manager. Aucune demande ne sera ignorée.",
         note: "Nous savons que certaines situations sont difficiles à exprimer. Elles ne seront pas traitées comme des anomalies, mais comme des réalités à accompagner.",
         keywords: ["situation individuelle", "situation particuliere", "handicap", "mobilite reduite", "contrainte sante", "besoin specifique", "cas particulier", "accessibilite", "pmr", "fauteuil", "ascenseur"]
       },
       {
         name: "Accessibilité du site (PMR)",
         status: "Réponse confirmée",
-        answer: "Le nouveau site est conforme aux normes d'accessibilité en vigueur pour les personnes à mobilité réduite.\n\nCela comprend l'accès aux entrées, aux espaces de travail, aux sanitaires et aux salles de réunion. Si vous avez un besoin spécifique, prenez contact avec votre RH pour qu'une visite préalable ou un aménagement adapté puisse être organisé.",
+        answer: "Le nouveau site est conforme aux normes d'accessibilité en vigueur pour les personnes à mobilité réduite.\n\nCela comprend l'accès aux entrées, aux espaces de travail, aux sanitaires et aux salles de réunion. Si vous avez un besoin spécifique, prenez contact avec votre RH.",
         note: "L'accessibilité ne se résume pas à la conformité réglementaire. Nous souhaitons que chacun puisse circuler et travailler dans des conditions dignes.",
         keywords: ["pmr", "accessibilite", "fauteuil roulant", "handicap moteur", "rampe", "ascenseur", "mobilite reduite", "acces handicape"]
       },
       {
         name: "Je ne veux pas déménager",
         status: "Réponse confirmée",
-        answer: "C'est une réaction tout à fait compréhensible, et vous n'êtes pas seul(e) à la ressentir.\n\nChanger de lieu de travail, c'est parfois perdre des repères construits sur des années : un trajet connu, des collègues voisins, une façon de s'installer le matin. Ce n'est pas anodin, et personne ne vous demande d'être enthousiasmé(e) immédiatement.\n\nCe que nous vous proposons, c'est d'avancer avec vous, pas de vous convaincre. Si vous avez des réserves fortes ou des contraintes réelles, le formulaire de contact ci-dessous est là pour ça.",
+        answer: "C'est une réaction tout à fait compréhensible, et vous n'êtes pas seul(e) à la ressentir.\n\nChanger de lieu de travail, c'est parfois perdre des repères construits sur des années. Ce n'est pas anodin, et personne ne vous demande d'être enthousiasmé(e) immédiatement.\n\nCe que nous vous proposons, c'est d'avancer avec vous, pas de vous convaincre.",
         note: "Le changement génère des résistances légitimes. Elles seront entendues, pas ignorées.",
-        keywords: ["pas envie", "ne veux pas", "contre", "opposé", "refus", "je refuse", "pas d accord", "mécontement", "mecontentement", "inquiet", "peur", "apprehension", "stress"]
+        keywords: ["pas envie", "ne veux pas", "contre", "oppose", "refus", "je refuse", "pas d accord", "mecontentement", "inquiet", "peur", "apprehension", "stress"]
       },
       {
         name: "J'ai peur du changement",
         status: "Réponse confirmée",
-        answer: "Ce que vous ressentez est normal. Un déménagement d'entreprise, ce n'est pas juste une adresse qui change — c'est un quotidien qui se recompose. Les repères habituels, les voisins de bureau, la routine du trajet, la façon dont on s'appropriait l'espace… tout ça se trouve remis en question.\n\nNous ne voulons pas minimiser ce que ça représente. Ce projet a justement été conçu pour que la transition soit accompagnée, progressive, et que les équipes ne soient pas lâchées dans l'inconnu le jour J.",
+        answer: "Ce que vous ressentez est normal. Un déménagement d'entreprise, ce n'est pas juste une adresse qui change — c'est un quotidien qui se recompose. Les repères habituels, les voisins de bureau, la routine du trajet… tout ça se trouve remis en question.\n\nCe projet a justement été conçu pour que la transition soit accompagnée et progressive.",
         note: "Si vous traversez une période difficile en lien avec ce projet, parlez-en à votre manager ou à votre RH. Vous n'avez pas à naviguer seul(e).",
-        keywords: ["peur", "angoisse", "stress", "anxieux", "anxiete", "change", "inquiet", "apprehension", "perturbe", "bouleverse", "destabilise", "mal a l aise"]
+        keywords: ["peur", "angoisse", "stress", "anxieux", "anxiete", "inquiet", "apprehension", "perturbe", "bouleverse", "destabilise", "mal a l aise"]
       },
       {
         name: "Liens avec les collègues après le déménagement",
         status: "Réponse confirmée",
-        answer: "L'un des risques réels d'un déménagement, c'est de perdre des liens informels qui font la vie d'une équipe — les discussions de couloir, les cafés partagés, les voisins de bureau qu'on ne verra peut-être plus autant.\n\nC'est un sujet que nous prenons au sérieux. Le nouveau site est conçu pour favoriser les rencontres et les interactions, pas pour les rigidifier. Des temps collectifs d'installation seront prévus pour permettre de se retrouver dans le nouveau contexte.",
+        answer: "L'un des risques réels d'un déménagement, c'est de perdre des liens informels qui font la vie d'une équipe — les discussions de couloir, les cafés partagés, les voisins de bureau.\n\nLe nouveau site est conçu pour favoriser les rencontres et les interactions. Des temps collectifs d'installation seront prévus.",
         note: "Le collectif ne tient pas juste à un bâtiment. Mais l'espace peut aider ou compliquer les choses. Nous avons choisi d'y réfléchir.",
-        keywords: ["collegues", "liens", "relation", "reseau", "perdu de vue", "ne plus voir", "separé", "equipe eclatee", "lien social", "isole", "seul"]
+        keywords: ["collegues", "liens", "relation", "reseau", "perdu de vue", "ne plus voir", "separe", "equipe eclatee", "lien social", "isole", "seul"]
       },
 
-      // ─── COMMUNICATION & PILOTAGE ───────────────────────────────────────────
-
-      {
-        name: "Communication à venir",
-        status: "Réponse confirmée",
-        answer: "Toutes les réponses ne peuvent pas être données immédiatement, parce que certains arbitrages dépendent de la maturité réelle du projet.\n\nEn revanche, l'engagement est clair : partager une information fiable, utile et progressive, plutôt que multiplier des messages incomplets ou contradictoires.",
-        note: "Cet espace a justement vocation à évoluer à mesure que le projet avance.",
-        keywords: ["plus d infos", "prochaines communications", "quand saura t on", "quand aura t on", "infos a venir", "communication", "informations"]
-      },
-      {
-        name: "Qui piloter le projet",
-        status: "Réponse confirmée",
-        answer: "Le projet est piloté par une équipe dédiée, composée de représentants des Ressources Humaines, de la Direction Immobilière et des Services Généraux, avec le soutien de la Direction Générale.\n\nDes référents de proximité seront identifiés dans chaque entité pour servir de relais et remonter les questions ou les préoccupations du terrain.",
-        note: "Si vous ne savez pas à qui vous adresser, le formulaire ci-dessous est le bon point d'entrée.",
-        keywords: ["qui pilote", "qui gere", "responsable projet", "interlocuteur", "chef projet", "equipe projet", "contact projet", "pilotage"]
-      },
-      {
-        name: "Les collaborateurs ont-ils été consultés",
-        status: "Réponse confirmée",
-        answer: "Oui. Des temps d'écoute, de consultation ou d'ateliers participatifs ont été ou seront organisés dans le cadre du projet, selon les entités et les phases.\n\nNous savons que la légitimité d'un projet immobilier passe aussi par la capacité à entendre les équipes — pas seulement à les informer. Les remontées du terrain ont alimenté des choix d'aménagement concrets.",
-        note: "Si vous n'avez pas encore eu l'occasion de vous exprimer, c'est encore possible — via le formulaire ou les espaces de consultation qui seront ouverts.",
-        keywords: ["consulte", "consultation", "avis", "voix", "participe", "participation", "co construction", "atelier", "sondage", "enquete", "expression collaborateurs"]
-      },
-      {
-        name: "Que disent les représentants du personnel",
-        status: "Réponse confirmée",
-        answer: "Les instances représentatives du personnel (CSE ou CSSCT selon votre entité) ont été ou seront informées et consultées sur le projet dans le respect des obligations légales.\n\nLeurs avis et observations font partie du processus. Si vous souhaitez en savoir plus sur leur position, nous vous encourageons à vous rapprocher directement de vos élus.",
-        note: "La concertation sociale sur un projet immobilier est un droit, pas une formalité. Elle est prise au sérieux.",
-        keywords: ["cse", "iri", "representants personnel", "syndicat", "delegue", "elu", "comite", "cssct", "information consultation", "partenaires sociaux"]
-      },
-      {
-        name: "Le projet peut-il encore changer",
-        status: "Réponse confirmée",
-        answer: "Certains éléments du projet sont encore en cours de finalisation. Des ajustements sont possibles, notamment sur les détails logistiques, les dates précises, ou les aménagements.\n\nEn revanche, les grandes orientations — le site, l'ambition du projet, la trajectoire générale — sont fixées. Nous ne souhaitons pas alimenter une incertitude inutile sur ce qui est acté.",
-        note: "Nous nous engageons à informer rapidement en cas d'évolution significative.",
-        keywords: ["peut changer", "va changer", "incertitude", "encore prevu", "annule", "reporte", "retard", "decision finale", "arrete", "tout peut changer"]
-      },
-      // ─── ACCOMPAGNEMENT AU CHANGEMENT ──────────────────────────────────────
-
+      // ACCOMPAGNEMENT AU CHANGEMENT
       {
         name: "Communications projet",
         status: "Réponse confirmée",
-        answer: "Un plan de communication structuré est prévu tout au long du projet. Il comprend plusieurs types de prises de parole :\n\n• Des points d'étape réguliers, pour informer de l'avancement sans attendre que tout soit figé\n• Des communications ciblées par équipe, quand le contenu est suffisamment spécifique pour mériter un message dédié\n• Des supports consultables à tout moment — comme cet espace — pour ne pas dépendre d'un email qu'on a peut-être raté\n\nL'objectif n'est pas de saturer les boîtes mail, mais de s'assurer que personne ne se retrouve dans le flou au mauvais moment.",
+        answer: "Un plan de communication structuré est prévu tout au long du projet :\n\n• Des points d'étape réguliers pour informer de l'avancement\n• Des communications ciblées par équipe\n• Des supports consultables à tout moment comme cet espace\n\nL'objectif : que personne ne se retrouve dans le flou au mauvais moment.",
         note: "Si vous avez l'impression de manquer d'informations sur un sujet précis, le formulaire ci-dessous est là pour le signaler.",
-        keywords: ["communication projet", "communications", "newsletter", "email projet", "information projet", "tenu informe", "pas informe", "comment je suis tenu au courant", "plan communication"]
+        keywords: ["communication projet", "communications", "newsletter", "email projet", "information projet", "tenu informe", "pas informe", "plan communication"]
       },
       {
         name: "Ambassadeurs du projet",
         status: "Réponse confirmée",
-        answer: "Un réseau d'ambassadeurs est mis en place dans le cadre du projet. Ce sont des collaborateurs volontaires, issus de différentes équipes et niveaux hiérarchiques, qui jouent un rôle de relais de proximité.\n\nLeur rôle n'est pas de défendre le projet à tout prix, mais de :\n• Faire remonter les questions et préoccupations du terrain\n• Partager les informations au plus près de leurs collègues\n• Contribuer à la construction des usages sur le nouveau site\n\nSi vous souhaitez rejoindre ce réseau — ou simplement savoir qui est l'ambassadeur de votre équipe — rapprochez-vous de votre RH ou de votre manager.",
-        note: "Les ambassadeurs ne sont pas des communicants. Ce sont des collègues qui ont accepté de jouer un rôle actif dans la transition. Ils peuvent aussi ne pas avoir toutes les réponses — et c'est normal.",
+        answer: "Un réseau d'ambassadeurs volontaires est mis en place. Ce sont des collaborateurs issus de différentes équipes qui jouent un rôle de relais de proximité.\n\nLeur rôle : faire remonter les questions du terrain, partager les informations, contribuer à la construction des usages sur le nouveau site.\n\nPour rejoindre ce réseau ou identifier votre ambassadeur, rapprochez-vous de votre RH.",
+        note: "Les ambassadeurs ne sont pas des communicants. Ce sont des collègues qui ont accepté de jouer un rôle actif dans la transition.",
         keywords: ["ambassadeur", "ambassadeurs", "relais", "referent projet", "reseau ambassadeurs", "volontaire", "correspondant", "champion changement"]
       },
       {
         name: "Ateliers de personnalisation des espaces",
         status: "Réponse confirmée",
-        answer: "Des ateliers de personnalisation sont prévus pour permettre aux équipes de s'approprier leur futur espace de travail avant l'installation.\n\nConcrètement, ces ateliers permettent de :\n• Découvrir les différentes zones et leur vocation\n• Exprimer des préférences sur l'aménagement ou l'organisation des espaces partagés\n• Co-construire les règles de vie propres à chaque entité\n• Poser des questions dans un cadre plus informel qu'une réunion d'information\n\nCes moments ne sont pas de la consultation cosmétique. Ils ont vocation à produire des résultats concrets, intégrés dans l'aménagement final.",
-        note: "Les dates et formats de ces ateliers seront communiqués dès que le calendrier sera stabilisé. Bloquez du temps — ça vaut le coup d'y participer.",
-        keywords: ["atelier", "ateliers", "personnalisation", "personnaliser", "co construction", "workshop", "participation", "choisir", "s exprimer", "amenagement", "customisation"]
+        answer: "Des ateliers de personnalisation sont prévus pour permettre aux équipes de s'approprier leur futur espace avant l'installation.\n\nCes ateliers permettent de découvrir les zones, exprimer des préférences sur l'aménagement, co-construire les règles de vie et poser des questions dans un cadre informel.\n\nCe n'est pas de la consultation cosmétique — les résultats sont intégrés dans l'aménagement final.",
+        note: "Les dates et formats seront communiqués dès que le calendrier sera stabilisé. Bloquez du temps — ça vaut le coup.",
+        keywords: ["atelier", "ateliers", "personnalisation", "personnaliser", "co construction", "workshop", "participation", "choisir", "s exprimer", "amenagement"]
       },
       {
         name: "Règles de vie sur le nouveau site",
         status: "Réponse partielle",
-        answer: "Les règles de vie — c'est-à-dire la façon dont on se comporte collectivement dans les espaces partagés — ne seront pas imposées d'en haut. Elles seront co-construites avec les équipes.\n\nCela peut concerner :\n• L'usage des espaces de concentration (comment on signale qu'on ne veut pas être dérangé)\n• Les règles de propreté et d'ordre des postes partagés\n• L'utilisation des espaces communs (salles, cuisines, terrasses)\n• Les habitudes collectives de travail en open space\n\nL'idée est que chaque entité puisse définir ses propres normes, dans un cadre commun fourni par le site.",
+        answer: "Les règles de vie dans les espaces partagés ne seront pas imposées d'en haut. Elles seront co-construites avec les équipes.\n\nCela peut concerner : l'usage des espaces de concentration, les règles de propreté des postes partagés, l'utilisation des espaces communs, les habitudes en open space.\n\nChaque entité pourra définir ses propres normes dans un cadre commun.",
         note: "Des règles de vie ne fonctionnent que si les personnes concernées se les sont appropriées. C'est tout l'enjeu de la démarche.",
         keywords: ["regles de vie", "regles", "charte", "charte usage", "comportement", "vivre ensemble", "collectif", "normes", "bonnes pratiques", "respect", "espaces partages"]
       },
       {
         name: "Formation et prise en main du nouveau site",
         status: "Réponse confirmée",
-        answer: "Des temps de formation ou de découverte guidée sont prévus pour que chacun puisse prendre en main le nouveau site rapidement.\n\nCela comprend notamment :\n• Une présentation des différents espaces et de leur usage\n• Une explication du système de réservation des salles et des ressources\n• Une initiation aux outils ou services propres au site (conciergerie, application mobile, etc.)\n\nL'objectif est que personne ne passe ses premières semaines à chercher les toilettes ou à ne pas savoir comment réserver une salle.",
-        note: "Ces formations seront courtes et pratiques — pas des réunions de plus. Le but est d'être opérationnel le plus vite possible.",
-        keywords: ["formation", "se former", "apprendre", "prise en main", "tutoriel", "guide", "onboarding site", "comment utiliser", "mode emploi", "application site"]
+        answer: "Des temps de formation ou de découverte guidée sont prévus pour que chacun puisse prendre en main le nouveau site rapidement.\n\nCela comprend : présentation des espaces, explication du système de réservation des salles, initiation aux outils et services du site.\n\nL'objectif : que personne ne passe ses premières semaines à chercher les toilettes.",
+        note: "Ces formations seront courtes et pratiques. Le but est d'être opérationnel le plus vite possible.",
+        keywords: ["formation", "se former", "apprendre", "prise en main", "tutoriel", "guide", "onboarding site", "comment utiliser", "mode emploi"]
       },
       {
         name: "Soutien managérial et rôle des managers",
         status: "Réponse confirmée",
-        answer: "Les managers jouent un rôle central dans l'accompagnement de leurs équipes lors de ce type de transition.\n\nIls seront informés en priorité, avant les communications générales, pour pouvoir répondre aux premières questions de leur équipe. Des ressources spécifiques leur seront fournies : éléments de langage, réponses aux questions fréquentes, accès privilégié aux équipes projet.\n\nSi vous avez l'impression que votre manager manque lui-même d'informations — c'est peut-être le cas, et c'est normal à ce stade. N'hésitez pas à l'encourager à se rapprocher des équipes RH ou projet.",
+        answer: "Les managers seront informés en priorité, avant les communications générales, pour pouvoir répondre aux premières questions de leur équipe.\n\nDes ressources spécifiques leur seront fournies : éléments de langage, réponses aux questions fréquentes, accès privilégié aux équipes projet.",
         note: "Un manager bien informé et à l'aise avec le projet, c'est la meilleure protection contre les rumeurs et l'anxiété collective.",
         keywords: ["manager", "managers", "management", "chef equipe", "responsable equipe", "encadrement", "role manager", "brief managers", "soutien manager"]
       },
       {
         name: "Accompagnement individuel au changement",
         status: "Réponse confirmée",
-        answer: "Au-delà des actions collectives, un accompagnement individuel est possible pour les collaborateurs qui en ressentent le besoin.\n\nSelon les dispositifs disponibles dans votre entité, cela peut prendre la forme :\n• D'un entretien avec votre RH pour poser vos questions dans un cadre confidentiel\n• D'un accès au dispositif d'écoute psychologique (ligne d'assistance salarié, si elle existe)\n• D'un échange avec un ambassadeur ou un référent de proximité\n\nVous n'avez pas à traverser cette transition seul(e), surtout si elle s'ajoute à d'autres difficultés personnelles ou professionnelles.",
+        answer: "Un accompagnement individuel est possible pour les collaborateurs qui en ressentent le besoin :\n\n• Entretien avec votre RH dans un cadre confidentiel\n• Accès au dispositif d'écoute psychologique si disponible\n• Échange avec un ambassadeur ou référent de proximité\n\nVous n'avez pas à traverser cette transition seul(e).",
         note: "Demander de l'aide n'est pas un signe de faiblesse. C'est une façon de prendre soin de soi — et de mieux traverser le changement.",
         keywords: ["accompagnement individuel", "aide individuelle", "soutien psychologique", "ecoute", "ligne ecoute", "rh", "entretien rh", "besoin aide", "difficile", "traverser", "seul"]
       },
       {
         name: "Retours et feedback après l'installation",
         status: "Réponse confirmée",
-        answer: "Une fois installées, les équipes auront la possibilité de faire des retours sur leur expérience du nouveau site.\n\nDes enquêtes de satisfaction, des temps d'échange collectifs ou des remontées via les ambassadeurs sont prévus pour identifier ce qui fonctionne bien — et ce qui mérite d'être ajusté. Le projet ne s'arrête pas le jour du déménagement.\n\nNous savons que les premiers mois révèlent souvent des frictions qu'on n'avait pas anticipées. C'est normal, et c'est pour ça qu'un dispositif de suivi est prévu.",
-        note: "Vos retours post-installation auront de l'importance. Ils permettront d'ajuster ce qui peut l'être et de documenter ce qui sera utile pour la suite.",
+        answer: "Une fois installées, les équipes auront la possibilité de faire des retours sur leur expérience du nouveau site.\n\nDes enquêtes de satisfaction et des temps d'échange sont prévus. Le projet ne s'arrête pas le jour du déménagement.\n\nNous savons que les premiers mois révèlent souvent des frictions qu'on n'avait pas anticipées.",
+        note: "Vos retours post-installation permettront d'ajuster ce qui peut l'être.",
         keywords: ["feedback", "retour", "avis", "satisfaction", "enquete", "apres demenagement", "post installation", "comment ca se passe", "bilan", "evaluation"]
       },
       {
         name: "Rumeurs et informations non officielles",
         status: "Réponse confirmée",
-        answer: "Dans tout projet de cette nature, des rumeurs circulent. C'est inévitable — et souvent le signe que les gens s'y intéressent et ont besoin de réponses.\n\nSi vous avez entendu quelque chose qui vous préoccupe — sur le site, sur l'organisation, sur les conditions de travail — nous vous encourageons à le poser directement ici ou via le formulaire. Une rumeur non traitée prend de la place là où une réponse franche pourrait suffire.\n\nNous nous engageons à répondre factuellement, même quand la réponse est 'ce point n'est pas encore arrêté'.",
+        answer: "Dans tout projet de cette nature, des rumeurs circulent. C'est inévitable — et souvent le signe que les gens s'y intéressent et ont besoin de réponses.\n\nSi vous avez entendu quelque chose qui vous préoccupe, posez-le ici ou via le formulaire. Nous nous engageons à répondre factuellement.",
         note: "L'incertitude génère des récits. Nous préférons les récits fondés sur des faits.",
         keywords: ["rumeur", "rumeurs", "ouie dire", "on dit que", "bruit de couloir", "entendu dire", "vrai ou faux", "intox", "fake", "pas vrai", "faux", "dementi"]
       },
 
-      // ─── PILOTAGE & COMMUNICATION ───────────────────────────────────────────
-
+      // PILOTAGE & COMMUNICATION
+      {
+        name: "Communication à venir",
+        status: "Réponse confirmée",
+        answer: "Toutes les réponses ne peuvent pas être données immédiatement, parce que certains arbitrages dépendent de la maturité réelle du projet.\n\nL'engagement est clair : partager une information fiable et progressive, plutôt que multiplier des messages incomplets ou contradictoires.",
+        note: "Cet espace a justement vocation à évoluer à mesure que le projet avance.",
+        keywords: ["plus d infos", "prochaines communications", "quand saura t on", "infos a venir", "communication", "informations"]
+      },
+      {
+        name: "Qui pilote le projet",
+        status: "Réponse confirmée",
+        answer: "Le projet est piloté par une équipe dédiée composée de représentants des Ressources Humaines, de la Direction Immobilière et des Services Généraux, avec le soutien de la Direction Générale.\n\nDes référents de proximité seront identifiés dans chaque entité.",
+        note: "Si vous ne savez pas à qui vous adresser, le formulaire ci-dessous est le bon point d'entrée.",
+        keywords: ["qui pilote", "qui gere", "responsable projet", "interlocuteur", "chef projet", "equipe projet", "contact projet", "pilotage"]
+      },
+      {
+        name: "Les collaborateurs ont-ils été consultés",
+        status: "Réponse confirmée",
+        answer: "Oui. Des temps d'écoute, de consultation ou d'ateliers participatifs ont été ou seront organisés selon les entités et les phases.\n\nLes remontées du terrain ont alimenté des choix d'aménagement concrets.",
+        note: "Si vous n'avez pas encore eu l'occasion de vous exprimer, c'est encore possible via le formulaire.",
+        keywords: ["consulte", "consultation", "avis", "voix", "participe", "participation", "co construction", "atelier", "sondage", "enquete", "expression collaborateurs"]
+      },
+      {
+        name: "Que disent les représentants du personnel",
+        status: "Réponse confirmée",
+        answer: "Les instances représentatives du personnel (CSE ou CSSCT selon votre entité) ont été ou seront informées et consultées sur le projet dans le respect des obligations légales.\n\nLeurs avis font partie du processus. Pour en savoir plus sur leur position, rapprochez-vous directement de vos élus.",
+        note: "La concertation sociale sur un projet immobilier est un droit, pas une formalité. Elle est prise au sérieux.",
+        keywords: ["cse", "iri", "representants personnel", "syndicat", "delegue", "elu", "comite", "cssct", "information consultation", "partenaires sociaux"]
+      },
+      {
+        name: "Le projet peut-il encore changer",
+        status: "Réponse confirmée",
+        answer: "Certains éléments sont encore en cours de finalisation. Des ajustements sont possibles sur les détails logistiques, les dates précises, ou les aménagements.\n\nEn revanche, les grandes orientations — le site, l'ambition du projet, la trajectoire générale — sont fixées.",
+        note: "Nous nous engageons à informer rapidement en cas d'évolution significative.",
+        keywords: ["peut changer", "va changer", "incertitude", "encore prevu", "annule", "reporte", "retard", "decision finale", "arrete"]
+      },
       {
         name: "Archivage et gestion des documents",
         status: "Réponse confirmée",
-        answer: "Un plan d'archivage sera communiqué avant le déménagement, avec des consignes précises sur ce qui doit être trié, numérisé ou détruit.\n\nLes archives physiques ayant vocation à être conservées seront prises en charge par les équipes de déménagement. Un prestataire spécialisé pourra intervenir pour les volumes importants.",
+        answer: "Un plan d'archivage sera communiqué avant le déménagement, avec des consignes précises sur ce qui doit être trié, numérisé ou détruit.\n\nLes archives physiques à conserver seront prises en charge par les équipes de déménagement.",
         note: "Prenez le temps de passer vos documents en revue avant le déménagement. C'est souvent l'occasion de désencombrer.",
         keywords: ["archives", "archivage", "documents", "papiers", "dossiers", "classeur", "scanner", "numerisation", "destruction", "tri"]
       }
     ];
 
-    const questionInput = document.getElementById("questionInput");
-    const askBtn = document.getElementById("askBtn");
-    const resultBox = document.getElementById("resultBox");
-    const notFoundBox = document.getElementById("notFoundBox");
-    const resultQuestion = document.getElementById("resultQuestion");
-    const resultStatus = document.getElementById("resultStatus");
-    const resultAnswer = document.getElementById("resultAnswer");
-    const resultNote = document.getElementById("resultNote");
+    // ─── MOTEUR DE MATCHING ───────────────────────────────────────────────────────
 
     const stopWords = new Set([
       "ou", "où", "est", "ce", "que", "qu", "on", "va", "je", "tu", "il", "elle",
@@ -660,343 +751,189 @@
       "de", "d", "a", "au", "aux", "en", "dans", "sur", "pour", "avec", "et",
       "mon", "ma", "mes", "notre", "nos", "votre", "vos", "y", "aura", "t",
       "sera", "seront", "sont", "avoir", "etre", "quels", "quelle", "quelles",
-      "proposes", "proposes", "prevu", "prevus"
+      "proposes", "prevu", "prevus"
     ]);
 
-    // Clé = token normalisé, valeur = token de remplacement pour le matching
     const synonymMap = {
-      // Restauration
-      cantine: "restauration",
-      manger: "restauration",
-      repas: "restauration",
-      dejeuner: "restauration",
-      restaurant: "restauration",
-      food: "restauration",
-      lunch: "restauration",
-      tr: "restauration",
-      "ticket restaurant": "restauration",
-      "titre restaurant": "restauration",
-
-      // Déménagement / calendrier
-      demenager: "demenagement",
-      transfert: "demenagement",
-      installation: "demenagement",
-      calendrier: "demenagement",
-      planning: "demenagement",
-      date: "demenagement",
-      quand: "demenagement",
-
-      // Jour J
-      "jour j": "jour",
-      "premier jour": "jour",
-      "grand jour": "jour",
-
-      // Affaires personnelles
-      carton: "affaires",
-      cartons: "affaires",
-      objets: "affaires",
-      plante: "affaires",
-      emballer: "affaires",
-
-      // Visites
-      visite: "visites",
-      visiter: "visites",
-      decouverte: "visites",
-
-      // Accès / badge
-      badge: "acces",
-      entrer: "acces",
-      entree: "acces",
-
-      // Informatique / IT
-      wifi: "informatique",
-      reseau: "informatique",
-      teams: "informatique",
-      outlook: "informatique",
-      it: "informatique",
-      equipement: "informatique",
-      equipements: "informatique",
-      materiel: "informatique",
-      ordinateur: "informatique",
-      telephone: "informatique",
-      outils: "informatique",
-      dsi: "informatique",
-      ecran: "informatique",
-      clavier: "informatique",
-      softphone: "informatique",
-      dect: "informatique",
-
-      // Stationnement voiture
-      parking: "stationnement",
-      voiture: "stationnement",
-      garage: "stationnement",
-      garer: "stationnement",
-
-      // Mobilité douce
-      velo: "mobilite",
-      bicyclette: "mobilite",
-      cycliste: "mobilite",
-      trottinette: "mobilite",
-      douche: "mobilite",
-      vestiaire: "mobilite",
-
-      // Transport en commun
-      navigo: "transport",
-      metro: "transport",
-      rer: "transport",
-      bus: "transport",
-      train: "transport",
-      abonnement: "transport",
-      trajet: "transport",
-      chemin: "transport",
-      loin: "transport",
-      proche: "transport",
-      distance: "transport",
-      navette: "transport",
-      covoiturage: "transport",
-      carpooling: "transport",
-
-      // Télétravail
-      remote: "teletravail",
-      "home office": "teletravail",
-      maison: "teletravail",
-      presentiel: "teletravail",
+      cantine: "restauration", manger: "restauration", repas: "restauration",
+      dejeuner: "restauration", restaurant: "restauration", food: "restauration",
+      lunch: "restauration", tr: "restauration",
+      demenager: "demenagement", transfert: "demenagement",
+      calendrier: "demenagement", planning: "demenagement",
+      visite: "visites", visiter: "visites", decouverte: "visites",
+      badge: "acces", entrer: "acces", entree: "acces",
+      wifi: "informatique", reseau: "informatique", teams: "informatique",
+      outlook: "informatique", it: "informatique", equipement: "informatique",
+      equipements: "informatique", materiel: "informatique",
+      ordinateur: "informatique", telephone: "informatique",
+      outils: "informatique", dsi: "informatique", ecran: "informatique",
+      parking: "stationnement", voiture: "stationnement", garage: "stationnement",
+      velo: "mobilite", bicyclette: "mobilite", cycliste: "mobilite",
+      trottinette: "mobilite", douche: "mobilite", vestiaire: "mobilite",
+      navigo: "transport", metro: "transport", rer: "transport",
+      bus: "transport", train: "transport", abonnement: "transport",
+      trajet: "transport", navette: "transport", covoiturage: "transport",
+      remote: "teletravail", maison: "teletravail", presentiel: "teletravail",
       hybride: "teletravail",
-
-      // Horaires
-      horaire: "horaires",
-      souplesse: "horaires",
-      flexible: "horaires",
-      flexibilite: "horaires",
-
-      // Flex office / bureau
-      bureau: "poste",
-      place: "poste",
-      desk: "poste",
-      flex: "flexoffice",
-      flexoffice: "flexoffice",
-
-      // Salles de réunion
-      salle: "reunion",
-      salles: "reunion",
-      booking: "reunion",
-
-      // Rangement
-      casier: "rangement",
-      casiers: "rangement",
-      locker: "rangement",
-      stockage: "rangement",
-      placard: "rangement",
-
-      // Concentration / calme
-      bruit: "concentration",
-      silence: "concentration",
-      calme: "concentration",
-      cabine: "concentration",
-      bulle: "concentration",
-      focus: "concentration",
-      "open space": "concentration",
-      phonique: "concentration",
-
-      // Bien-être / sport
-      sport: "bienetre",
-      fitness: "bienetre",
-      gym: "bienetre",
-      meditation: "bienetre",
-      yoga: "bienetre",
-      sieste: "bienetre",
-
-      // Parentalité
-      creche: "parentalite",
-      enfant: "parentalite",
-      famille: "parentalite",
-      bebe: "parentalite",
-      allaitement: "parentalite",
-
-      // Accessibilité PMR
-      pmr: "accessibilite",
-      fauteuil: "accessibilite",
-      handicap: "accessibilite",
-      ascenseur: "accessibilite",
-      rampe: "accessibilite",
-
-      // Résistance au changement
-      "pas envie": "resistance",
-      refuse: "resistance",
-      refus: "resistance",
-      contre: "resistance",
-      oppose: "resistance",
-      angoisse: "resistance",
-      peur: "resistance",
-      anxieux: "resistance",
-      stress: "resistance",
-      apprehension: "resistance",
-      inquiet: "resistance",
-      perturbe: "resistance",
-      mecontentement: "resistance",
-
-      // Lien social
-      collegues: "lien",
-      liens: "lien",
-      relation: "lien",
-      isole: "lien",
-      seul: "lien",
-
-      // Consultation / pilotage
-      cse: "consultation",
-      syndicat: "consultation",
-      delegue: "consultation",
-      cssct: "consultation",
-      elu: "consultation",
-      pilote: "pilotage",
-      responsable: "pilotage",
-      interlocuteur: "pilotage",
-
-      // Accompagnement au changement
-      ambassadeur: "ambassadeurs",
-      relais: "ambassadeurs",
-      referent: "ambassadeurs",
-      volontaire: "ambassadeurs",
-      correspondant: "ambassadeurs",
-      atelier: "ateliers",
-      workshop: "ateliers",
-      personnalisation: "ateliers",
-      personnaliser: "ateliers",
-      charte: "regles",
-      comportement: "regles",
-      "vivre ensemble": "regles",
-      normes: "regles",
-      formation: "formation",
-      tutoriel: "formation",
-      guide: "formation",
-      onboarding: "formation",
-      manager: "management",
-      managers: "management",
-      encadrement: "management",
-      feedback: "feedback",
-      retour: "feedback",
-      bilan: "feedback",
-      evaluation: "feedback",
-      satisfaction: "feedback",
-      rumeur: "rumeurs",
-      rumeurs: "rumeurs",
-      intox: "rumeurs",
-      "on dit": "rumeurs",
-      "ouie dire": "rumeurs",
-      newsletter: "communication projet",
-      "plan communication": "communication projet",
-
-      // Archivage
-      archives: "archivage",
-      archive: "archivage",
-      documents: "archivage",
-      papiers: "archivage",
-      dossiers: "archivage",
-      scanner: "archivage",
-      numerisation: "archivage",
-      destruction: "archivage",
+      horaire: "horaires", souplesse: "horaires", flexible: "horaires",
+      bureau: "poste", place: "poste", desk: "poste",
+      flex: "flexoffice", flexoffice: "flexoffice",
+      salle: "reunion", salles: "reunion", booking: "reunion",
+      casier: "rangement", casiers: "rangement", locker: "rangement",
+      stockage: "rangement", placard: "rangement",
+      bruit: "concentration", silence: "concentration", cabine: "concentration",
+      bulle: "concentration", focus: "concentration", phonique: "concentration",
+      sport: "bienetre", fitness: "bienetre", gym: "bienetre",
+      meditation: "bienetre", yoga: "bienetre", sieste: "bienetre",
+      creche: "parentalite", enfant: "parentalite", famille: "parentalite",
+      bebe: "parentalite", allaitement: "parentalite",
+      pmr: "accessibilite", fauteuil: "accessibilite", handicap: "accessibilite",
+      ascenseur: "accessibilite", rampe: "accessibilite",
+      peur: "resistance", angoisse: "resistance", stress: "resistance",
+      anxieux: "resistance", apprehension: "resistance", inquiet: "resistance",
+      collegues: "lien", liens: "lien", relation: "lien", isole: "lien",
+      cse: "consultation", syndicat: "consultation", delegue: "consultation",
+      cssct: "consultation", elu: "consultation",
+      pilote: "pilotage", responsable: "pilotage", interlocuteur: "pilotage",
+      ambassadeur: "ambassadeurs", relais: "ambassadeurs", referent: "ambassadeurs",
+      volontaire: "ambassadeurs", correspondant: "ambassadeurs",
+      atelier: "ateliers", workshop: "ateliers",
+      charte: "regles", comportement: "regles", normes: "regles",
+      formation: "formation", tutoriel: "formation", onboarding: "formation",
+      manager: "management", managers: "management", encadrement: "management",
+      feedback: "feedback", retour: "feedback", bilan: "feedback",
+      rumeur: "rumeurs", intox: "rumeurs",
+      archives: "archivage", documents: "archivage", papiers: "archivage",
+      dossiers: "archivage", scanner: "archivage", destruction: "archivage",
     };
 
     function normalize(text) {
-      return text
-        .toLowerCase()
-        .normalize("NFD")
+      return text.toLowerCase().normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/[^a-z0-9\s]/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
+        .replace(/\s+/g, " ").trim();
     }
 
     function tokenize(text) {
-      return normalize(text)
-        .split(" ")
-        .filter(word => word && !stopWords.has(word))
-        .map(word => synonymMap[word] || word);
+      return normalize(text).split(" ")
+        .filter(w => w && !stopWords.has(w))
+        .map(w => synonymMap[w] || w);
     }
 
     function matchIntent(question) {
       const tokens = tokenize(question);
-      const normalizedQuestion = normalize(question);
-
-      let bestIntent = null;
-      let bestScore = 0;
-
+      const normQ = normalize(question);
+      let best = null, bestScore = 0;
       intents.forEach(intent => {
         let score = 0;
-
-        intent.keywords.forEach(keyword => {
-          const keywordTokens = tokenize(keyword);
-
-          // Match token par token (score +3 par token trouvé)
-          keywordTokens.forEach(k => {
-            if (tokens.includes(k)) {
-              score += 3;
-            }
-          });
-
-          // Match de la phrase entière normalisée (score +4 si la question contient le keyword)
-          const normalizedKeyword = normalize(keyword);
-          if (normalizedKeyword.length > 3 && normalizedQuestion.includes(normalizedKeyword)) {
-            score += 4;
-          }
+        intent.keywords.forEach(kw => {
+          tokenize(kw).forEach(k => { if (tokens.includes(k)) score += 3; });
+          const nk = normalize(kw);
+          if (nk.length > 3 && normQ.includes(nk)) score += 4;
         });
-
-        if (score > bestScore) {
-          bestScore = score;
-          bestIntent = intent;
-        }
+        if (score > bestScore) { bestScore = score; best = intent; }
       });
-
-      return bestScore >= 3 ? bestIntent : null;
+      return bestScore >= 3 ? best : null;
     }
 
-    function showResult(userQuestion, intent) {
-      resultQuestion.textContent = "Question : " + userQuestion;
-      resultStatus.textContent = intent.status;
-      resultAnswer.textContent = intent.answer;
-      resultNote.textContent = intent.note;
+    // ─── APPEL GEMINI ─────────────────────────────────────────────────────────────
 
-      resultBox.style.display = "block";
+    async function askGemini(question) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+      const body = {
+        contents: [{ parts: [{ text: PROJECT_CONTEXT + "\n\n--- QUESTION DU COLLABORATEUR ---\n" + question }] }],
+        generationConfig: { temperature: 0.3, maxOutputTokens: 400 }
+      };
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) throw new Error("Erreur API Gemini : " + res.status);
+      const data = await res.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
+    }
+
+    // ─── INTERFACE ────────────────────────────────────────────────────────────────
+
+    const questionInput  = document.getElementById("questionInput");
+    const askBtn         = document.getElementById("askBtn");
+    const resultBox      = document.getElementById("resultBox");
+    const notFoundBox    = document.getElementById("notFoundBox");
+    const loadingBox     = document.getElementById("loadingBox");
+    const resultQuestion = document.getElementById("resultQuestion");
+    const resultStatus   = document.getElementById("resultStatus");
+    const resultAnswer   = document.getElementById("resultAnswer");
+    const resultNote     = document.getElementById("resultNote");
+
+    function showLoading(on) {
+      loadingBox.style.display  = on ? "block" : "none";
+      resultBox.style.display   = "none";
       notFoundBox.style.display = "none";
+      askBtn.disabled           = on;
+    }
 
+    function showResult(userQuestion, answer, status, note) {
+      resultQuestion.textContent = "Question : " + userQuestion;
+      resultStatus.textContent   = status;
+      resultAnswer.textContent   = answer;
+      resultNote.textContent     = note;
+      resultBox.style.display    = "block";
+      notFoundBox.style.display  = "none";
       resultBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
     function showNotFound() {
-      resultBox.style.display = "none";
+      resultBox.style.display   = "none";
       notFoundBox.style.display = "block";
       notFoundBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
-    function handleQuestion(question) {
+    async function handleQuestion(question) {
+      if (!question.trim()) return;
+
+      // 1. Intents officiels en priorité
       const intent = matchIntent(question);
       if (intent) {
-        showResult(question, intent);
-      } else {
+        showResult(question, intent.answer, intent.status, intent.note);
+        return;
+      }
+
+      // 2. Fallback Gemini pour les questions non couvertes
+      showLoading(true);
+      try {
+        const aiAnswer = await askGemini(question);
+        showLoading(false);
+        if (aiAnswer) {
+          showResult(
+            question,
+            aiAnswer,
+            "Réponse générée",
+            "Cette réponse est produite à partir des informations disponibles sur le projet. Si elle ne répond pas précisément à votre situation, utilisez le formulaire ci-dessous."
+          );
+        } else {
+          showNotFound();
+        }
+      } catch (err) {
+        showLoading(false);
         showNotFound();
+        console.error(err);
       }
     }
 
-    askBtn.addEventListener("click", () => {
-      const question = questionInput.value.trim();
-      if (!question) return;
-      handleQuestion(question);
+    askBtn.addEventListener("click", () => handleQuestion(questionInput.value.trim()));
+
+    questionInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") { e.preventDefault(); askBtn.click(); }
     });
 
-    questionInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        askBtn.click();
-      }
-    });
-
-    document.querySelectorAll(".suggestion").forEach(button => {
-      button.addEventListener("click", () => {
-        const question = button.dataset.question;
-        questionInput.value = question;
-        handleQuestion(question);
+    document.querySelectorAll(".suggestion").forEach(btn => {
+      btn.addEventListener("click", () => {
+        questionInput.value = btn.dataset.question;
+        handleQuestion(btn.dataset.question);
       });
     });
+
   </script>
 </body>
 </html>
