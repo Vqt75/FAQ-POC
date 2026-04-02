@@ -1538,6 +1538,10 @@ ARCHIVAGE
     lightboxTitle.textContent = title;
     lightboxCap.textContent   = text;
 
+    // Réinitialise la position avant d'ouvrir
+    scale = 1; tx = 0; ty = 0;
+    lightboxWrap.style.transform = "";
+
     if (img) {
       const i = new Image();
       i.className = "lightbox-img";
@@ -1545,7 +1549,14 @@ ARCHIVAGE
       i.alt = title;
       lightboxMedia.innerHTML = "";
       lightboxMedia.appendChild(i);
-      i.onload = resetView;
+      // Ouvre d'abord, puis centre une fois que la scène a ses dimensions
+      lightbox.classList.add("open");
+      document.body.style.overflow = "hidden";
+      if (i.complete) {
+        requestAnimationFrame(() => requestAnimationFrame(resetView));
+      } else {
+        i.onload = () => requestAnimationFrame(() => requestAnimationFrame(resetView));
+      }
     } else if (ph) {
       const icon  = ph.querySelector(".plan-placeholder-icon").textContent;
       const label = ph.querySelector(".plan-placeholder-label").textContent;
@@ -1555,11 +1566,10 @@ ARCHIVAGE
           <div style="font-size:0.85rem;text-transform:uppercase;letter-spacing:0.08em;font-weight:500;">${label}</div>
           <div style="font-size:0.75rem;color:rgba(255,255,255,0.25);margin-top:4px;">Remplacez le placeholder par une vraie image</div>
         </div>`;
-      setTimeout(resetView, 50);
+      lightbox.classList.add("open");
+      document.body.style.overflow = "hidden";
+      requestAnimationFrame(() => requestAnimationFrame(resetView));
     }
-
-    lightbox.classList.add("open");
-    document.body.style.overflow = "hidden";
   }
 
   function closeLightbox() {
