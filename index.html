@@ -552,13 +552,368 @@
 
     .plan-upload-note strong { font-weight: 600; }
 
+    /* ════════════════════════════════════════
+       ENCART CALENDRIER / TIMELINE
+    ════════════════════════════════════════ */
+
+    .timeline-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .timeline-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .timeline-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .timeline-percent {
+      font-size: 0.82rem;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .progress-track {
+      height: 6px;
+      background: #ede8df;
+      border-radius: 999px;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #c9a84c, var(--gold));
+      border-radius: 999px;
+      transition: width 0.6s ease;
+    }
+
+    .milestones {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .milestone {
+      display: grid;
+      grid-template-columns: 90px 20px 1fr;
+      gap: 0 14px;
+      align-items: stretch;
+      min-height: 52px;
+    }
+
+    .milestone-date {
+      font-size: 0.75rem;
+      color: var(--muted);
+      padding-top: 3px;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .milestone-spine {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .milestone-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--line);
+      background: #fff;
+      flex-shrink: 0;
+      margin-top: 3px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .milestone.done .milestone-dot {
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .milestone.current .milestone-dot {
+      background: #fff;
+      border-color: var(--gold);
+      border-width: 3px;
+      box-shadow: 0 0 0 3px rgba(155,122,47,0.15);
+    }
+
+    .milestone-line {
+      flex: 1;
+      width: 2px;
+      background: var(--line);
+      margin: 2px 0;
+    }
+
+    .milestone.done .milestone-line { background: var(--gold); }
+    .milestone:last-child .milestone-line { display: none; }
+
+    .milestone-content {
+      padding-bottom: 20px;
+    }
+
+    .milestone-label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+      padding-top: 1px;
+    }
+
+    .milestone.future .milestone-label { color: var(--muted); }
+
+    .milestone-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    .milestone-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 7px;
+      border-radius: 999px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .badge-done    { background: #e8f5e9; color: #2e7d32; }
+    .badge-current { background: var(--gold-soft); color: var(--gold); }
+    .badge-future  { background: #f5f5f5; color: #999; }
+
+    /* ════════════════════════════════════════
+       PAGE AMBASSADEURS
+    ════════════════════════════════════════ */
+
+    .people-intro {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+      color: #444;
+      line-height: 1.7;
+    }
+
+    .people-intro strong { color: var(--text); }
+
+    .people-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .person-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+
+    .person-card:hover {
+      border-color: #c9b98a;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    .person-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--gold-soft);
+      border: 2px solid #e0cfa0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 14px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .person-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .person-name {
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .person-role {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .person-dept {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      background: var(--gold-soft);
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    /* ════════════════════════════════════════
+       PAGE ÉQUIPE PROJET
+    ════════════════════════════════════════ */
+
+    .team-section-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      color: var(--muted);
+      margin: 28px 0 14px;
+    }
+
+    .team-section-title:first-child { margin-top: 0; }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+
+    .team-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px 18px 16px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+
+    .team-card:hover {
+      border-color: #c9b98a;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.06);
+    }
+
+    .team-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--gold-soft);
+      border: 2px solid #e0cfa0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .team-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .team-avatar.parella {
+      background: #e8edf5;
+      border-color: #b8c8e0;
+      color: #3a5a8a;
+    }
+
+    .team-info { flex: 1; }
+
+    .team-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .team-title {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+      margin-bottom: 5px;
+    }
+
+    .team-badge {
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    .team-badge.xyz {
+      background: var(--gold-soft);
+      color: var(--gold);
+    }
+
+    .team-badge.parella {
+      background: #e8edf5;
+      color: #3a5a8a;
+    }
+
+    .parella-banner {
+      background: #f0f4fa;
+      border: 1px solid #c8d8ed;
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.88rem;
+      color: #3a5a8a;
+    }
+
+    .parella-logo {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 640px) {
       .search-row { grid-template-columns: 1fr; }
       .plans-grid { grid-template-columns: 1fr; }
       .nav-brand { display: none; }
-      .nav-tab { padding: 0 12px; font-size: 0.82rem; }
+      .nav-tab { padding: 0 10px; font-size: 0.78rem; }
       .article-header { flex-direction: column; gap: 10px; }
+      .milestone { grid-template-columns: 72px 20px 1fr; }
+      .people-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+      .team-grid { grid-template-columns: 1fr; }
     }
 
     /* ── LIGHTBOX ZOOM ── */
@@ -644,17 +999,10 @@
 
     .lightbox-stage.dragging { cursor: grabbing; }
 
-    .lightbox-canvas {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
     .lightbox-media-wrap {
       position: absolute;
+      top: 0;
+      left: 0;
       transform-origin: 0 0;
     }
 
@@ -706,6 +1054,8 @@
       <button class="nav-tab" data-page="actu">Actualités</button>
       <button class="nav-tab active" data-page="faq">FAQ</button>
       <button class="nav-tab" data-page="plans">Plans & 3D</button>
+      <button class="nav-tab" data-page="ambassadeurs">Ambassadeurs</button>
+      <button class="nav-tab" data-page="equipe">Équipe projet</button>
     </div>
   </div>
 </nav>
@@ -718,6 +1068,75 @@
       <h1>Le fil du projet</h1>
       <p>Retrouvez ici toutes les informations publiées par l'équipe projet, au fur et à mesure des décisions et des étapes franchies. Cette page remplace la newsletter envoyée par email.</p>
     </div>
+
+    <!-- ENCART CALENDRIER -->
+    <div class="timeline-box">
+      <div class="timeline-header">
+        <h2>Avancement du projet</h2>
+        <span class="timeline-percent">Étape 3 sur 6 — 42%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width: 42%"></div>
+      </div>
+      <div class="milestones">
+
+        <div class="milestone done">
+          <div class="milestone-date">Oct. 2025</div>
+          <div class="milestone-spine"><div class="milestone-dot"></div><div class="milestone-line"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-label">Lancement du projet <span class="milestone-badge badge-done">Terminé</span></div>
+            <div class="milestone-desc">Décision de déménagement actée. Constitution de l'équipe projet. Premiers échanges avec les instances représentatives du personnel.</div>
+          </div>
+        </div>
+
+        <div class="milestone done">
+          <div class="milestone-date">Déc. 2025 – Fév. 2026</div>
+          <div class="milestone-spine"><div class="milestone-dot"></div><div class="milestone-line"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-label">Cadrage & choix du site <span class="milestone-badge badge-done">Terminé</span></div>
+            <div class="milestone-desc">Analyse des sites candidats. Sélection du nouveau site. Validation du programme immobilier et du budget. Information des partenaires sociaux.</div>
+          </div>
+        </div>
+
+        <div class="milestone current">
+          <div class="milestone-date">Mars – Juin 2026</div>
+          <div class="milestone-spine"><div class="milestone-dot"></div><div class="milestone-line"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-label">Conception & co-construction <span class="milestone-badge badge-current">En cours</span></div>
+            <div class="milestone-desc">Ateliers de personnalisation des espaces. Finalisation des plans de micro-zoning. Lancement du réseau d'ambassadeurs. Premières visites du site.</div>
+          </div>
+        </div>
+
+        <div class="milestone future">
+          <div class="milestone-date">Juil. – Sept. 2026</div>
+          <div class="milestone-spine"><div class="milestone-dot"></div><div class="milestone-line"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-label">Préparation opérationnelle <span class="milestone-badge badge-future">À venir</span></div>
+            <div class="milestone-desc">Travaux d'aménagement intérieur. Préparation logistique des équipes. Communications de bascule. Formations à la prise en main du nouveau site.</div>
+          </div>
+        </div>
+
+        <div class="milestone future">
+          <div class="milestone-date">Sem. du 14 oct. 2026</div>
+          <div class="milestone-spine"><div class="milestone-dot"></div><div class="milestone-line"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-label">Déménagement <span class="milestone-badge badge-future">À venir</span></div>
+            <div class="milestone-desc">Bascule progressive des équipes sur le nouveau site. Accueil renforcé. Support IT et logistique en temps réel. Équipe projet disponible sur place.</div>
+          </div>
+        </div>
+
+        <div class="milestone future">
+          <div class="milestone-date">Nov. 2026+</div>
+          <div class="milestone-spine"><div class="milestone-dot"></div><div class="milestone-line"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-label">Installation & ajustements <span class="milestone-badge badge-future">À venir</span></div>
+            <div class="milestone-desc">Enquête de satisfaction post-installation. Ajustements des espaces et des règles de vie. Bilan du projet et clôture.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- /ENCART CALENDRIER -->
 
     <div class="articles">
 
@@ -1089,6 +1508,253 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
   </div>
 </div>
 
+<!-- ═══════════════════ PAGE : AMBASSADEURS ═══════════════════ -->
+<div class="page" id="page-ambassadeurs">
+  <div class="wrap">
+    <div class="page-header">
+      <div class="eyebrow">Projet XYZ — Réseau</div>
+      <h1>Vos ambassadeurs projet</h1>
+      <p>Ce sont vos collègues. Ils ont accepté volontairement de jouer un rôle de relais entre les équipes et l'équipe projet. Interpellez-les sans hésiter.</p>
+    </div>
+
+    <div class="people-intro">
+      <strong>Quel est leur rôle exactement ?</strong><br>
+      Les ambassadeurs ne sont pas des porte-paroles officiels du projet, ni des communicants. Ce sont des collaborateurs comme vous, issus de différentes équipes et niveaux hiérarchiques, qui ont choisi de s'impliquer activement dans la transition.<br><br>
+      Concrètement, ils font trois choses : ils <strong>relaient les informations</strong> du projet au plus près de leurs collègues, ils <strong>remontent les questions et préoccupations</strong> du terrain vers l'équipe projet via un canal dédié, et ils <strong>participent à la co-construction</strong> des usages et des règles de vie sur le nouveau site.<br><br>
+      Si vous avez une question que vous préférez poser à un collègue plutôt qu'à votre RH, si vous avez entendu une rumeur que vous voulez vérifier, ou si vous voulez simplement comprendre où en est le projet — votre ambassadeur est la bonne personne.
+    </div>
+
+    <div class="people-grid">
+
+      <div class="person-card">
+        <div class="person-avatar">SL</div>
+        <div class="person-name">Sophie Lecomte</div>
+        <div class="person-role">Responsable comptabilité clients</div>
+        <div class="person-dept">Finance</div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">TM</div>
+        <div class="person-name">Thomas Meunier</div>
+        <div class="person-role">Chargé de développement RH</div>
+        <div class="person-dept">Ressources humaines</div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">AL</div>
+        <div class="person-name">Amina Laaroussi</div>
+        <div class="person-role">Chef de projet digital</div>
+        <div class="person-dept">Marketing</div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">PD</div>
+        <div class="person-name">Pierre Dumont</div>
+        <div class="person-role">Ingénieur infrastructure</div>
+        <div class="person-dept">DSI</div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">CR</div>
+        <div class="person-name">Claire Renard</div>
+        <div class="person-role">Juriste droit des affaires</div>
+        <div class="person-dept">Juridique</div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">JB</div>
+        <div class="person-name">Julien Berger</div>
+        <div class="person-role">Responsable supply chain</div>
+        <div class="person-dept">Opérations</div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">NF</div>
+        <div class="person-name">Nathalie Ferrand</div>
+        <div class="person-role">Assistante de direction</div>
+        <div class="person-dept">Direction générale</div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">KD</div>
+        <div class="person-name">Karim Djebbar</div>
+        <div class="person-role">Analyste financier senior</div>
+        <div class="person-dept">Contrôle de gestion</div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">MB</div>
+        <div class="person-name">Marie Blanchard</div>
+        <div class="person-role">Responsable formation</div>
+        <div class="person-dept">Ressources humaines</div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">RP</div>
+        <div class="person-name">Romain Petit</div>
+        <div class="person-role">Développeur back-end</div>
+        <div class="person-dept">DSI</div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">LV</div>
+        <div class="person-name">Laura Vasseur</div>
+        <div class="person-role">Chargée de communication interne</div>
+        <div class="person-dept">Communication</div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">FB</div>
+        <div class="person-name">François Bouchard</div>
+        <div class="person-role">Responsable maintenance</div>
+        <div class="person-dept">Services généraux</div>
+      </div>
+
+    </div>
+
+    <div class="box" style="font-size:0.9rem; color:var(--muted); line-height:1.6;">
+      <strong style="color:var(--text); display:block; margin-bottom:6px;">Vous souhaitez devenir ambassadeur ?</strong>
+      Le réseau est ouvert à de nouveaux volontaires jusqu'à fin avril. Si vous êtes motivé(e) pour jouer ce rôle, parlez-en à votre manager ou contactez directement l'équipe projet via le formulaire de la FAQ.
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════ PAGE : ÉQUIPE PROJET ═══════════════════ -->
+<div class="page" id="page-equipe">
+  <div class="wrap">
+    <div class="page-header">
+      <div class="eyebrow">Projet XYZ — Organisation</div>
+      <h1>L'équipe projet</h1>
+      <p>Retrouvez ici les personnes qui pilotent le projet côté entreprise et les interlocuteurs du cabinet Parella qui accompagne la démarche de transformation des espaces de travail.</p>
+    </div>
+
+    <div class="team-section-title">Équipe XYZ — Pilotage interne</div>
+
+    <div class="team-grid">
+
+      <div class="team-card">
+        <div class="team-avatar">SC</div>
+        <div class="team-info">
+          <div class="team-name">Stéphanie Collet</div>
+          <div class="team-title">Directrice des Ressources Humaines — Cheffe de projet</div>
+          <span class="team-badge xyz">XYZ</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">BM</div>
+        <div class="team-info">
+          <div class="team-name">Bruno Marchand</div>
+          <div class="team-title">Directeur Immobilier & Services Généraux</div>
+          <span class="team-badge xyz">XYZ</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">EG</div>
+        <div class="team-info">
+          <div class="team-name">Élodie Garnier</div>
+          <div class="team-title">RRH — Accompagnement au changement & communication projet</div>
+          <span class="team-badge xyz">XYZ</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">OT</div>
+        <div class="team-info">
+          <div class="team-name">Olivier Thibaut</div>
+          <div class="team-title">Responsable logistique & coordination déménagement</div>
+          <span class="team-badge xyz">XYZ</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">CV</div>
+        <div class="team-info">
+          <div class="team-name">Céline Vidal</div>
+          <div class="team-title">DSI — Référente IT du projet</div>
+          <span class="team-badge xyz">XYZ</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">LP</div>
+        <div class="team-info">
+          <div class="team-name">Laurent Peyre</div>
+          <div class="team-title">Responsable travaux & coordination technique site</div>
+          <span class="team-badge xyz">XYZ</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="team-section-title" style="margin-top: 36px;">Cabinet Parella — Conseil & accompagnement</div>
+
+    <div class="parella-banner">
+      <div class="parella-logo">🏛️</div>
+      <div>
+        <strong>Parella</strong> est le cabinet de conseil en immobilier de travail qui accompagne XYZ dans la conception des espaces, l'animation des ateliers de co-construction et la conduite du changement. Son équipe travaille en binôme avec l'équipe projet interne depuis le début du cadrage.
+      </div>
+    </div>
+
+    <div class="team-grid">
+
+      <div class="team-card">
+        <div class="team-avatar parella">MH</div>
+        <div class="team-info">
+          <div class="team-name">Mathieu Hernandez</div>
+          <div class="team-title">Associé — Directeur de mission</div>
+          <span class="team-badge parella">Parella</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar parella">IR</div>
+        <div class="team-info">
+          <div class="team-name">Isabelle Rousseau</div>
+          <div class="team-title">Manager — Conduite du changement & communication</div>
+          <span class="team-badge parella">Parella</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar parella">AK</div>
+        <div class="team-info">
+          <div class="team-name">Antoine Keller</div>
+          <div class="team-title">Consultant senior — Design des espaces de travail</div>
+          <span class="team-badge parella">Parella</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar parella">SN</div>
+        <div class="team-info">
+          <div class="team-name">Sara Nguyen</div>
+          <div class="team-title">Consultante — Animation ateliers & diagnostic usage</div>
+          <span class="team-badge parella">Parella</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar parella">GF</div>
+        <div class="team-info">
+          <div class="team-name">Guillaume Faure</div>
+          <div class="team-title">Consultant — Programmation immobilière & zoning</div>
+          <span class="team-badge parella">Parella</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="box" style="font-size:0.9rem; color:var(--muted); line-height:1.6; margin-top:8px;">
+      <strong style="color:var(--text); display:block; margin-bottom:6px;">Une question pour l'équipe projet ?</strong>
+      Vous pouvez contacter l'équipe via le formulaire disponible dans l'onglet FAQ. Toutes les demandes sont lues et traitées dans les meilleurs délais.
+    </div>
+
+  </div>
+</div>
+
 <!-- ═══════════════════ LIGHTBOX ZOOM ═══════════════════ -->
 <div class="lightbox" id="lightbox">
   <div class="lightbox-toolbar">
@@ -1102,11 +1768,9 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
     </div>
   </div>
   <div class="lightbox-stage" id="lightboxStage">
-    <div class="lightbox-canvas" id="lightboxCanvas">
       <div class="lightbox-media-wrap" id="lightboxWrap">
         <div id="lightboxMedia"></div>
       </div>
-    </div>
   </div>
   <div class="lightbox-caption">
     <div id="lightboxCaption"></div>
@@ -1432,15 +2096,16 @@ ARCHIVAGE
   }
 
   function resetView() {
-    const stage  = lightboxStage.getBoundingClientRect();
-    const media  = lightboxMedia.firstElementChild;
+    const stage = lightboxStage.getBoundingClientRect();
+    const media = lightboxMedia.firstElementChild;
     if (!media) return;
     const mw = media.naturalWidth  || media.offsetWidth  || 800;
     const mh = media.naturalHeight || media.offsetHeight || 500;
-    const fitScale = Math.min(stage.width / mw, stage.height / mh, 1);
-    scale = fitScale;
-    tx = (stage.width  - mw * scale) / 2;
-    ty = (stage.height - mh * scale) / 2;
+    const sw = stage.width  || window.innerWidth;
+    const sh = stage.height || window.innerHeight * 0.7;
+    scale = Math.min(sw / mw, sh / mh, 1);
+    tx = (sw - mw * scale) / 2;
+    ty = (sh - mh * scale) / 2;
     lightboxWrap.style.transformOrigin = "0 0";
     applyTransform();
   }
