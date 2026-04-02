@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Assistant projet</title>
+  <title>Projet XYZ — Espace collaborateurs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-
   <style>
     :root {
       --bg: #f7f7f5;
@@ -19,81 +18,277 @@
       --gold-soft: #f5eddc;
       --max: 860px;
       --radius: 16px;
+      --nav-h: 60px;
     }
-
-    * { box-sizing: border-box; }
-
+ 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+ 
     body {
-      margin: 0;
       font-family: "Roboto", Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
     }
-
+ 
+    /* ── NAV ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      height: var(--nav-h);
+      display: flex;
+      align-items: stretch;
+    }
+ 
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      width: 100%;
+    }
+ 
+    .nav-brand {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      margin-right: 32px;
+      white-space: nowrap;
+    }
+ 
+    .nav-tabs {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      flex: 1;
+    }
+ 
+    .nav-tab {
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+ 
+    .nav-tab:hover { color: var(--text); }
+ 
+    .nav-tab.active {
+      color: var(--text);
+      border-bottom-color: var(--gold);
+      font-weight: 500;
+    }
+ 
+    /* ── PAGES ── */
+    .page { display: none; }
+    .page.active { display: block; }
+ 
     .wrap {
       max-width: var(--max);
       margin: 0 auto;
-      padding: 32px 20px 48px;
+      padding: 32px 20px 64px;
     }
-
-    .top {
+ 
+    /* ── HEADER COMMUN ── */
+    .page-header {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+ 
+    .eyebrow {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+ 
+    .page-header h1 {
+      font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      margin-bottom: 10px;
+    }
+ 
+    .page-header p {
+      color: #444;
+      max-width: 680px;
+      font-size: 0.97rem;
+    }
+ 
+    /* ── BOX ── */
+    .box {
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: var(--radius);
       padding: 24px;
       margin-bottom: 20px;
     }
-
-    .eyebrow {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--gold);
-      margin-bottom: 12px;
-      font-weight: 500;
-    }
-
-    h1 {
-      margin: 0 0 12px;
-      font-size: clamp(2rem, 4vw, 3rem);
-      line-height: 1.02;
-      font-weight: 400;
-      letter-spacing: -0.04em;
-    }
-
-    .intro {
-      margin: 0;
-      color: #333;
-      max-width: 700px;
-    }
-
-    .box {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
+ 
     .label {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: var(--muted);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       font-weight: 700;
     }
-
+ 
+    /* ════════════════════════════════════════
+       ONGLET ACTUALITÉS
+    ════════════════════════════════════════ */
+ 
+    .articles { display: flex; flex-direction: column; gap: 20px; }
+ 
+    .article {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+ 
+    .article:hover {
+      border-color: #c9b98a;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+ 
+    .article-header {
+      padding: 22px 24px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+ 
+    .article-meta {
+      flex: 1;
+    }
+ 
+    .article-tags {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+ 
+    .tag {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 600;
+      color: var(--gold);
+      background: var(--gold-soft);
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+ 
+    .tag-muted {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 500;
+      color: var(--muted);
+    }
+ 
+    .article-title {
+      font-size: 1.15rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+ 
+    .article-chapeau {
+      font-size: 0.93rem;
+      color: #444;
+      line-height: 1.55;
+    }
+ 
+    .article-toggle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+      color: var(--muted);
+      transition: transform 0.2s, background 0.15s;
+      margin-top: 2px;
+    }
+ 
+    .article.open .article-toggle {
+      transform: rotate(180deg);
+      background: var(--gold-soft);
+      color: var(--gold);
+    }
+ 
+    .article-body {
+      display: none;
+      padding: 0 24px 24px;
+      border-top: 1px solid var(--line);
+    }
+ 
+    .article.open .article-body { display: block; }
+ 
+    .article-body-inner {
+      padding-top: 20px;
+      font-size: 0.96rem;
+      color: #333;
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+ 
+    .article-body-inner strong {
+      display: block;
+      margin-top: 18px;
+      margin-bottom: 4px;
+      color: var(--text);
+      font-size: 0.97rem;
+    }
+ 
+    .read-time {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+ 
+    /* ════════════════════════════════════════
+       ONGLET FAQ
+    ════════════════════════════════════════ */
+ 
     .search-row {
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 10px;
     }
-
-    input[type="text"],
-    input[type="email"],
-    textarea {
+ 
+    input[type="text"], input[type="email"], textarea {
       width: 100%;
       padding: 14px 15px;
       border: 1px solid var(--line);
@@ -103,16 +298,14 @@
       color: var(--text);
       background: #fff;
     }
-
-    input[type="text"]:focus,
-    input[type="email"]:focus,
-    textarea:focus {
+ 
+    input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
       outline: none;
       border-color: var(--gold);
       box-shadow: 0 0 0 3px rgba(155,122,47,0.08);
     }
-
-    button {
+ 
+    button.btn-primary {
       border: 0;
       background: #111;
       color: #fff;
@@ -122,119 +315,475 @@
       font-family: inherit;
       cursor: pointer;
     }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
+ 
+    button.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+ 
     .suggestions {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-top: 12px;
     }
-
+ 
     .suggestion {
       background: #fff;
       color: #111;
       border: 1px solid var(--line);
       border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 0.9rem;
+      padding: 8px 13px;
+      font-size: 0.88rem;
       cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.12s, color 0.12s;
     }
-
-    .suggestion:hover {
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-
-    .result { display: none; }
-
-    .question {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-
-    .answer {
-      font-size: 1rem;
+ 
+    .suggestion:hover { border-color: var(--gold); color: var(--gold); }
+ 
+    .faq-result { display: none; }
+ 
+    .faq-question { font-size: 0.88rem; color: var(--muted); margin-bottom: 10px; }
+ 
+    .faq-answer {
+      font-size: 0.97rem;
       white-space: pre-line;
       margin-bottom: 14px;
+      line-height: 1.65;
     }
-
-    .meta {
+ 
+    .faq-meta {
       display: inline-block;
       border: 1px solid var(--line);
       border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 0.8rem;
+      padding: 5px 11px;
+      font-size: 0.78rem;
       color: var(--gold);
       background: var(--gold-soft);
       margin-bottom: 12px;
     }
-
-    .note {
+ 
+    .faq-note {
       padding-top: 12px;
       border-top: 1px solid var(--line);
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       color: var(--muted);
     }
-
-    .loading {
+ 
+    .faq-loading {
       display: none;
       color: var(--muted);
       font-size: 0.95rem;
       padding: 16px 0;
     }
-
+ 
     .loading-dots::after {
       content: '';
       animation: dots 1.2s steps(3, end) infinite;
     }
-
+ 
     @keyframes dots {
       0%   { content: ''; }
       33%  { content: '.'; }
       66%  { content: '..'; }
       100% { content: '...'; }
     }
-
-    .not-found { display: none; color: var(--muted); }
-
+ 
+    .faq-notfound { display: none; color: var(--muted); }
+ 
     .form-grid { display: grid; gap: 14px; }
-
-    textarea { min-height: 120px; resize: vertical; }
-
-    .small {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-top: 8px;
+ 
+    textarea { min-height: 110px; resize: vertical; }
+ 
+    .small { font-size: 0.88rem; color: var(--muted); margin-top: 8px; }
+ 
+    /* ════════════════════════════════════════
+       ONGLET PLANS & 3D
+    ════════════════════════════════════════ */
+ 
+    .plans-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
     }
-
+ 
+    .filter-btn {
+      background: #fff;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.12s;
+    }
+ 
+    .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+ 
+    .filter-btn.active {
+      background: var(--gold);
+      color: #fff;
+      border-color: var(--gold);
+    }
+ 
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 20px;
+    }
+ 
+    .plan-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+ 
+    .plan-card:hover {
+      border-color: #c9b98a;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    }
+ 
+    .plan-visual {
+      width: 100%;
+      aspect-ratio: 16/10;
+      background: #f0ece4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+ 
+    .plan-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+ 
+    .plan-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #b5a98a;
+      text-align: center;
+      padding: 20px;
+    }
+ 
+    .plan-placeholder-icon {
+      font-size: 2.2rem;
+      opacity: 0.6;
+    }
+ 
+    .plan-placeholder-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+ 
+    .plan-type-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text);
+    }
+ 
+    .plan-info { padding: 18px 20px 20px; }
+ 
+    .plan-tags { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+ 
+    .plan-title {
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+ 
+    .plan-comment {
+      font-size: 0.88rem;
+      color: #555;
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+ 
+    .plan-card.expanded .plan-comment {
+      display: block;
+      -webkit-line-clamp: unset;
+    }
+ 
+    .plan-read-more {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: var(--gold);
+      cursor: pointer;
+      display: inline-block;
+      background: none;
+      border: none;
+      font-family: inherit;
+      padding: 0;
+    }
+ 
+    .plan-upload-note {
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: var(--gold-soft);
+      border: 1px solid #e0cfa0;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      color: #7a6020;
+      line-height: 1.55;
+    }
+ 
+    .plan-upload-note strong { font-weight: 600; }
+ 
+    /* ── RESPONSIVE ── */
     @media (max-width: 640px) {
       .search-row { grid-template-columns: 1fr; }
+      .plans-grid { grid-template-columns: 1fr; }
+      .nav-brand { display: none; }
+      .nav-tab { padding: 0 12px; font-size: 0.82rem; }
+      .article-header { flex-direction: column; gap: 10px; }
     }
   </style>
 </head>
 <body>
+ 
+<!-- ═══════════════════ NAVIGATION ═══════════════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">Projet XYZ</div>
+    <div class="nav-tabs">
+      <button class="nav-tab" data-page="actu">Actualités</button>
+      <button class="nav-tab active" data-page="faq">FAQ</button>
+      <button class="nav-tab" data-page="plans">Plans & 3D</button>
+    </div>
+  </div>
+</nav>
+ 
+<!-- ═══════════════════ PAGE : ACTUALITÉS ═══════════════════ -->
+<div class="page" id="page-actu">
   <div class="wrap">
-
-    <section class="top">
-      <div class="eyebrow">Projet XYZ — espace d'information</div>
+    <div class="page-header">
+      <div class="eyebrow">Projet XYZ — Actualités</div>
+      <h1>Le fil du projet</h1>
+      <p>Retrouvez ici toutes les informations publiées par l'équipe projet, au fur et à mesure des décisions et des étapes franchies. Cette page remplace la newsletter envoyée par email.</p>
+    </div>
+ 
+    <div class="articles">
+ 
+      <!-- Article 1 -->
+      <div class="article" data-article="1">
+        <div class="article-header">
+          <div class="article-meta">
+            <div class="article-tags">
+              <span class="tag">Calendrier</span>
+              <span class="tag-muted">2 avril 2026 · 4 min de lecture</span>
+            </div>
+            <div class="article-title">Le projet entre dans sa phase active — ce qui change concrètement dans les prochaines semaines</div>
+            <div class="article-chapeau">Après plusieurs mois de cadrage et de travail en coulisses, le projet de déménagement entre dans une nouvelle phase. Voici ce qui se passe concrètement d'ici fin avril — et ce qui reste encore à confirmer.</div>
+          </div>
+          <div class="article-toggle">▾</div>
+        </div>
+        <div class="article-body">
+          <div class="article-body-inner">Vous avez été nombreux à nous poser la même question ces dernières semaines : "Quand est-ce que ça va vraiment commencer ?" La réponse, c'est maintenant.
+ 
+Après plusieurs mois de cadrage, de travail technique et de consultations préalables — y compris avec les instances représentatives du personnel — le projet de déménagement entre dans sa phase opérationnelle. Les premières actions visibles pour les collaborateurs démarrent en avril, et le rythme va s'accélérer jusqu'à la semaine du 14 octobre, date prévue pour la bascule.
+ 
+<strong>Les ateliers de personnalisation démarrent mi-avril.</strong>
+ 
+C'est probablement la nouveauté la plus importante de cette phase. Entre mi-avril et fin mai, chaque entité participera à un atelier dédié animé par l'équipe projet et un cabinet spécialisé en design des espaces de travail. Ces ateliers durent environ deux heures et réunissent une quinzaine de collaborateurs représentatifs de l'équipe.
+ 
+L'objectif n'est pas de vous présenter un plan définitif et de recueillir vos applaudissements. L'objectif est de co-construire avec vous la micro-organisation de votre espace : implantation des postes, règles de vie, usage des zones partagées, signalétique. Les résultats de ces ateliers alimenteront directement les derniers arbitrages d'aménagement. Ça compte vraiment.
+ 
+Votre manager vous communiquera la date de votre atelier dans les prochains jours. La participation est fortement encouragée — pas obligatoire, mais fortement encouragée. Ceux qui n'ont pas pu y assister pourront faire remonter leurs retours via le formulaire de la FAQ.
+ 
+<strong>Le réseau d'ambassadeurs est officiellement lancé.</strong>
+ 
+Une vingtaine de collaborateurs volontaires, issus de différentes équipes et niveaux hiérarchiques, ont accepté de jouer le rôle de relais de proximité pour ce projet. Ils ont reçu une formation courte sur le projet, ses enjeux et ses grandes décisions, et ils disposent d'un canal de remontée direct vers l'équipe projet.
+ 
+Leur rôle n'est pas de défendre le projet à tout prix — ce ne sont pas des communicants. Leur rôle est d'être disponibles pour leurs collègues, de faire circuler l'information dans les deux sens, et de signaler les points de friction que les canaux officiels ne captent pas toujours.
+ 
+La liste complète des ambassadeurs sera diffusée avant la fin du mois d'avril. En attendant, renseignez-vous auprès de votre manager ou de votre RH.
+ 
+<strong>Les premières visites du site sont ouvertes.</strong>
+ 
+Un calendrier de visites découverte est en cours de finalisation pour les mois d'avril et mai. Ces visites sont organisées en petits groupes (une dizaine de personnes), guidées par un membre de l'équipe projet et par le responsable du site. Elles durent environ une heure et demie.
+ 
+Pendant la visite, vous verrez l'état actuel du chantier d'aménagement, vous découvrirez les différentes zones, et vous pourrez poser toutes vos questions à des interlocuteurs qui connaissent le projet dans le détail. Pour ceux qui ne peuvent pas se déplacer, une visite virtuelle commentée sera disponible sur ce site dans les prochaines semaines.
+ 
+<strong>Ce qui reste à confirmer — soyons honnêtes.</strong>
+ 
+— Les dates précises de bascule par équipe : le phasage est en cours de finalisation. Communication prévue avant fin mai.
+— Les modalités de restauration : plusieurs options à l'étude. Arbitrage attendu fin avril.
+— Le dispositif de stationnement : en cours de négociation avec le gestionnaire du site. Réponse attendue début mai.
+— Les règles d'occupation des espaces (flex office vs postes attribués) : sera en partie déterminé par les ateliers d'avril. Cadre général communiqué fin mai.
+ 
+Ce site est mis à jour à chaque étape franchie.</div>
+        </div>
+      </div>
+ 
+      <!-- Article 2 -->
+      <div class="article" data-article="2">
+        <div class="article-header">
+          <div class="article-meta">
+            <div class="article-tags">
+              <span class="tag">Écoute</span>
+              <span class="tag-muted">18 mars 2026 · 5 min de lecture</span>
+            </div>
+            <div class="article-title">Ce que nous avons entendu — retour détaillé sur les premières remontées terrain</div>
+            <div class="article-chapeau">Depuis le lancement du projet, plusieurs centaines de questions et de préoccupations ont été collectées. Voici ce que nous en avons retenu — et ce que ça change concrètement.</div>
+          </div>
+          <div class="article-toggle">▾</div>
+        </div>
+        <div class="article-body">
+          <div class="article-body-inner">Depuis le lancement du projet, plusieurs centaines de questions, de remarques et de préoccupations ont été collectées — via ce site, via les managers, via les sessions d'écoute organisées en équipe, et via les échanges informels que les ambassadeurs ont remontés. Nous avons lu chacune d'entre elles. Cet article en est le compte-rendu fidèle.
+ 
+Nous avons fait le choix de ne pas édulcorer. Ce qui suit reflète ce que vous nous avez dit — y compris les choses inconfortables.
+ 
+<strong>1. Le trajet : la préoccupation numéro un.</strong>
+ 
+C'est, de très loin, le sujet qui revient le plus. Une part significative des collaborateurs voit son temps de trajet augmenter avec le nouveau site — parfois de manière modérée, parfois de façon vraiment substantielle. Certains nous ont écrit pour dire que ce changement remet en question leur organisation familiale entière.
+ 
+Ce que nous faisons avec ça : une cartographie précise des situations a été réalisée. Les collaborateurs dont le trajet augmente de plus de 30 minutes aller simple feront l'objet d'un accompagnement individualisé. Cela peut prendre plusieurs formes : prise en charge partielle d'un abonnement plus étendu, aménagement temporaire du nombre de jours sur site, ou entretien RH pour explorer les options. Ce dispositif sera formalisé et communiqué avant fin avril.
+ 
+<strong>2. Le bureau personnel : une question d'identité autant que de confort.</strong>
+ 
+"Je veux savoir où je vais m'asseoir le matin." Cette phrase est revenue dans un très grand nombre de retours. La perspective du flex office génère une anxiété qui va au-delà du confort immédiat — c'est une question de repères, de territoire, parfois d'efficacité pure.
+ 
+Le flex office intégral — où personne n'a de place fixe — n'est pas le modèle retenu par défaut. Le modèle d'occupation des espaces sera discuté dans les ateliers d'avril, et différentes équipes pourront avoir des règles différentes selon leur nature de travail.
+ 
+<strong>3. Le bruit et la concentration : une crainte légitime.</strong>
+ 
+Beaucoup d'entre vous ont exprimé la crainte d'un open space bruyant, peu propice à la concentration. Le nouveau site a été pensé avec ça en tête : zones de focus silence strict, cabines phoniques insonorisées sans réservation, salles de réunion en nombre suffisant. Des ajustements seront nécessaires après l'installation, et c'est pour ça qu'un dispositif de retours post-installation est prévu.
+ 
+<strong>4. La restauration : le silence qui agace.</strong>
+ 
+Plusieurs retours ont été directs : "On nous parle de tout sauf de ce qu'on va manger." C'est compréhensible. La raison pour laquelle nous n'avons pas encore communiqué sur ce point n'est pas un oubli — les négociations avec les prestataires potentiels sont encore en cours. L'arbitrage est attendu pour fin avril, et une communication dédiée suivra dans la semaine.
+ 
+<strong>5. L'incertitude : ce qui use le plus.</strong>
+ 
+Au-delà de chaque sujet pris individuellement, beaucoup ont exprimé la fatigue de ne pas savoir. Cette incertitude prolongée use — et c'est une réaction tout à fait normale face à un changement qui touche au quotidien.
+ 
+Nous ne pouvons pas tout résoudre immédiatement. Mais nous pouvons nous engager sur une chose : vous dire la vérité sur ce qu'on sait et sur ce qu'on ne sait pas encore. Ce site est l'outil de cet engagement.
+ 
+Merci à tous ceux qui ont pris le temps d'écrire et de remonter des retours.</div>
+        </div>
+      </div>
+ 
+      <!-- Article 3 -->
+      <div class="article" data-article="3">
+        <div class="article-header">
+          <div class="article-meta">
+            <div class="article-tags">
+              <span class="tag">Espaces</span>
+              <span class="tag-muted">5 mars 2026 · 4 min de lecture</span>
+            </div>
+            <div class="article-title">Première plongée dans le futur site — plans, ambiances et ce qu'il faut en retenir</div>
+            <div class="article-chapeau">Pour la première fois, nous partageons des documents visuels sur le futur site. Plans, vues 3D, zones commentées : voici comment les lire et comment vous en servir avant les ateliers.</div>
+          </div>
+          <div class="article-toggle">▾</div>
+        </div>
+        <div class="article-body">
+          <div class="article-body-inner">Pour la première fois depuis le lancement du projet, nous partageons des documents visuels sur le futur site. Nous avons volontairement attendu d'avoir des éléments suffisamment avancés pour que les visuels soient représentatifs de la réalité finale. Ce moment est arrivé.
+ 
+Vous trouverez dans l'onglet Plans & 3D de ce site une première série de documents : plans de macro-zoning, vues 3D des espaces principaux, et plan de détail d'une zone type. Voici un guide de lecture pour en tirer le meilleur parti.
+ 
+<strong>Comment lire un plan de macro-zoning.</strong>
+ 
+Le macro-zoning, c'est la carte grande maille du site. Il montre quelles grandes familles d'usages occupent quels espaces, sans aller jusqu'au niveau du poste individuel. Sur nos plans, vous verrez des zones colorées : espaces de travail ouverts, zones de concentration, salles de réunion, espaces de convivialité, services.
+ 
+Ce que le macro-zoning ne dit pas : il ne dit pas où vous allez vous asseoir. Ça, c'est le micro-zoning — et c'est précisément ce qui sera co-construit dans les ateliers d'avril. Le macro-zoning est le cadre ; le micro-zoning est le contenu.
+ 
+<strong>Comment lire les vues 3D.</strong>
+ 
+Les vues 3D sont des rendus réalisés par le cabinet d'architecture à partir des plans définitifs. Elles représentent fidèlement les volumes, les matériaux, les couleurs et la luminosité des espaces. Ce n'est pas du photomontage enjolivé — les rendus ont été calibrés pour être proches de la réalité perçue.
+ 
+Regardez particulièrement la vue de l'espace de convivialité central et la vue depuis l'entrée principale. Ces deux espaces donnent une bonne idée de l'intention générale du projet : des lieux généreux, lumineux, pensés pour le bien-être autant que pour l'efficacité.
+ 
+<strong>Ce que vous pouvez faire avec ces documents dès maintenant.</strong>
+ 
+Si votre atelier de personnalisation est dans les prochaines semaines, nous vous encourageons à consulter ces plans avant d'y aller. Arriver avec des questions précises permet des échanges beaucoup plus riches qu'une découverte à froid le jour de l'atelier.
+ 
+Si vous avez des remarques sur ce que vous voyez dans ces documents, le formulaire de la page FAQ est là pour ça. Les questions remontées avant les ateliers alimenteront directement les points de discussion.</div>
+        </div>
+      </div>
+ 
+      <!-- Article 4 -->
+      <div class="article" data-article="4">
+        <div class="article-header">
+          <div class="article-meta">
+            <div class="article-tags">
+              <span class="tag">Vision</span>
+              <span class="tag-muted">12 février 2026 · 4 min de lecture</span>
+            </div>
+            <div class="article-title">Pourquoi on déménage — et ce qu'on a voulu faire de ce projet</div>
+            <div class="article-chapeau">Avant de parler de cartons et de badges, il nous semblait important de partager le pourquoi. Ce déménagement n'est pas qu'une contrainte logistique — c'est un choix, avec une intention derrière.</div>
+          </div>
+          <div class="article-toggle">▾</div>
+        </div>
+        <div class="article-body">
+          <div class="article-body-inner">Avant de parler de cartons, de badges et de plans d'étage, il nous semblait important de partager quelque chose de plus fondamental : le pourquoi. Pas le pourquoi administratif et contractuel — même si celui-là existe — mais l'intention derrière ce projet.
+ 
+<strong>La contrainte de départ.</strong>
+ 
+Soyons directs : ce déménagement n'est pas né d'une envie spontanée de changer d'air. Le bail de notre site actuel arrive à échéance, et les conditions de renouvellement n'étaient pas satisfaisantes. C'est une réalité contractuelle qui a déclenché le projet.
+ 
+Mais une contrainte peut être traversée de deux façons : en faisant au minimum, ou en essayant d'en faire quelque chose. Nous avons choisi la deuxième option.
+ 
+<strong>Pourquoi ce site, et pas un autre.</strong>
+ 
+Le nouveau site a été sélectionné au terme d'une analyse multicritères menée sur plusieurs mois. Les critères n'étaient pas uniquement immobiliers. L'accessibilité en transports en commun était un critère majeur. La qualité des espaces — volumes, lumière naturelle, possibilité d'aménager des zones diversifiées — était déterminante. La capacité du bâtiment à accueillir nos modes de travail hybrides actuels a aussi pesé dans la balance.
+ 
+Plusieurs sites ont été visités et écartés. Celui que nous avons retenu est, selon nous, le meilleur compromis possible entre ces différentes exigences. Il n'est pas parfait — aucun site ne l'est — mais il offre une base solide pour construire quelque chose de bien.
+ 
+<strong>L'intention derrière le projet.</strong>
+ 
+Au-delà du déménagement lui-même, nous avons voulu faire de ce projet une occasion de repenser notre façon de travailler ensemble. Pas de façon révolutionnaire ou imposée — mais en posant quelques questions simples : de quoi avons-nous besoin pour travailler bien ? Qu'est-ce qui use les gens et qu'on pourrait éviter dans le nouveau lieu ?
+ 
+Ces questions ont alimenté les choix d'aménagement. Les espaces de concentration ne sont pas là pour cocher une case — ils sont là parce que le bruit est l'une des plaintes les plus fréquentes dans nos espaces actuels. Les espaces de convivialité ne sont pas un luxe — ils sont là parce que le lien social entre collègues est une composante réelle du bien-être au travail.
+ 
+<strong>L'engagement qui en découle.</strong>
+ 
+Nous serons honnêtes : tous les arbitrages ne sont pas encore rendus. Nous aurions pu attendre d'avoir toutes les réponses avant de communiquer. Nous avons choisi de ne pas le faire.
+ 
+L'engagement que nous prenons, c'est celui de la transparence progressive : vous informer au fur et à mesure que les décisions sont prises, pas quand tout est parfait. Ce site est l'outil de cet engagement. Si une information que nous avons donnée doit être corrigée, nous le dirons clairement, avec les raisons.</div>
+        </div>
+      </div>
+ 
+    </div><!-- /articles -->
+  </div>
+</div>
+ 
+<!-- ═══════════════════ PAGE : FAQ ═══════════════════ -->
+<div class="page active" id="page-faq">
+  <div class="wrap">
+    <div class="page-header">
+      <div class="eyebrow">Projet XYZ — FAQ</div>
       <h1>Retrouvez les informations à jour sur le projet</h1>
-      <p class="intro">
-        Cet espace permet de consulter rapidement les réponses aux principales questions liées au projet :
-        calendrier, déménagement, services, accompagnement et informations pratiques.
-      </p>
-    </section>
-
-    <section class="box">
+      <p>Posez votre question librement. Les réponses officielles s'affichent instantanément ; pour les questions non couvertes, une IA prend le relais en s'appuyant sur la base de connaissances du projet.</p>
+    </div>
+ 
+    <div class="box">
       <div class="label">Posez votre question</div>
       <div class="search-row">
         <input type="text" id="questionInput" placeholder="Ex. : Où est-ce qu'on va manger ?">
-        <button type="button" id="askBtn">Rechercher</button>
+        <button type="button" id="askBtn" class="btn-primary">Rechercher</button>
       </div>
       <div class="suggestions">
         <button type="button" class="suggestion" data-question="Quand a lieu le déménagement ?">Date du déménagement</button>
@@ -246,87 +795,256 @@
         <button type="button" class="suggestion" data-question="Qui pilote le projet ?">Pilotage</button>
         <button type="button" class="suggestion" data-question="Que faire de mes archives ?">Archivage</button>
       </div>
-    </section>
-
-    <div class="box loading" id="loadingBox">
+    </div>
+ 
+    <div class="box faq-loading" id="loadingBox">
       <span class="loading-dots">Recherche en cours</span>
     </div>
-
-    <section class="box result" id="resultBox">
+ 
+    <div class="box faq-result" id="resultBox">
       <div class="label">Réponse</div>
-      <div class="question" id="resultQuestion"></div>
-      <div class="meta" id="resultStatus"></div>
-      <div class="answer" id="resultAnswer"></div>
-      <div class="note" id="resultNote"></div>
-    </section>
-
-    <section class="box not-found" id="notFoundBox">
+      <div class="faq-question" id="resultQuestion"></div>
+      <div class="faq-meta" id="resultStatus"></div>
+      <div class="faq-answer" id="resultAnswer"></div>
+      <div class="faq-note" id="resultNote"></div>
+    </div>
+ 
+    <div class="box faq-notfound" id="notFoundBox">
       <div class="label">Réponse indisponible</div>
-      <p>Nous n'avons pas encore de réponse précise à cette question.
-      Elle pourra être intégrée dans une prochaine mise à jour de la FAQ.</p>
-    </section>
-
-    <section class="box">
+      <p>Nous n'avons pas encore de réponse précise à cette question. Elle pourra être intégrée dans une prochaine mise à jour de la FAQ.</p>
+    </div>
+ 
+    <div class="box">
       <div class="label">Si vous n'avez pas trouvé votre réponse</div>
       <form action="" method="POST">
         <div class="form-grid">
           <input type="text" name="name" placeholder="Nom et prénom">
           <input type="email" name="email" placeholder="Adresse email">
           <textarea name="message" placeholder="Décrivez votre question ou le point qui reste flou."></textarea>
-          <button type="submit">Envoyer la demande</button>
+          <button type="submit" class="btn-primary">Envoyer la demande</button>
         </div>
       </form>
       <p class="small">Le formulaire n'est pas encore branché. Il pourra être relié ensuite à une boîte mail.</p>
-    </section>
-
+    </div>
   </div>
-
-  <script>
-
-    // ─── CLÉ API GEMINI ──────────────────────────────────────────────────────────
-    // Remplacez cette valeur par votre propre clé depuis aistudio.google.com
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${AIzaSyCCcVfG3Th5musH2YvM7DSDi2txOEssSIk}`;
-    // ─────────────────────────────────────────────────────────────────────────────
-
-    // ─── CONTEXTE PROJET (transmis à Gemini) ─────────────────────────────────────
-    // Mettez ce texte à jour à mesure que le projet avance.
-    const PROJECT_CONTEXT = `
+</div>
+ 
+<!-- ═══════════════════ PAGE : PLANS & 3D ═══════════════════ -->
+<div class="page" id="page-plans">
+  <div class="wrap">
+    <div class="page-header">
+      <div class="eyebrow">Projet XYZ — Plans & 3D</div>
+      <h1>Découvrez le futur site</h1>
+      <p>Plans de macro et micro-zoning, vues 3D des espaces, ambiances : tous les documents visuels du projet sont ici, commentés pour vous aider à vous projeter avant les ateliers.</p>
+    </div>
+ 
+    <div class="plans-filters">
+      <button class="filter-btn active" data-filter="all">Tous</button>
+      <button class="filter-btn" data-filter="Plan">Plans</button>
+      <button class="filter-btn" data-filter="3D">Vues 3D</button>
+      <button class="filter-btn" data-filter="Macro-zoning">Macro-zoning</button>
+      <button class="filter-btn" data-filter="Micro-zoning">Micro-zoning</button>
+      <button class="filter-btn" data-filter="Ambiance">Ambiances</button>
+      <button class="filter-btn" data-filter="Concentration">Concentration</button>
+    </div>
+ 
+    <div class="plans-grid" id="plansGrid">
+ 
+      <div class="plan-card" data-tags="Plan Macro-zoning">
+        <div class="plan-visual">
+          <div class="plan-placeholder">
+            <div class="plan-placeholder-icon">📐</div>
+            <div class="plan-placeholder-label">Plan · R+1</div>
+          </div>
+          <div class="plan-type-badge">Plan</div>
+        </div>
+        <div class="plan-info">
+          <div class="plan-tags"><span class="tag">Macro-zoning</span></div>
+          <div class="plan-title">Plan macro-zoning — vue générale niveau R+1</div>
+          <div class="plan-comment">Ce plan présente la répartition grande maille des usages sur le niveau R+1, principal plateau de travail du site. Les zones colorées correspondent aux grandes familles d'usages : bleu clair pour les espaces de travail ouverts, bleu foncé pour les zones de concentration, vert pour les espaces collaboratifs, ocre pour les salles de réunion formelle, orange pour les cabines phoniques en accès libre. Le niveau est organisé autour d'une colonne vertébrale centrale qui sépare les espaces de concentration (côté nord) des espaces collaboratifs (côté sud, plus lumineux). On remarque la densité des cabines phoniques : neuf cabines réparties sur l'ensemble du plateau, soit une cabine pour environ vingt postes — un ratio volontairement généreux. L'implantation précise des équipes sur ce plateau n'est pas encore arrêtée et sera co-construite dans les ateliers d'avril.</div>
+          <button class="plan-read-more">Lire la suite ↓</button>
+        </div>
+      </div>
+ 
+      <div class="plan-card" data-tags="3D Ambiance">
+        <div class="plan-visual">
+          <div class="plan-placeholder">
+            <div class="plan-placeholder-icon">🏛️</div>
+            <div class="plan-placeholder-label">Vue 3D · Convivialité</div>
+          </div>
+          <div class="plan-type-badge">3D</div>
+        </div>
+        <div class="plan-info">
+          <div class="plan-tags"><span class="tag">Ambiance</span></div>
+          <div class="plan-title">Vue 3D — espace de convivialité central</div>
+          <div class="plan-comment">Cet espace de 180 m² est conçu pour être le cœur battant du site. Lumineux, ouvert, il accueillera les pauses, les déjeuners informels et les échanges spontanés entre équipes. Le mobilier est volontairement mixte : tables hautes pour les échanges debout, assises basses pour les moments détendus, coins semi-privatifs délimités par des cloisons végétalisées. L'îlot central accueille les équipements de restauration légère. Les matériaux — bois clair, béton poncé, végétation intérieure, textile acoustique — créent une ambiance chaleureuse tout en maintenant le temps de réverbération sous 0,6 seconde.</div>
+          <button class="plan-read-more">Lire la suite ↓</button>
+        </div>
+      </div>
+ 
+      <div class="plan-card" data-tags="Plan Micro-zoning">
+        <div class="plan-visual">
+          <div class="plan-placeholder">
+            <div class="plan-placeholder-icon">📋</div>
+            <div class="plan-placeholder-label">Plan · Finance (exemple)</div>
+          </div>
+          <div class="plan-type-badge">Plan</div>
+        </div>
+        <div class="plan-info">
+          <div class="plan-tags"><span class="tag">Micro-zoning</span></div>
+          <div class="plan-title">Plan micro-zoning — équipe Finance & Contrôle de gestion (exemple)</div>
+          <div class="plan-comment">Ce plan de détail est présenté à titre d'exemple pour illustrer le niveau de précision des plans de micro-zoning par équipe. Il ne reflète pas l'implantation définitive — celle-ci sera construite dans l'atelier dédié, prévu mi-avril. On distingue 24 postes organisés en îlots de 4, séparés par des cloisons basses (H.140 cm), deux cabines phoniques à moins de 15 mètres de tout poste, une salle de réunion attenante de 6 personnes, et un espace de rangement avec casiers individuels nominatifs. L'orientation des îlots, la position des cloisons et l'attribution des casiers peuvent être ajustés dans l'atelier.</div>
+          <button class="plan-read-more">Lire la suite ↓</button>
+        </div>
+      </div>
+ 
+      <div class="plan-card" data-tags="3D Concentration">
+        <div class="plan-visual">
+          <div class="plan-placeholder">
+            <div class="plan-placeholder-icon">🎧</div>
+            <div class="plan-placeholder-label">Vue 3D · Zone de focus</div>
+          </div>
+          <div class="plan-type-badge">3D</div>
+        </div>
+        <div class="plan-info">
+          <div class="plan-tags"><span class="tag">Concentration</span></div>
+          <div class="plan-title">Vue 3D — cabine phonique et zone de focus</div>
+          <div class="plan-comment">Cette vue présente les deux dispositifs les plus attendus : les cabines phoniques individuelles et la zone de focus collective. Chaque cabine fait environ 2 m², équipée d'un siège ergonomique, d'un écran externe (USB-C), d'une ventilation silencieuse et d'un éclairage variable. Isolation acoustique : Rw 38 dB. Accès libre sans réservation, voyant vert/rouge visible depuis l'extérieur. La zone de focus adjacente est régie par des règles strictes : silence complet, pas de téléphone, pas de conversations. Délimitée par un changement de revêtement de sol et une signalétique discrète.</div>
+          <button class="plan-read-more">Lire la suite ↓</button>
+        </div>
+      </div>
+ 
+      <div class="plan-card" data-tags="Plan Macro-zoning">
+        <div class="plan-visual">
+          <div class="plan-placeholder">
+            <div class="plan-placeholder-icon">🏢</div>
+            <div class="plan-placeholder-label">Plan · Rez-de-chaussée</div>
+          </div>
+          <div class="plan-type-badge">Plan</div>
+        </div>
+        <div class="plan-info">
+          <div class="plan-tags"><span class="tag">Macro-zoning</span></div>
+          <div class="plan-title">Plan macro-zoning — rez-de-chaussée complet</div>
+          <div class="plan-comment">Le rez-de-chaussée concentre les fonctions d'accueil et de services. On y trouve : l'accueil principal avec contrôle d'accès par badge, un espace restauration de 400 m² (120 couverts + terrasse extérieure 60 places), trois salles de réunion grandes capacités (20, 30 et 40 personnes) accessibles sans badge, le point colis (accès 24h/24), la salle de sport et les vestiaires (sous-sol), et le local vélos sécurisé (accès direct depuis la rue). Les modalités de fonctionnement de l'espace restauration — self, formule plateau, commande digitale — ne sont pas encore arrêtées.</div>
+          <button class="plan-read-more">Lire la suite ↓</button>
+        </div>
+      </div>
+ 
+      <div class="plan-card" data-tags="3D Ambiance">
+        <div class="plan-visual">
+          <div class="plan-placeholder">
+            <div class="plan-placeholder-icon">✨</div>
+            <div class="plan-placeholder-label">Vue 3D · Hall d'entrée</div>
+          </div>
+          <div class="plan-type-badge">3D</div>
+        </div>
+        <div class="plan-info">
+          <div class="plan-tags"><span class="tag">Ambiance</span></div>
+          <div class="plan-title">Vue 3D — hall d'entrée depuis l'accueil</div>
+          <div class="plan-comment">Le hall est traversé par une lumière naturelle zénithale provenant d'une verrière d'environ 80 m² située au-dessus de la double hauteur centrale (6,5 m). Les matériaux — pierre claire au sol, béton ciré sur les parties structurelles, panneau bois sur les cloisons légères — créent une ambiance à la fois minérale et chaleureuse. L'escalier principal, généreusement dimensionné (2,4 m de largeur), est visible depuis l'entrée pour encourager son usage. Lors des premières semaines, une équipe d'accueil renforcée sera présente en déambulation pour orienter les collaborateurs et faciliter la prise en main du site.</div>
+          <button class="plan-read-more">Lire la suite ↓</button>
+        </div>
+      </div>
+ 
+    </div><!-- /plans-grid -->
+ 
+    <div class="plan-upload-note">
+      <strong>Pour ajouter un visuel :</strong> déposez votre image (PNG, JPG ou PDF) dans le dossier <code>images/</code> de votre repo GitHub, puis référencez-la dans le code en remplaçant le bloc <code>.plan-placeholder</code> par une balise <code>&lt;img src="images/mon-fichier.png"&gt;</code> dans la carte correspondante.
+    </div>
+ 
+  </div>
+</div>
+ 
+<!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+<script>
+ 
+  // ── NAVIGATION ────────────────────────────────────────────────────────────────
+  document.querySelectorAll(".nav-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+      tab.classList.add("active");
+      document.getElementById("page-" + tab.dataset.page).classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+ 
+  // ── ARTICLES (accordéon) ─────────────────────────────────────────────────────
+  document.querySelectorAll(".article").forEach(article => {
+    article.querySelector(".article-header").addEventListener("click", () => {
+      article.classList.toggle("open");
+    });
+  });
+ 
+  // ── FILTRES PLANS ─────────────────────────────────────────────────────────────
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const filter = btn.dataset.filter;
+      document.querySelectorAll(".plan-card").forEach(card => {
+        if (filter === "all" || card.dataset.tags.includes(filter)) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  });
+ 
+  // ── LIRE LA SUITE (plans) ─────────────────────────────────────────────────────
+  document.querySelectorAll(".plan-read-more").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.stopPropagation();
+      const card = btn.closest(".plan-card");
+      card.classList.toggle("expanded");
+      btn.textContent = card.classList.contains("expanded") ? "Réduire ↑" : "Lire la suite ↓";
+    });
+  });
+ 
+  // ══════════════════════════════════════════════════════════════════════════════
+  // FAQ — CLÉ API GEMINI
+  // Remplacez cette valeur par votre clé depuis aistudio.google.com
+  const GEMINI_API_KEY = "COLLEZ-VOTRE-CLÉ-ICI";
+  // ══════════════════════════════════════════════════════════════════════════════
+ 
+  const PROJECT_CONTEXT = `
 Tu es l'assistant d'information du projet de déménagement d'entreprise XYZ.
 Tu réponds aux questions des collaborateurs en t'appuyant UNIQUEMENT sur les informations ci-dessous.
 Ton ton est empathique, clair, et humain. Tu reconnais les émotions quand elles sont présentes dans la question.
 Si une information n'est pas disponible dans la base ci-dessous, tu réponds honnêtement que ce point n'est pas encore arrêté, et tu invites à utiliser le formulaire de contact en bas de page.
 Tu ne dois jamais inventer de dates, de décisions ou d'engagements qui ne figurent pas dans la base.
 Tu réponds toujours en français, en 3 à 6 phrases maximum, de façon directe et utile.
-
+ 
 --- BASE DE CONNAISSANCES ---
-
+ 
 CALENDRIER
 - Le déménagement est prévu la semaine du 14 octobre.
 - Le phasage par équipe est en cours de finalisation. Toutes les équipes ne basculeront pas au même moment.
 - Les grandes étapes : information/cadrage, préparation logistique, tri/archivage, déménagement physique, installation, accompagnement post-arrivée.
 - Le jour J, une fiche pratique sera remise avec heure d'arrivée, point d'accueil, contacts sur place.
-
+ 
 AFFAIRES PERSONNELLES
 - Un guide de préparation sera transmis avant le déménagement : quoi emballer, quoi trier, ce qui est pris en charge.
 - Les objets personnels (photos, plantes) peuvent être apportés le jour J ou dans les jours suivants.
-
+ 
 RESTAURATION
 - Les modalités exactes de restauration ne sont pas encore arrêtées. Plusieurs options sont à l'étude.
 - Le dispositif de titres-restaurant ou remboursement repas n'est pas impacté par le déménagement.
-
+ 
 TRANSPORTS
 - La prise en charge des abonnements transport en commun reste inchangée.
 - Des solutions de navette ou covoiturage sont à l'étude selon les besoins identifiés.
 - Le temps de trajet est pris en compte. Les situations les plus impactantes feront l'objet d'un accompagnement.
-
+ 
 PARKING ET MOBILITÉS DOUCES
 - Des solutions de stationnement voiture sont prévues, périmètre exact à préciser.
 - Des espaces vélo sécurisés sont prévus, potentiellement avec vestiaires/douches. Modalités à préciser.
-
+ 
 TÉLÉTRAVAIL ET HORAIRES
 - Les accords de télétravail existants ne sont pas remis en cause par le déménagement.
 - Les politiques d'horaires flexibles continuent à s'appliquer.
-
+ 
 ESPACES DE TRAVAIL
 - Le nouveau site intègre des espaces de concentration (bulles, cabines phoniques, zones silencieuses).
 - Des espaces de convivialité sont prévus pour les pauses et échanges informels.
@@ -334,28 +1052,28 @@ ESPACES DE TRAVAIL
 - Les principes d'occupation (flex office ou postes attribués) seront communiqués.
 - Le système de réservation des salles de réunion sera précisé avant la mise en service.
 - La qualité environnementale (lumière, ventilation, acoustique, température) a été prise en compte.
-
+ 
 INFORMATIQUE ET ÉQUIPEMENTS
 - Les accès, connexion et outils IT seront opérationnels à l'arrivée. Une équipe IT sera présente les premiers jours.
 - La continuité des lignes téléphoniques est prise en compte.
 - Le déménagement peut être l'occasion de renouveler une partie du parc informatique.
-
+ 
 BADGE ET ACCÈS
 - Les modalités d'accès (badges, droits, zones) sont en cours de finalisation. Un accueil sera prévu le premier matin.
-
+ 
 VISITES DU SITE
 - Des temps de découverte du site sont prévus avant l'installation définitive. Formats variés (visites physiques, supports visuels).
-
+ 
 SERVICES SUR SITE
 - Des services sont à l'étude : conciergerie, point colis, salle de sport/bien-être, espaces parents.
 - Des espaces dédiés au bien-être physique sont prévus (salle de sport, espace détente ou repos).
-
+ 
 SITUATIONS PARTICULIÈRES
 - Les situations individuelles (handicap, mobilité réduite, contrainte de santé) seront prises en compte. Prendre contact avec son RH.
 - Le site est conforme aux normes PMR.
 - Les situations impliquant des enfants ou des contraintes familiales peuvent être remontées aux RH.
 - Des espaces de retrait (prière, repos) sont intégrés dans la réflexion sur l'aménagement.
-
+ 
 ACCOMPAGNEMENT AU CHANGEMENT
 - Un plan de communication structuré est prévu : points d'étape réguliers, communications ciblées, supports accessibles.
 - Un réseau d'ambassadeurs volontaires est mis en place pour relayer les informations et remonter les préoccupations.
@@ -366,574 +1084,172 @@ ACCOMPAGNEMENT AU CHANGEMENT
 - Un accompagnement individuel est possible : entretien RH confidentiel, dispositif d'écoute psychologique si disponible.
 - Des enquêtes de satisfaction et retours post-installation sont prévus.
 - Les rumeurs peuvent être posées ici ou via le formulaire. Une réponse factuelle sera apportée.
-
+ 
 CONSULTATION ET PILOTAGE
 - Le projet est piloté par une équipe RH, Direction Immobilière et Services Généraux, avec le soutien de la Direction Générale.
 - Les instances représentatives du personnel (CSE/CSSCT) sont informées et consultées selon les obligations légales.
 - Des temps d'écoute et ateliers participatifs ont été ou seront organisés.
-
+ 
 ARCHIVAGE
 - Un plan d'archivage avec consignes de tri, numérisation et destruction sera communiqué avant le déménagement.
 - Les archives physiques à conserver seront prises en charge par les équipes de déménagement.
 `;
-    // ─────────────────────────────────────────────────────────────────────────────
-
-    // ─── INTENTS OFFICIELS (prioritaires sur l'IA) ───────────────────────────────
-    const intents = [
-
-      // CALENDRIER & LOGISTIQUE
-      {
-        name: "Date du déménagement",
-        status: "Réponse confirmée",
-        answer: "Le déménagement est actuellement prévu la semaine du 14 octobre.\n\nLa date précise de bascule par équipe sera confirmée dès que le planning logistique sera totalement sécurisé.",
-        note: "Nous préférons partager une date confirmée plutôt qu'un calendrier prématuré qui devrait ensuite être corrigé.",
-        keywords: ["date", "quand", "demenagement", "demenager", "transfert", "installation", "semaine", "arrivee", "jour j", "calendrier", "planning"]
-      },
-      {
-        name: "Phasage du déménagement par équipe",
-        status: "En attente",
-        answer: "Le phasage précis par équipe est en cours de finalisation.\n\nToutes les entités ne basculeront pas nécessairement au même moment. L'objectif est de garantir une installation fluide, sans mettre les équipes en difficulté opérationnelle.",
-        note: "Une communication spécifique précisera l'ordre de passage, les dates et les équipes concernées dès que le phasage sera stabilisé.",
-        keywords: ["phasage", "ordre", "ordre passage", "equipe", "equipes", "service", "qui demenage quand", "quand mon equipe"]
-      },
-      {
-        name: "Grandes étapes du déménagement",
-        status: "Réponse partielle",
-        answer: "Le déménagement se prépare généralement en plusieurs temps :\n\n1. Information et cadrage du projet\n2. Préparation logistique et consignes pratiques\n3. Tri, archivage et préparation des postes\n4. Déménagement physique des équipes\n5. Installation sur le nouveau site\n6. Ajustements et accompagnement post-arrivée\n\nToutes ces étapes n'ont pas le même niveau de visibilité au même moment, mais elles seront précisées au fil du projet.",
-        note: "L'enjeu n'est pas seulement de changer de lieu, mais de permettre une appropriation progressive du nouveau cadre de travail.",
-        keywords: ["etapes", "etape", "process", "processus", "deroulement", "phases", "phase", "organisation"]
-      },
-      {
-        name: "Que faire le jour J",
-        status: "Réponse confirmée",
-        answer: "Le jour du déménagement, les équipes concernées recevront une fiche pratique détaillant les actions attendues : heure d'arrivée recommandée, point d'accueil dédié, contacts sur place et déroulé de la journée.\n\nL'objectif est que personne ne se retrouve seul face à l'inconnu ce jour-là. Un accompagnement physique sera assuré sur le site.",
-        note: "Ce type de moment peut générer une certaine appréhension. Nous y sommes attentifs et souhaitons que l'arrivée soit vécue comme un vrai point de départ, pas comme une simple contrainte logistique.",
-        keywords: ["jour j", "jour demenagement", "que faire", "comment ca va se passer", "le grand jour", "premier jour"]
-      },
-      {
-        name: "Que faire de mes affaires personnelles",
-        status: "Réponse confirmée",
-        answer: "Un guide de préparation sera transmis avant le déménagement, précisant quoi emballer, quoi trier, et ce qui relève de la responsabilité des équipes de déménagement.\n\nLes objets personnels — photos, plantes, petits équipements — pourront être apportés le jour J ou dans les jours suivants.",
-        note: "S'approprier un nouveau lieu prend du temps. Il n'y a pas de bonne ou de mauvaise façon de le faire.",
-        keywords: ["affaires", "affaires personnelles", "objets", "plante", "photo", "decoration", "mes affaires", "emballer", "carton", "cartons"]
-      },
-      {
-        name: "Temps de trajet vers le nouveau site",
-        status: "Réponse confirmée",
-        answer: "Nous sommes conscients que le changement de site peut modifier les trajets quotidiens de certains collaborateurs — parfois de manière significative.\n\nUne analyse des temps de trajet a été réalisée pour identifier les situations les plus impactantes. Des solutions d'accompagnement sont à l'étude pour les personnes les plus éloignées.",
-        note: "Le trajet, ça compte. Ce n'est pas un détail. Nous ne voulons pas que ce sujet reste sans réponse.",
-        keywords: ["trajet", "transport", "navette", "temps trajet", "loin", "proche", "distance", "chemin", "route", "rer", "metro", "bus", "train", "comment venir", "acces transports"]
-      },
-
-      // TÉLÉTRAVAIL & FLEXIBILITÉ
-      {
-        name: "Télétravail et jours sur site",
-        status: "Réponse confirmée",
-        answer: "Le déménagement n'entraîne pas de remise en cause des accords de télétravail en vigueur.\n\nLes règles applicables restent celles définies dans votre accord ou votre charte d'équipe. Le nouveau site est conçu pour accueillir un volume de présence compatible avec les pratiques hybrides actuelles.",
-        note: "Le télétravail est devenu une composante importante de l'équilibre de nombreux collaborateurs. Nous en sommes conscients.",
-        keywords: ["teletravail", "remote", "travail distance", "jours sur site", "hybride", "presentiel", "jours bureau", "travail maison", "chez moi", "home office"]
-      },
-      {
-        name: "Flexibilité des horaires",
-        status: "Réponse confirmée",
-        answer: "Les politiques d'horaires flexibles ne sont pas remises en cause par le déménagement.\n\nSi vous bénéficiez d'aménagements d'horaires ou d'accords de souplesse dans votre équipe, ceux-ci continuent à s'appliquer.",
-        note: "Nous savons que la rigidité des horaires peut peser lourd quand le trajet change. Ce sujet sera pris en compte dans l'accompagnement.",
-        keywords: ["horaires", "horaires flexibles", "flexibilite", "arriver plus tot", "partir plus tard", "amenagement horaires", "souplesse"]
-      },
-
-      // ESPACES DE TRAVAIL
-      {
-        name: "Postes attribués ou flex office",
-        status: "Réponse partielle",
-        answer: "Les principes d'occupation des espaces seront précisés en fonction de l'organisation retenue sur le nouveau site.\n\nSelon les cas, cela pourra inclure des postes attribués, des espaces mutualisés ou des logiques plus flexibles d'occupation.\n\nNous savons que la question du bureau personnel est loin d'être anodine. Ce sujet sera traité avec sérieux.",
-        note: "Une communication spécifique expliquera les règles de fonctionnement des espaces de travail.",
-        keywords: ["flex office", "flexoffice", "poste", "bureau", "place", "attribution", "desk", "placement", "poste attribue", "mon bureau"]
-      },
-      {
-        name: "Espaces de concentration et calme",
-        status: "Réponse confirmée",
-        answer: "Le nouveau site intègre des espaces dédiés à la concentration individuelle — bulles de travail, zones silencieuses, cabines phoniques — pour permettre à chacun de trouver l'environnement adapté à son activité du moment.",
-        note: "Travailler dans un espace trop bruyant n'est pas une fatalité. Dites-nous si vous avez des besoins spécifiques à ce sujet.",
-        keywords: ["concentration", "calme", "bruit", "silence", "open space", "cabine", "bulle", "focus", "isolement", "travailler sereinement", "phonique"]
-      },
-      {
-        name: "Réservation des salles de réunion",
-        status: "Réponse partielle",
-        answer: "Les salles de réunion seront intégrées dans un dispositif de réservation adapté aux usages du site.\n\nL'objectif est de permettre une utilisation lisible, simple et cohérente de ces espaces — sans que la chasse aux salles ne devienne un sport quotidien.",
-        note: "Les modalités pratiques de réservation seront précisées avant la mise en service.",
-        keywords: ["salle", "salles", "reunion", "reserver", "booking", "meeting room", "salle de reunion"]
-      },
-      {
-        name: "Espaces de convivialité",
-        status: "Réponse confirmée",
-        answer: "Oui. Le nouveau site intégrera plusieurs espaces pensés pour les temps informels, les pauses et les échanges du quotidien.\n\nCes lieux ont été conçus pour que les liens entre collègues puissent se tisser naturellement, dans des endroits vraiment accueillants.",
-        note: "Le déménagement peut être une occasion de recréer du lien. Nous voulons qu'elle soit réelle.",
-        keywords: ["convivialite", "pause", "cafe", "espace informel", "detente", "pause cafe", "conviviaux", "communs", "terrasse", "lounge"]
-      },
-      {
-        name: "Casier ou rangement personnel",
-        status: "Réponse partielle",
-        answer: "Des solutions de rangement personnel sont prévues dans le cadre du projet.\n\nLes modalités exactes d'usage, d'attribution ou de partage seront précisées selon le dispositif retenu. L'idée est que chacun puisse avoir un espace bien à soi, même dans un environnement partagé.",
-        note: "Une information complémentaire sera communiquée au moment opportun.",
-        keywords: ["casier", "casiers", "rangement", "locker", "affaires personnelles", "affaires", "stockage", "placard", "espace personnel"]
-      },
-      {
-        name: "Luminosité et qualité de l'environnement de travail",
-        status: "Réponse confirmée",
-        answer: "Le nouveau site a fait l'objet d'une attention particulière sur la qualité environnementale : luminosité naturelle, ventilation, acoustique et confort thermique ont été pris en compte dans l'aménagement.",
-        note: "Si vous avez des retours à faire sur l'environnement physique après l'installation, ils seront remontés aux équipes en charge du site.",
-        keywords: ["lumiere", "luminosite", "fenetres", "chaleur", "froid", "temperature", "ventilation", "air", "acoustique", "confort", "environnement travail", "qualite air"]
-      },
-
-      // RESTAURATION & SERVICES
-      {
-        name: "Offre de restauration",
-        status: "En attente",
-        answer: "Les modalités exactes de restauration ne sont pas encore arrêtées à ce stade.\n\nPlusieurs options sont actuellement à l'étude. Nous savons que le déjeuner, c'est aussi un moment de décompression et de lien social — pas juste un ravitaillement.",
-        note: "Nous reviendrons vers vous dès que des arbitrages plus précis auront été rendus.",
-        keywords: ["restauration", "manger", "repas", "dejeuner", "cantine", "food", "restaurant", "pause dejeuner", "titres restaurant", "ticket restaurant", "tr", "lunch"]
-      },
-      {
-        name: "Titres-restaurant et remboursement des repas",
-        status: "Réponse confirmée",
-        answer: "Le dispositif de titres-restaurant ou de remboursement des repas n'est pas impacté par le déménagement.\n\nSi votre accord prévoit une prise en charge employeur sur vos repas, celle-ci continue à s'appliquer dans les mêmes conditions.",
-        note: "Le pouvoir d'achat du quotidien, ça compte. Ce sujet ne sera pas mis de côté.",
-        keywords: ["ticket restaurant", "titre restaurant", "tr", "remboursement repas", "prise en charge repas", "avantage repas"]
-      },
-      {
-        name: "Services sur le nouveau site",
-        status: "Réponse partielle",
-        answer: "Le nouveau site est pensé pour intégrer des services utiles au quotidien : conciergerie, point colis, salle de sport ou espace bien-être, espaces parents, salle de prière ou de repos.\n\nLa liste définitive est en cours de finalisation.",
-        note: "Si vous avez des besoins ou des suggestions de services, le formulaire ci-dessous est là pour ça.",
-        keywords: ["services", "conciergerie", "salle sport", "sport", "bien etre", "colis", "services sur site", "coiffeur", "pressing", "pharmacie"]
-      },
-      {
-        name: "Salle de sport et bien-être",
-        status: "Réponse partielle",
-        answer: "Des espaces dédiés au bien-être physique sont intégrés dans le projet — salle de sport, espace détente ou salle de repos.\n\nLes modalités d'accès, de réservation et d'utilisation seront précisées dès que le dispositif sera finalisé.",
-        note: "Prendre soin de soi au travail n'est pas un luxe. Ces espaces font partie d'un engagement plus large sur la qualité de vie au travail.",
-        keywords: ["sport", "salle sport", "fitness", "gym", "detente", "meditation", "yoga", "bien etre", "salle repos", "sieste"]
-      },
-
-      // TRANSPORTS & ACCESSIBILITÉ
-      {
-        name: "Visites du site avant l'arrivée",
-        status: "Réponse confirmée",
-        answer: "Oui, le projet prévoit des temps de découverte du nouveau site avant l'installation définitive.\n\nCes moments sont importants — voir un lieu avant d'y travailler aide à se projeter, à poser des questions, à se rassurer sur ce qu'on ne sait pas encore.",
-        note: "Le calendrier de ces temps sera communiqué dans une prochaine étape.",
-        keywords: ["visite", "visites", "voir", "decouverte", "venir voir", "visiter", "decouvrir le site", "avant d arriver"]
-      },
-      {
-        name: "Parking voiture",
-        status: "Réponse partielle",
-        answer: "Des solutions de stationnement sont prévues, mais leur périmètre exact et leurs modalités d'accès restent encore à préciser.\n\nNous comprenons que pour les collaborateurs venant en voiture — parfois faute d'alternative — c'est une question centrale.",
-        note: "Une information détaillée sera communiquée dès que les règles d'accès seront stabilisées.",
-        keywords: ["parking", "voiture", "stationnement", "se garer", "garage", "place voiture", "place parking"]
-      },
-      {
-        name: "Parking vélo et mobilités douces",
-        status: "Réponse partielle",
-        answer: "Le projet prévoit d'intégrer des solutions adaptées aux mobilités douces, notamment pour les collaborateurs venant à vélo.\n\nCela inclut un espace de stationnement sécurisé, et potentiellement des vestiaires ou des douches.",
-        note: "Des précisions seront apportées dès que le dispositif final sera stabilisé.",
-        keywords: ["velo", "parking velo", "mobilite", "mobilite douce", "trottinette", "deux roues", "cycliste", "bicyclette", "douche", "vestiaire"]
-      },
-      {
-        name: "Remboursement des transports",
-        status: "Réponse confirmée",
-        answer: "La prise en charge des abonnements de transport en commun reste applicable dans les mêmes conditions qu'aujourd'hui.\n\nSi le changement de site entraîne un surcoût, rapprochez-vous de votre RH : des ajustements pourront être examinés au cas par cas.",
-        note: "Le coût du trajet ne doit pas devenir une charge supplémentaire. Ce sujet mérite d'être posé clairement.",
-        keywords: ["transport", "navigo", "abonnement transport", "remboursement transport", "prise en charge transport", "frais transport", "pass navigo"]
-      },
-      {
-        name: "Navette ou covoiturage",
-        status: "En attente",
-        answer: "Des solutions de mobilité collective — navette depuis une gare proche, plateforme de covoiturage entre collègues — sont à l'étude selon la localisation du site et les besoins identifiés.\n\nSi les transports en commun ne couvrent pas bien votre trajet, signalez-le.",
-        note: "Nous préférons construire les bonnes solutions en fonction des vrais besoins.",
-        keywords: ["navette", "covoiturage", "carpooling", "transport collectif", "shuttle", "bus navette", "blablacar", "partager voiture"]
-      },
-      {
-        name: "Badge et accès au nouveau site",
-        status: "En attente",
-        answer: "Les modalités d'accès au nouveau site sont en cours de stabilisation.\n\nCela concerne notamment les badges, les droits d'accès et les modalités d'entrée. Un accueil sera organisé pour les premières arrivées afin que personne ne se retrouve bloqué le premier matin.",
-        note: "Une communication dédiée précisera les conditions d'accès avant l'arrivée sur site.",
-        keywords: ["badge", "acces", "entrer", "entree", "controle acces", "droits acces", "ouverture", "acces site"]
-      },
-
-      // INFORMATIQUE & ÉQUIPEMENTS
-      {
-        name: "Connexion et outils IT à l'arrivée",
-        status: "Réponse confirmée",
-        answer: "Tout est mis en œuvre pour que les accès, la connexion et les outils de travail soient opérationnels à l'arrivée sur le nouveau site.\n\nUne équipe IT sera présente les premiers jours pour traiter les problèmes en temps réel.",
-        note: "Si certains ajustements devaient intervenir au démarrage, ils seraient signalés clairement et traités en priorité.",
-        keywords: ["wifi", "connexion", "reseau", "outlook", "teams", "outils", "informatique", "it", "equipements", "equipement", "materiel", "ordinateur", "telephone", "poste informatique"]
-      },
-      {
-        name: "Nouveau matériel informatique",
-        status: "Réponse partielle",
-        answer: "Le déménagement peut être l'occasion de renouveler une partie du parc informatique. Des arbitrages sont en cours sur le périmètre concerné.\n\nSi votre équipement actuel est vétuste ou inadapté, c'est le bon moment pour le signaler à votre manager ou à la DSI.",
-        note: "Un déménagement ne devrait pas laisser les collaborateurs avec du matériel obsolète. Ce point est pris en compte.",
-        keywords: ["nouveau materiel", "renouvellement", "ordi neuf", "nouvel ordinateur", "ecran", "clavier", "souris", "equipement neuf", "dsi"]
-      },
-      {
-        name: "Téléphonie et numéros de téléphone",
-        status: "Réponse partielle",
-        answer: "La continuité des lignes téléphoniques et des numéros est prise en compte dans le projet.\n\nSi vous avez un numéro de poste fixe, des instructions seront données sur la marche à suivre pour assurer la continuité de vos appels entrants.",
-        note: "Perdre la joignabilité le jour J serait problématique. Ce risque est identifié et traité.",
-        keywords: ["telephone fixe", "numero telephone", "ligne fixe", "poste telephone", "telephonie", "numero", "appels", "softphone", "dect"]
-      },
-
-      // VIE QUOTIDIENNE & BIEN-ÊTRE
-      {
-        name: "Espaces parents et crèche",
-        status: "En attente",
-        answer: "La question de la parentalité dans le nouveau contexte est identifiée.\n\nSelon la localisation et la taille du site, des solutions peuvent être explorées : espace d'allaitement, accès à une crèche inter-entreprises, ou dispositifs de garde partenaires.",
-        note: "Le changement de site peut impacter les organisations familiales. Ce n'est pas un sujet secondaire.",
-        keywords: ["creche", "parent", "enfant", "garde enfant", "allaitement", "parentalite", "famille", "bebe", "ecole"]
-      },
-      {
-        name: "Salle de prière ou de repos",
-        status: "En attente",
-        answer: "La question des espaces de retrait — pour se reposer, prier, ou simplement s'isoler un moment — est intégrée dans la réflexion sur l'aménagement.\n\nNous souhaitons que le nouveau site puisse accueillir chacun dans le respect de ses besoins.",
-        note: "Ces sujets peuvent être sensibles. Ils méritent d'être posés clairement et traités avec respect.",
-        keywords: ["priere", "salle priere", "religion", "repos", "sieste", "espace retrait", "isolement"]
-      },
-      {
-        name: "Situations individuelles particulières",
-        status: "En attente",
-        answer: "Les situations individuelles nécessitant une attention particulière — handicap, mobilité réduite, contrainte de santé, situation familiale spécifique — seront prises en compte.\n\nSi vous estimez avoir un besoin spécifique, signalez-le auprès de votre RH ou de votre manager. Aucune demande ne sera ignorée.",
-        note: "Nous savons que certaines situations sont difficiles à exprimer. Elles ne seront pas traitées comme des anomalies, mais comme des réalités à accompagner.",
-        keywords: ["situation individuelle", "situation particuliere", "handicap", "mobilite reduite", "contrainte sante", "besoin specifique", "cas particulier", "accessibilite", "pmr", "fauteuil", "ascenseur"]
-      },
-      {
-        name: "Accessibilité du site (PMR)",
-        status: "Réponse confirmée",
-        answer: "Le nouveau site est conforme aux normes d'accessibilité en vigueur pour les personnes à mobilité réduite.\n\nCela comprend l'accès aux entrées, aux espaces de travail, aux sanitaires et aux salles de réunion. Si vous avez un besoin spécifique, prenez contact avec votre RH.",
-        note: "L'accessibilité ne se résume pas à la conformité réglementaire. Nous souhaitons que chacun puisse circuler et travailler dans des conditions dignes.",
-        keywords: ["pmr", "accessibilite", "fauteuil roulant", "handicap moteur", "rampe", "ascenseur", "mobilite reduite", "acces handicape"]
-      },
-      {
-        name: "Je ne veux pas déménager",
-        status: "Réponse confirmée",
-        answer: "C'est une réaction tout à fait compréhensible, et vous n'êtes pas seul(e) à la ressentir.\n\nChanger de lieu de travail, c'est parfois perdre des repères construits sur des années. Ce n'est pas anodin, et personne ne vous demande d'être enthousiasmé(e) immédiatement.\n\nCe que nous vous proposons, c'est d'avancer avec vous, pas de vous convaincre.",
-        note: "Le changement génère des résistances légitimes. Elles seront entendues, pas ignorées.",
-        keywords: ["pas envie", "ne veux pas", "contre", "oppose", "refus", "je refuse", "pas d accord", "mecontentement", "inquiet", "peur", "apprehension", "stress"]
-      },
-      {
-        name: "J'ai peur du changement",
-        status: "Réponse confirmée",
-        answer: "Ce que vous ressentez est normal. Un déménagement d'entreprise, ce n'est pas juste une adresse qui change — c'est un quotidien qui se recompose. Les repères habituels, les voisins de bureau, la routine du trajet… tout ça se trouve remis en question.\n\nCe projet a justement été conçu pour que la transition soit accompagnée et progressive.",
-        note: "Si vous traversez une période difficile en lien avec ce projet, parlez-en à votre manager ou à votre RH. Vous n'avez pas à naviguer seul(e).",
-        keywords: ["peur", "angoisse", "stress", "anxieux", "anxiete", "inquiet", "apprehension", "perturbe", "bouleverse", "destabilise", "mal a l aise"]
-      },
-      {
-        name: "Liens avec les collègues après le déménagement",
-        status: "Réponse confirmée",
-        answer: "L'un des risques réels d'un déménagement, c'est de perdre des liens informels qui font la vie d'une équipe — les discussions de couloir, les cafés partagés, les voisins de bureau.\n\nLe nouveau site est conçu pour favoriser les rencontres et les interactions. Des temps collectifs d'installation seront prévus.",
-        note: "Le collectif ne tient pas juste à un bâtiment. Mais l'espace peut aider ou compliquer les choses. Nous avons choisi d'y réfléchir.",
-        keywords: ["collegues", "liens", "relation", "reseau", "perdu de vue", "ne plus voir", "separe", "equipe eclatee", "lien social", "isole", "seul"]
-      },
-
-      // ACCOMPAGNEMENT AU CHANGEMENT
-      {
-        name: "Communications projet",
-        status: "Réponse confirmée",
-        answer: "Un plan de communication structuré est prévu tout au long du projet :\n\n• Des points d'étape réguliers pour informer de l'avancement\n• Des communications ciblées par équipe\n• Des supports consultables à tout moment comme cet espace\n\nL'objectif : que personne ne se retrouve dans le flou au mauvais moment.",
-        note: "Si vous avez l'impression de manquer d'informations sur un sujet précis, le formulaire ci-dessous est là pour le signaler.",
-        keywords: ["communication projet", "communications", "newsletter", "email projet", "information projet", "tenu informe", "pas informe", "plan communication"]
-      },
-      {
-        name: "Ambassadeurs du projet",
-        status: "Réponse confirmée",
-        answer: "Un réseau d'ambassadeurs volontaires est mis en place. Ce sont des collaborateurs issus de différentes équipes qui jouent un rôle de relais de proximité.\n\nLeur rôle : faire remonter les questions du terrain, partager les informations, contribuer à la construction des usages sur le nouveau site.\n\nPour rejoindre ce réseau ou identifier votre ambassadeur, rapprochez-vous de votre RH.",
-        note: "Les ambassadeurs ne sont pas des communicants. Ce sont des collègues qui ont accepté de jouer un rôle actif dans la transition.",
-        keywords: ["ambassadeur", "ambassadeurs", "relais", "referent projet", "reseau ambassadeurs", "volontaire", "correspondant", "champion changement"]
-      },
-      {
-        name: "Ateliers de personnalisation des espaces",
-        status: "Réponse confirmée",
-        answer: "Des ateliers de personnalisation sont prévus pour permettre aux équipes de s'approprier leur futur espace avant l'installation.\n\nCes ateliers permettent de découvrir les zones, exprimer des préférences sur l'aménagement, co-construire les règles de vie et poser des questions dans un cadre informel.\n\nCe n'est pas de la consultation cosmétique — les résultats sont intégrés dans l'aménagement final.",
-        note: "Les dates et formats seront communiqués dès que le calendrier sera stabilisé. Bloquez du temps — ça vaut le coup.",
-        keywords: ["atelier", "ateliers", "personnalisation", "personnaliser", "co construction", "workshop", "participation", "choisir", "s exprimer", "amenagement"]
-      },
-      {
-        name: "Règles de vie sur le nouveau site",
-        status: "Réponse partielle",
-        answer: "Les règles de vie dans les espaces partagés ne seront pas imposées d'en haut. Elles seront co-construites avec les équipes.\n\nCela peut concerner : l'usage des espaces de concentration, les règles de propreté des postes partagés, l'utilisation des espaces communs, les habitudes en open space.\n\nChaque entité pourra définir ses propres normes dans un cadre commun.",
-        note: "Des règles de vie ne fonctionnent que si les personnes concernées se les sont appropriées. C'est tout l'enjeu de la démarche.",
-        keywords: ["regles de vie", "regles", "charte", "charte usage", "comportement", "vivre ensemble", "collectif", "normes", "bonnes pratiques", "respect", "espaces partages"]
-      },
-      {
-        name: "Formation et prise en main du nouveau site",
-        status: "Réponse confirmée",
-        answer: "Des temps de formation ou de découverte guidée sont prévus pour que chacun puisse prendre en main le nouveau site rapidement.\n\nCela comprend : présentation des espaces, explication du système de réservation des salles, initiation aux outils et services du site.\n\nL'objectif : que personne ne passe ses premières semaines à chercher les toilettes.",
-        note: "Ces formations seront courtes et pratiques. Le but est d'être opérationnel le plus vite possible.",
-        keywords: ["formation", "se former", "apprendre", "prise en main", "tutoriel", "guide", "onboarding site", "comment utiliser", "mode emploi"]
-      },
-      {
-        name: "Soutien managérial et rôle des managers",
-        status: "Réponse confirmée",
-        answer: "Les managers seront informés en priorité, avant les communications générales, pour pouvoir répondre aux premières questions de leur équipe.\n\nDes ressources spécifiques leur seront fournies : éléments de langage, réponses aux questions fréquentes, accès privilégié aux équipes projet.",
-        note: "Un manager bien informé et à l'aise avec le projet, c'est la meilleure protection contre les rumeurs et l'anxiété collective.",
-        keywords: ["manager", "managers", "management", "chef equipe", "responsable equipe", "encadrement", "role manager", "brief managers", "soutien manager"]
-      },
-      {
-        name: "Accompagnement individuel au changement",
-        status: "Réponse confirmée",
-        answer: "Un accompagnement individuel est possible pour les collaborateurs qui en ressentent le besoin :\n\n• Entretien avec votre RH dans un cadre confidentiel\n• Accès au dispositif d'écoute psychologique si disponible\n• Échange avec un ambassadeur ou référent de proximité\n\nVous n'avez pas à traverser cette transition seul(e).",
-        note: "Demander de l'aide n'est pas un signe de faiblesse. C'est une façon de prendre soin de soi — et de mieux traverser le changement.",
-        keywords: ["accompagnement individuel", "aide individuelle", "soutien psychologique", "ecoute", "ligne ecoute", "rh", "entretien rh", "besoin aide", "difficile", "traverser", "seul"]
-      },
-      {
-        name: "Retours et feedback après l'installation",
-        status: "Réponse confirmée",
-        answer: "Une fois installées, les équipes auront la possibilité de faire des retours sur leur expérience du nouveau site.\n\nDes enquêtes de satisfaction et des temps d'échange sont prévus. Le projet ne s'arrête pas le jour du déménagement.\n\nNous savons que les premiers mois révèlent souvent des frictions qu'on n'avait pas anticipées.",
-        note: "Vos retours post-installation permettront d'ajuster ce qui peut l'être.",
-        keywords: ["feedback", "retour", "avis", "satisfaction", "enquete", "apres demenagement", "post installation", "comment ca se passe", "bilan", "evaluation"]
-      },
-      {
-        name: "Rumeurs et informations non officielles",
-        status: "Réponse confirmée",
-        answer: "Dans tout projet de cette nature, des rumeurs circulent. C'est inévitable — et souvent le signe que les gens s'y intéressent et ont besoin de réponses.\n\nSi vous avez entendu quelque chose qui vous préoccupe, posez-le ici ou via le formulaire. Nous nous engageons à répondre factuellement.",
-        note: "L'incertitude génère des récits. Nous préférons les récits fondés sur des faits.",
-        keywords: ["rumeur", "rumeurs", "ouie dire", "on dit que", "bruit de couloir", "entendu dire", "vrai ou faux", "intox", "fake", "pas vrai", "faux", "dementi"]
-      },
-
-      // PILOTAGE & COMMUNICATION
-      {
-        name: "Communication à venir",
-        status: "Réponse confirmée",
-        answer: "Toutes les réponses ne peuvent pas être données immédiatement, parce que certains arbitrages dépendent de la maturité réelle du projet.\n\nL'engagement est clair : partager une information fiable et progressive, plutôt que multiplier des messages incomplets ou contradictoires.",
-        note: "Cet espace a justement vocation à évoluer à mesure que le projet avance.",
-        keywords: ["plus d infos", "prochaines communications", "quand saura t on", "infos a venir", "communication", "informations"]
-      },
-      {
-        name: "Qui pilote le projet",
-        status: "Réponse confirmée",
-        answer: "Le projet est piloté par une équipe dédiée composée de représentants des Ressources Humaines, de la Direction Immobilière et des Services Généraux, avec le soutien de la Direction Générale.\n\nDes référents de proximité seront identifiés dans chaque entité.",
-        note: "Si vous ne savez pas à qui vous adresser, le formulaire ci-dessous est le bon point d'entrée.",
-        keywords: ["qui pilote", "qui gere", "responsable projet", "interlocuteur", "chef projet", "equipe projet", "contact projet", "pilotage"]
-      },
-      {
-        name: "Les collaborateurs ont-ils été consultés",
-        status: "Réponse confirmée",
-        answer: "Oui. Des temps d'écoute, de consultation ou d'ateliers participatifs ont été ou seront organisés selon les entités et les phases.\n\nLes remontées du terrain ont alimenté des choix d'aménagement concrets.",
-        note: "Si vous n'avez pas encore eu l'occasion de vous exprimer, c'est encore possible via le formulaire.",
-        keywords: ["consulte", "consultation", "avis", "voix", "participe", "participation", "co construction", "atelier", "sondage", "enquete", "expression collaborateurs"]
-      },
-      {
-        name: "Que disent les représentants du personnel",
-        status: "Réponse confirmée",
-        answer: "Les instances représentatives du personnel (CSE ou CSSCT selon votre entité) ont été ou seront informées et consultées sur le projet dans le respect des obligations légales.\n\nLeurs avis font partie du processus. Pour en savoir plus sur leur position, rapprochez-vous directement de vos élus.",
-        note: "La concertation sociale sur un projet immobilier est un droit, pas une formalité. Elle est prise au sérieux.",
-        keywords: ["cse", "iri", "representants personnel", "syndicat", "delegue", "elu", "comite", "cssct", "information consultation", "partenaires sociaux"]
-      },
-      {
-        name: "Le projet peut-il encore changer",
-        status: "Réponse confirmée",
-        answer: "Certains éléments sont encore en cours de finalisation. Des ajustements sont possibles sur les détails logistiques, les dates précises, ou les aménagements.\n\nEn revanche, les grandes orientations — le site, l'ambition du projet, la trajectoire générale — sont fixées.",
-        note: "Nous nous engageons à informer rapidement en cas d'évolution significative.",
-        keywords: ["peut changer", "va changer", "incertitude", "encore prevu", "annule", "reporte", "retard", "decision finale", "arrete"]
-      },
-      {
-        name: "Archivage et gestion des documents",
-        status: "Réponse confirmée",
-        answer: "Un plan d'archivage sera communiqué avant le déménagement, avec des consignes précises sur ce qui doit être trié, numérisé ou détruit.\n\nLes archives physiques à conserver seront prises en charge par les équipes de déménagement.",
-        note: "Prenez le temps de passer vos documents en revue avant le déménagement. C'est souvent l'occasion de désencombrer.",
-        keywords: ["archives", "archivage", "documents", "papiers", "dossiers", "classeur", "scanner", "numerisation", "destruction", "tri"]
-      }
-    ];
-
-    // ─── MOTEUR DE MATCHING ───────────────────────────────────────────────────────
-
-    const stopWords = new Set([
-      "ou", "où", "est", "ce", "que", "qu", "on", "va", "je", "tu", "il", "elle",
-      "nous", "vous", "ils", "elles", "le", "la", "les", "un", "une", "des", "du",
-      "de", "d", "a", "au", "aux", "en", "dans", "sur", "pour", "avec", "et",
-      "mon", "ma", "mes", "notre", "nos", "votre", "vos", "y", "aura", "t",
-      "sera", "seront", "sont", "avoir", "etre", "quels", "quelle", "quelles",
-      "proposes", "prevu", "prevus"
-    ]);
-
-    const synonymMap = {
-      cantine: "restauration", manger: "restauration", repas: "restauration",
-      dejeuner: "restauration", restaurant: "restauration", food: "restauration",
-      lunch: "restauration", tr: "restauration",
-      demenager: "demenagement", transfert: "demenagement",
-      calendrier: "demenagement", planning: "demenagement",
-      visite: "visites", visiter: "visites", decouverte: "visites",
-      badge: "acces", entrer: "acces", entree: "acces",
-      wifi: "informatique", reseau: "informatique", teams: "informatique",
-      outlook: "informatique", it: "informatique", equipement: "informatique",
-      equipements: "informatique", materiel: "informatique",
-      ordinateur: "informatique", telephone: "informatique",
-      outils: "informatique", dsi: "informatique", ecran: "informatique",
-      parking: "stationnement", voiture: "stationnement", garage: "stationnement",
-      velo: "mobilite", bicyclette: "mobilite", cycliste: "mobilite",
-      trottinette: "mobilite", douche: "mobilite", vestiaire: "mobilite",
-      navigo: "transport", metro: "transport", rer: "transport",
-      bus: "transport", train: "transport", abonnement: "transport",
-      trajet: "transport", navette: "transport", covoiturage: "transport",
-      remote: "teletravail", maison: "teletravail", presentiel: "teletravail",
-      hybride: "teletravail",
-      horaire: "horaires", souplesse: "horaires", flexible: "horaires",
-      bureau: "poste", place: "poste", desk: "poste",
-      flex: "flexoffice", flexoffice: "flexoffice",
-      salle: "reunion", salles: "reunion", booking: "reunion",
-      casier: "rangement", casiers: "rangement", locker: "rangement",
-      stockage: "rangement", placard: "rangement",
-      bruit: "concentration", silence: "concentration", cabine: "concentration",
-      bulle: "concentration", focus: "concentration", phonique: "concentration",
-      sport: "bienetre", fitness: "bienetre", gym: "bienetre",
-      meditation: "bienetre", yoga: "bienetre", sieste: "bienetre",
-      creche: "parentalite", enfant: "parentalite", famille: "parentalite",
-      bebe: "parentalite", allaitement: "parentalite",
-      pmr: "accessibilite", fauteuil: "accessibilite", handicap: "accessibilite",
-      ascenseur: "accessibilite", rampe: "accessibilite",
-      peur: "resistance", angoisse: "resistance", stress: "resistance",
-      anxieux: "resistance", apprehension: "resistance", inquiet: "resistance",
-      collegues: "lien", liens: "lien", relation: "lien", isole: "lien",
-      cse: "consultation", syndicat: "consultation", delegue: "consultation",
-      cssct: "consultation", elu: "consultation",
-      pilote: "pilotage", responsable: "pilotage", interlocuteur: "pilotage",
-      ambassadeur: "ambassadeurs", relais: "ambassadeurs", referent: "ambassadeurs",
-      volontaire: "ambassadeurs", correspondant: "ambassadeurs",
-      atelier: "ateliers", workshop: "ateliers",
-      charte: "regles", comportement: "regles", normes: "regles",
-      formation: "formation", tutoriel: "formation", onboarding: "formation",
-      manager: "management", managers: "management", encadrement: "management",
-      feedback: "feedback", retour: "feedback", bilan: "feedback",
-      rumeur: "rumeurs", intox: "rumeurs",
-      archives: "archivage", documents: "archivage", papiers: "archivage",
-      dossiers: "archivage", scanner: "archivage", destruction: "archivage",
-    };
-
-    function normalize(text) {
-      return text.toLowerCase().normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9\s]/g, " ")
-        .replace(/\s+/g, " ").trim();
-    }
-
-    function tokenize(text) {
-      return normalize(text).split(" ")
-        .filter(w => w && !stopWords.has(w))
-        .map(w => synonymMap[w] || w);
-    }
-
-    function matchIntent(question) {
-      const tokens = tokenize(question);
-      const normQ = normalize(question);
-      let best = null, bestScore = 0;
-      intents.forEach(intent => {
-        let score = 0;
-        intent.keywords.forEach(kw => {
-          tokenize(kw).forEach(k => { if (tokens.includes(k)) score += 3; });
-          const nk = normalize(kw);
-          if (nk.length > 3 && normQ.includes(nk)) score += 4;
-        });
-        if (score > bestScore) { bestScore = score; best = intent; }
+ 
+  // ── INTENTS OFFICIELS ─────────────────────────────────────────────────────────
+  const intents = [
+    { name:"Date du déménagement", status:"Réponse confirmée", answer:"Le déménagement est actuellement prévu la semaine du 14 octobre.\n\nLa date précise de bascule par équipe sera confirmée dès que le planning logistique sera totalement sécurisé.", note:"Nous préférons partager une date confirmée plutôt qu'un calendrier prématuré qui devrait ensuite être corrigé.", keywords:["date","quand","demenagement","demenager","transfert","installation","semaine","arrivee","jour j","calendrier","planning"] },
+    { name:"Phasage du déménagement par équipe", status:"En attente", answer:"Le phasage précis par équipe est en cours de finalisation.\n\nToutes les entités ne basculeront pas nécessairement au même moment. L'objectif est de garantir une installation fluide, sans mettre les équipes en difficulté opérationnelle.", note:"Une communication spécifique précisera l'ordre de passage, les dates et les équipes concernées dès que le phasage sera stabilisé.", keywords:["phasage","ordre","ordre passage","equipe","equipes","service","qui demenage quand","quand mon equipe"] },
+    { name:"Grandes étapes du déménagement", status:"Réponse partielle", answer:"Le déménagement se prépare généralement en plusieurs temps :\n\n1. Information et cadrage du projet\n2. Préparation logistique et consignes pratiques\n3. Tri, archivage et préparation des postes\n4. Déménagement physique des équipes\n5. Installation sur le nouveau site\n6. Ajustements et accompagnement post-arrivée", note:"L'enjeu n'est pas seulement de changer de lieu, mais de permettre une appropriation progressive du nouveau cadre de travail.", keywords:["etapes","etape","process","processus","deroulement","phases","phase","organisation"] },
+    { name:"Que faire le jour J", status:"Réponse confirmée", answer:"Le jour du déménagement, les équipes concernées recevront une fiche pratique détaillant les actions attendues : heure d'arrivée recommandée, point d'accueil dédié, contacts sur place et déroulé de la journée.\n\nUn accompagnement physique sera assuré sur le site.", note:"Ce type de moment peut générer une certaine appréhension. Nous y sommes attentifs.", keywords:["jour j","jour demenagement","que faire","comment ca va se passer","le grand jour","premier jour"] },
+    { name:"Que faire de mes affaires personnelles", status:"Réponse confirmée", answer:"Un guide de préparation sera transmis avant le déménagement, précisant quoi emballer, quoi trier, et ce qui relève de la responsabilité des équipes de déménagement.\n\nLes objets personnels — photos, plantes — pourront être apportés le jour J ou dans les jours suivants.", note:"S'approprier un nouveau lieu prend du temps. Il n'y a pas de bonne ou de mauvaise façon de le faire.", keywords:["affaires","affaires personnelles","objets","plante","photo","decoration","mes affaires","emballer","carton","cartons"] },
+    { name:"Temps de trajet vers le nouveau site", status:"Réponse confirmée", answer:"Nous sommes conscients que le changement de site peut modifier les trajets quotidiens de certains collaborateurs.\n\nUne analyse des temps de trajet a été réalisée pour identifier les situations les plus impactantes. Des solutions d'accompagnement sont à l'étude pour les personnes les plus éloignées.", note:"Le trajet, ça compte. Ce n'est pas un détail.", keywords:["trajet","transport","navette","temps trajet","loin","proche","distance","chemin","route","rer","metro","bus","train","comment venir","acces transports"] },
+    { name:"Télétravail et jours sur site", status:"Réponse confirmée", answer:"Le déménagement n'entraîne pas de remise en cause des accords de télétravail en vigueur.\n\nLes règles applicables restent celles définies dans votre accord ou votre charte d'équipe.", note:"Le télétravail est devenu une composante importante de l'équilibre de nombreux collaborateurs. Nous en sommes conscients.", keywords:["teletravail","remote","travail distance","jours sur site","hybride","presentiel","jours bureau","travail maison","chez moi","home office"] },
+    { name:"Flexibilité des horaires", status:"Réponse confirmée", answer:"Les politiques d'horaires flexibles ne sont pas remises en cause par le déménagement.\n\nSi vous bénéficiez d'aménagements d'horaires dans votre équipe, ceux-ci continuent à s'appliquer.", note:"Nous savons que la rigidité des horaires peut peser lourd quand le trajet change.", keywords:["horaires","horaires flexibles","flexibilite","arriver plus tot","partir plus tard","amenagement horaires","souplesse"] },
+    { name:"Postes attribués ou flex office", status:"Réponse partielle", answer:"Les principes d'occupation des espaces seront précisés en fonction de l'organisation retenue sur le nouveau site.\n\nLe flex office intégral n'est pas le modèle retenu par défaut. Le sujet sera co-construit dans les ateliers d'avril.", note:"Une communication spécifique expliquera les règles de fonctionnement des espaces de travail.", keywords:["flex office","flexoffice","poste","bureau","place","attribution","desk","placement","poste attribue","mon bureau"] },
+    { name:"Espaces de concentration et calme", status:"Réponse confirmée", answer:"Le nouveau site intègre des espaces dédiés à la concentration individuelle — bulles de travail, zones silencieuses, cabines phoniques.", note:"Travailler dans un espace trop bruyant n'est pas une fatalité.", keywords:["concentration","calme","bruit","silence","open space","cabine","bulle","focus","isolement","travailler sereinement","phonique"] },
+    { name:"Réservation des salles de réunion", status:"Réponse partielle", answer:"Les salles de réunion seront intégrées dans un dispositif de réservation adapté aux usages du site.\n\nL'objectif est de permettre une utilisation lisible et cohérente de ces espaces.", note:"Les modalités pratiques de réservation seront précisées avant la mise en service.", keywords:["salle","salles","reunion","reserver","booking","meeting room","salle de reunion"] },
+    { name:"Espaces de convivialité", status:"Réponse confirmée", answer:"Oui. Le nouveau site intégrera plusieurs espaces pensés pour les temps informels, les pauses et les échanges du quotidien.", note:"Le déménagement peut être une occasion de recréer du lien. Nous voulons qu'elle soit réelle.", keywords:["convivialite","pause","cafe","espace informel","detente","pause cafe","conviviaux","communs","terrasse","lounge"] },
+    { name:"Casier ou rangement personnel", status:"Réponse partielle", answer:"Des solutions de rangement personnel sont prévues dans le cadre du projet.\n\nL'idée est que chacun puisse avoir un espace bien à soi, même dans un environnement partagé.", note:"Une information complémentaire sera communiquée au moment opportun.", keywords:["casier","casiers","rangement","locker","affaires personnelles","affaires","stockage","placard","espace personnel"] },
+    { name:"Offre de restauration", status:"En attente", answer:"Les modalités exactes de restauration ne sont pas encore arrêtées à ce stade.\n\nPlusieurs options sont actuellement à l'étude. Nous savons que le déjeuner, c'est aussi un moment de décompression — pas juste un ravitaillement.", note:"Nous reviendrons vers vous dès que des arbitrages plus précis auront été rendus.", keywords:["restauration","manger","repas","dejeuner","cantine","food","restaurant","pause dejeuner","titres restaurant","ticket restaurant","tr","lunch"] },
+    { name:"Remboursement des transports", status:"Réponse confirmée", answer:"La prise en charge des abonnements de transport en commun reste applicable dans les mêmes conditions qu'aujourd'hui.\n\nSi le changement de site entraîne un surcoût, rapprochez-vous de votre RH.", note:"Le coût du trajet ne doit pas devenir une charge supplémentaire.", keywords:["transport","navigo","abonnement transport","remboursement transport","prise en charge transport","frais transport","pass navigo"] },
+    { name:"Parking voiture", status:"Réponse partielle", answer:"Des solutions de stationnement sont prévues, mais leur périmètre exact et leurs modalités d'accès restent encore à préciser.", note:"Une information détaillée sera communiquée dès que les règles d'accès seront stabilisées.", keywords:["parking","voiture","stationnement","se garer","garage","place voiture","place parking"] },
+    { name:"Parking vélo et mobilités douces", status:"Réponse partielle", answer:"Le projet prévoit d'intégrer des solutions adaptées aux mobilités douces, notamment pour les collaborateurs venant à vélo.\n\nCela inclut un espace de stationnement sécurisé, et potentiellement des vestiaires ou des douches.", note:"Des précisions seront apportées dès que le dispositif final sera stabilisé.", keywords:["velo","parking velo","mobilite","mobilite douce","trottinette","deux roues","cycliste","bicyclette","douche","vestiaire"] },
+    { name:"Visites du site avant l'arrivée", status:"Réponse confirmée", answer:"Oui, le projet prévoit des temps de découverte du nouveau site avant l'installation définitive.\n\nVoir un lieu avant d'y travailler aide à se projeter, à poser des questions, à se rassurer.", note:"Le calendrier de ces temps sera communiqué dans une prochaine étape.", keywords:["visite","visites","voir","decouverte","venir voir","visiter","decouvrir le site","avant d arriver"] },
+    { name:"Badge et accès au nouveau site", status:"En attente", answer:"Les modalités d'accès au nouveau site sont en cours de stabilisation.\n\nUn accueil sera organisé pour les premières arrivées afin que personne ne se retrouve bloqué le premier matin.", note:"Une communication dédiée précisera les conditions d'accès avant l'arrivée sur site.", keywords:["badge","acces","entrer","entree","controle acces","droits acces","ouverture","acces site"] },
+    { name:"Connexion et outils IT à l'arrivée", status:"Réponse confirmée", answer:"Tout est mis en œuvre pour que les accès, la connexion et les outils de travail soient opérationnels à l'arrivée.\n\nUne équipe IT sera présente les premiers jours pour traiter les problèmes en temps réel.", note:"Si certains ajustements devaient intervenir au démarrage, ils seraient signalés clairement et traités en priorité.", keywords:["wifi","connexion","reseau","outlook","teams","outils","informatique","it","equipements","equipement","materiel","ordinateur","telephone","poste informatique"] },
+    { name:"J'ai peur du changement", status:"Réponse confirmée", answer:"Ce que vous ressentez est normal. Un déménagement d'entreprise, ce n'est pas juste une adresse qui change — c'est un quotidien qui se recompose.\n\nCe projet a justement été conçu pour que la transition soit accompagnée et progressive.", note:"Si vous traversez une période difficile en lien avec ce projet, parlez-en à votre manager ou à votre RH.", keywords:["peur","angoisse","stress","anxieux","anxiete","inquiet","apprehension","perturbe","bouleverse","destabilise","mal a l aise","pas envie","contre"] },
+    { name:"Ambassadeurs du projet", status:"Réponse confirmée", answer:"Un réseau d'ambassadeurs volontaires est mis en place. Ce sont des collaborateurs issus de différentes équipes qui jouent un rôle de relais de proximité.\n\nPour rejoindre ce réseau ou identifier votre ambassadeur, rapprochez-vous de votre RH.", note:"Les ambassadeurs ne sont pas des communicants. Ce sont des collègues qui ont accepté de jouer un rôle actif dans la transition.", keywords:["ambassadeur","ambassadeurs","relais","referent projet","reseau ambassadeurs","volontaire","correspondant"] },
+    { name:"Ateliers de personnalisation des espaces", status:"Réponse confirmée", answer:"Des ateliers de personnalisation sont prévus pour permettre aux équipes de s'approprier leur futur espace avant l'installation.\n\nCe n'est pas de la consultation cosmétique — les résultats sont intégrés dans l'aménagement final.", note:"Les dates et formats seront communiqués dès que le calendrier sera stabilisé.", keywords:["atelier","ateliers","personnalisation","personnaliser","co construction","workshop","participation","choisir","s exprimer","amenagement"] },
+    { name:"Règles de vie sur le nouveau site", status:"Réponse partielle", answer:"Les règles de vie dans les espaces partagés ne seront pas imposées d'en haut. Elles seront co-construites avec les équipes lors des ateliers d'avril.", note:"Des règles de vie ne fonctionnent que si les personnes concernées se les sont appropriées.", keywords:["regles de vie","regles","charte","charte usage","comportement","vivre ensemble","collectif","normes","bonnes pratiques","respect","espaces partages"] },
+    { name:"Qui pilote le projet", status:"Réponse confirmée", answer:"Le projet est piloté par une équipe dédiée composée de représentants des Ressources Humaines, de la Direction Immobilière et des Services Généraux, avec le soutien de la Direction Générale.", note:"Si vous ne savez pas à qui vous adresser, le formulaire ci-dessous est le bon point d'entrée.", keywords:["qui pilote","qui gere","responsable projet","interlocuteur","chef projet","equipe projet","contact projet","pilotage"] },
+    { name:"Archivage et gestion des documents", status:"Réponse confirmée", answer:"Un plan d'archivage sera communiqué avant le déménagement, avec des consignes précises sur ce qui doit être trié, numérisé ou détruit.\n\nLes archives physiques à conserver seront prises en charge par les équipes de déménagement.", note:"Prenez le temps de passer vos documents en revue avant le déménagement. C'est souvent l'occasion de désencombrer.", keywords:["archives","archivage","documents","papiers","dossiers","classeur","scanner","numerisation","destruction","tri"] },
+    { name:"Accessibilité du site (PMR)", status:"Réponse confirmée", answer:"Le nouveau site est conforme aux normes d'accessibilité en vigueur pour les personnes à mobilité réduite.\n\nCela comprend l'accès aux entrées, aux espaces de travail, aux sanitaires et aux salles de réunion.", note:"L'accessibilité ne se résume pas à la conformité réglementaire. Nous souhaitons que chacun puisse circuler dans des conditions dignes.", keywords:["pmr","accessibilite","fauteuil roulant","handicap moteur","rampe","ascenseur","mobilite reduite","acces handicape"] },
+    { name:"Rumeurs et informations non officielles", status:"Réponse confirmée", answer:"Dans tout projet de cette nature, des rumeurs circulent. Si vous avez entendu quelque chose qui vous préoccupe, posez-le ici ou via le formulaire. Nous nous engageons à répondre factuellement.", note:"L'incertitude génère des récits. Nous préférons les récits fondés sur des faits.", keywords:["rumeur","rumeurs","ouie dire","on dit que","bruit de couloir","entendu dire","vrai ou faux","intox","fake","pas vrai","faux","dementi"] },
+    { name:"Communication à venir", status:"Réponse confirmée", answer:"Toutes les réponses ne peuvent pas être données immédiatement. L'engagement est clair : partager une information fiable et progressive, plutôt que multiplier des messages incomplets.", note:"Cet espace a justement vocation à évoluer à mesure que le projet avance.", keywords:["plus d infos","prochaines communications","quand saura t on","infos a venir","communication","informations"] },
+  ];
+ 
+  // ── MOTEUR DE MATCHING ────────────────────────────────────────────────────────
+  const stopWords = new Set(["ou","où","est","ce","que","qu","on","va","je","tu","il","elle","nous","vous","ils","elles","le","la","les","un","une","des","du","de","d","a","au","aux","en","dans","sur","pour","avec","et","mon","ma","mes","notre","nos","votre","vos","y","aura","t","sera","seront","sont","avoir","etre","quels","quelle","quelles","proposes","prevu","prevus"]);
+ 
+  const synonymMap = {
+    cantine:"restauration",manger:"restauration",repas:"restauration",dejeuner:"restauration",restaurant:"restauration",food:"restauration",lunch:"restauration",tr:"restauration",
+    demenager:"demenagement",transfert:"demenagement",calendrier:"demenagement",planning:"demenagement",
+    visite:"visites",visiter:"visites",decouverte:"visites",
+    badge:"acces",entrer:"acces",entree:"acces",
+    wifi:"informatique",reseau:"informatique",teams:"informatique",outlook:"informatique",it:"informatique",equipement:"informatique",equipements:"informatique",materiel:"informatique",ordinateur:"informatique",telephone:"informatique",outils:"informatique",dsi:"informatique",ecran:"informatique",
+    parking:"stationnement",voiture:"stationnement",garage:"stationnement",
+    velo:"mobilite",bicyclette:"mobilite",cycliste:"mobilite",trottinette:"mobilite",douche:"mobilite",vestiaire:"mobilite",
+    navigo:"transport",metro:"transport",rer:"transport",bus:"transport",train:"transport",abonnement:"transport",trajet:"transport",navette:"transport",covoiturage:"transport",
+    remote:"teletravail",maison:"teletravail",presentiel:"teletravail",hybride:"teletravail",
+    horaire:"horaires",souplesse:"horaires",flexible:"horaires",
+    bureau:"poste",place:"poste",desk:"poste",flex:"flexoffice",flexoffice:"flexoffice",
+    salle:"reunion",salles:"reunion",booking:"reunion",
+    casier:"rangement",casiers:"rangement",locker:"rangement",stockage:"rangement",placard:"rangement",
+    bruit:"concentration",silence:"concentration",cabine:"concentration",bulle:"concentration",focus:"concentration",phonique:"concentration",
+    sport:"bienetre",fitness:"bienetre",gym:"bienetre",meditation:"bienetre",yoga:"bienetre",
+    creche:"parentalite",enfant:"parentalite",famille:"parentalite",bebe:"parentalite",
+    pmr:"accessibilite",fauteuil:"accessibilite",handicap:"accessibilite",ascenseur:"accessibilite",rampe:"accessibilite",
+    peur:"resistance",angoisse:"resistance",stress:"resistance",anxieux:"resistance",apprehension:"resistance",inquiet:"resistance",
+    collegues:"lien",liens:"lien",relation:"lien",isole:"lien",
+    cse:"consultation",syndicat:"consultation",delegue:"consultation",cssct:"consultation",elu:"consultation",
+    ambassadeur:"ambassadeurs",relais:"ambassadeurs",referent:"ambassadeurs",volontaire:"ambassadeurs",
+    atelier:"ateliers",workshop:"ateliers",
+    charte:"regles",comportement:"regles",normes:"regles",
+    formation:"formation",tutoriel:"formation",onboarding:"formation",
+    manager:"management",managers:"management",encadrement:"management",
+    feedback:"feedback",retour:"feedback",bilan:"feedback",
+    rumeur:"rumeurs",intox:"rumeurs",
+    archives:"archivage",documents:"archivage",papiers:"archivage",dossiers:"archivage",scanner:"archivage",destruction:"archivage",
+  };
+ 
+  function normalize(text) {
+    return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
+  }
+ 
+  function tokenize(text) {
+    return normalize(text).split(" ").filter(w => w && !stopWords.has(w)).map(w => synonymMap[w] || w);
+  }
+ 
+  function matchIntent(question) {
+    const tokens = tokenize(question);
+    const normQ = normalize(question);
+    let best = null, bestScore = 0;
+    intents.forEach(intent => {
+      let score = 0;
+      intent.keywords.forEach(kw => {
+        tokenize(kw).forEach(k => { if (tokens.includes(k)) score += 3; });
+        const nk = normalize(kw);
+        if (nk.length > 3 && normQ.includes(nk)) score += 4;
       });
-      return bestScore >= 6 ? best : null;
-    }
-
-    // ─── APPEL GEMINI ─────────────────────────────────────────────────────────────
-
-    async function askGemini(question) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-      const body = {
-        contents: [{ parts: [{ text: PROJECT_CONTEXT + "\n\n--- QUESTION DU COLLABORATEUR ---\n" + question }] }],
-        generationConfig: { temperature: 0.3, maxOutputTokens: 400 }
-      };
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      if (!res.ok) throw new Error("Erreur API Gemini : " + res.status);
-      const data = await res.json();
-      return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
-    }
-
-    // ─── INTERFACE ────────────────────────────────────────────────────────────────
-
-    const questionInput  = document.getElementById("questionInput");
-    const askBtn         = document.getElementById("askBtn");
-    const resultBox      = document.getElementById("resultBox");
-    const notFoundBox    = document.getElementById("notFoundBox");
-    const loadingBox     = document.getElementById("loadingBox");
-    const resultQuestion = document.getElementById("resultQuestion");
-    const resultStatus   = document.getElementById("resultStatus");
-    const resultAnswer   = document.getElementById("resultAnswer");
-    const resultNote     = document.getElementById("resultNote");
-
-    function showLoading(on) {
-      loadingBox.style.display  = on ? "block" : "none";
-      resultBox.style.display   = "none";
-      notFoundBox.style.display = "none";
-      askBtn.disabled           = on;
-    }
-
-    function showResult(userQuestion, answer, status, note) {
-      resultQuestion.textContent = "Question : " + userQuestion;
-      resultStatus.textContent   = status;
-      resultAnswer.textContent   = answer;
-      resultNote.textContent     = note;
-      resultBox.style.display    = "block";
-      notFoundBox.style.display  = "none";
-      resultBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-
-    function showNotFound() {
-      resultBox.style.display   = "none";
-      notFoundBox.style.display = "block";
-      notFoundBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-
-    async function handleQuestion(question) {
-      if (!question.trim()) return;
-
-      // 1. Intents officiels en priorité
-      const intent = matchIntent(question);
-      if (intent) {
-        showResult(question, intent.answer, intent.status, intent.note);
-        return;
-      }
-
-      // 2. Fallback Gemini pour les questions non couvertes
-      showLoading(true);
-      try {
-        const aiAnswer = await askGemini(question);
-        showLoading(false);
-        if (aiAnswer) {
-          showResult(
-            question,
-            aiAnswer,
-            "Réponse générée",
-            "Cette réponse est produite à partir des informations disponibles sur le projet. Si elle ne répond pas précisément à votre situation, utilisez le formulaire ci-dessous."
-          );
-        } else {
-          showNotFound();
-        }
-      } catch (err) {
-        showLoading(false);
-        showNotFound();
-        console.error(err);
-      }
-    }
-
-    askBtn.addEventListener("click", () => handleQuestion(questionInput.value.trim()));
-
-    questionInput.addEventListener("keydown", e => {
-      if (e.key === "Enter") { e.preventDefault(); askBtn.click(); }
+      if (score > bestScore) { bestScore = score; best = intent; }
     });
-
-    document.querySelectorAll(".suggestion").forEach(btn => {
-      btn.addEventListener("click", () => {
-        questionInput.value = btn.dataset.question;
-        handleQuestion(btn.dataset.question);
-      });
-    });
-
-  </script>
+    return bestScore >= 6 ? best : null;
+  }
+ 
+  // ── GEMINI ────────────────────────────────────────────────────────────────────
+  async function askGemini(question) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const body = { contents:[{parts:[{text: PROJECT_CONTEXT + "\n\n--- QUESTION DU COLLABORATEUR ---\n" + question}]}], generationConfig:{temperature:0.3,maxOutputTokens:400} };
+    const res = await fetch(url, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body) });
+    if (!res.ok) throw new Error("Erreur API Gemini : " + res.status);
+    const data = await res.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
+  }
+ 
+  // ── FAQ INTERFACE ─────────────────────────────────────────────────────────────
+  const questionInput  = document.getElementById("questionInput");
+  const askBtn         = document.getElementById("askBtn");
+  const resultBox      = document.getElementById("resultBox");
+  const notFoundBox    = document.getElementById("notFoundBox");
+  const loadingBox     = document.getElementById("loadingBox");
+  const resultQuestion = document.getElementById("resultQuestion");
+  const resultStatus   = document.getElementById("resultStatus");
+  const resultAnswer   = document.getElementById("resultAnswer");
+  const resultNote     = document.getElementById("resultNote");
+ 
+  function showLoading(on) {
+    loadingBox.style.display  = on ? "block" : "none";
+    resultBox.style.display   = "none";
+    notFoundBox.style.display = "none";
+    askBtn.disabled           = on;
+  }
+ 
+  function showResult(userQuestion, answer, status, note) {
+    resultQuestion.textContent = "Question : " + userQuestion;
+    resultStatus.textContent   = status;
+    resultAnswer.textContent   = answer;
+    resultNote.textContent     = note;
+    resultBox.style.display    = "block";
+    notFoundBox.style.display  = "none";
+    resultBox.scrollIntoView({ behavior:"smooth", block:"nearest" });
+  }
+ 
+  function showNotFound() {
+    resultBox.style.display   = "none";
+    notFoundBox.style.display = "block";
+    notFoundBox.scrollIntoView({ behavior:"smooth", block:"nearest" });
+  }
+ 
+  async function handleQuestion(question) {
+    if (!question.trim()) return;
+    const intent = matchIntent(question);
+    if (intent) { showResult(question, intent.answer, intent.status, intent.note); return; }
+    showLoading(true);
+    try {
+      const aiAnswer = await askGemini(question);
+      showLoading(false);
+      if (aiAnswer) {
+        showResult(question, aiAnswer, "Réponse générée", "Cette réponse est produite à partir des informations disponibles sur le projet. Si elle ne répond pas précisément à votre situation, utilisez le formulaire ci-dessous.");
+      } else { showNotFound(); }
+    } catch (err) { showLoading(false); showNotFound(); console.error(err); }
+  }
+ 
+  askBtn.addEventListener("click", () => handleQuestion(questionInput.value.trim()));
+  questionInput.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); askBtn.click(); } });
+  document.querySelectorAll(".suggestion").forEach(btn => {
+    btn.addEventListener("click", () => { questionInput.value = btn.dataset.question; handleQuestion(btn.dataset.question); });
+  });
+ 
+</script>
 </body>
 </html>
