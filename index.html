@@ -265,341 +265,276 @@
     </section>
   </div>
 
-  <script>
-    const intents = [
-  {
-    name: "Date du déménagement",
-    status: "Réponse confirmée",
-    answer: "Le déménagement est actuellement prévu la semaine du 14 octobre.\n\nLa date précise de bascule par équipe sera confirmée dès que le planning logistique sera totalement sécurisé.",
-    note: "Nous préférons partager une date confirmée plutôt qu’un calendrier prématuré qui devrait ensuite être corrigé.",
-    keywords: ["date", "quand", "demenagement", "demenager", "transfert", "installation", "semaine", "arrivee", "arrivée", "jour j"]
-  },
-  {
-    name: "Phasage du déménagement par équipe",
-    status: "En attente",
-    answer: "Le phasage précis par équipe est en cours de finalisation.\n\nToutes les entités ne basculeront pas nécessairement au même moment. L’objectif est de garantir une installation fluide, sans mettre les équipes en difficulté opérationnelle.",
-    note: "Une communication spécifique précisera l’ordre de passage, les dates et les équipes concernées dès que le phasage sera stabilisé.",
-    keywords: ["phasage", "ordre", "ordre de passage", "equipe", "équipe", "equipes", "équipes", "service", "quand mon equipe", "quand mon équipe", "qui demenage quand", "qui déménage quand"]
-  },
-  {
-    name: "Grandes étapes du déménagement",
-    status: "Réponse partielle",
-    answer: "Le déménagement se prépare généralement en plusieurs temps :\n\n1. Information et cadrage du projet\n2. Préparation logistique et consignes pratiques\n3. Tri, archivage et préparation des postes\n4. Déménagement physique des équipes\n5. Installation sur le nouveau site\n6. Ajustements et accompagnement post-arrivée\n\nToutes ces étapes n’ont pas le même niveau de visibilité au même moment, mais elles seront précisées au fil du projet.",
-    note: "L’enjeu n’est pas seulement de changer de lieu, mais de permettre une appropriation progressive du nouveau cadre de travail.",
-    keywords: ["etapes", "étapes", "etape", "étape", "process", "processus", "deroule", "déroule", "deroulement", "déroulement", "phases", "phase", "comment ca se passe", "comment ça se passe"]
-  },
-  {
-    name: "Préparation du poste avant départ",
-    status: "Réponse partielle",
-    answer: "Avant le déménagement, il sera demandé de préparer son poste de travail : trier ses documents, identifier ce qui doit être transféré, ranger ses effets personnels et suivre les consignes de préparation qui seront communiquées.\n\nLe but n’est pas d’ajouter de la complexité, mais d’éviter les oublis et de faciliter l’installation sur le nouveau site.",
-    note: "Une checklist simple sera partagée au moment opportun pour rendre cette étape la plus lisible possible.",
-    keywords: ["preparer", "préparer", "poste", "bureau", "quitter mon poste", "avant depart", "avant départ", "ranger", "vider", "preparation poste", "préparation poste"]
-  },
-  {
-    name: "Tri et désencombrement",
-    status: "Réponse partielle",
-    answer: "Une phase de tri sera demandée avant le déménagement, afin de limiter le transfert de documents ou d’objets qui n’ont plus vocation à être utilisés.\n\nCette étape peut paraître contraignante, mais elle permet de gagner en lisibilité, en efficacité logistique et en confort d’installation sur le nouveau site.",
-    note: "Les critères de tri seront précisés pour éviter de laisser les équipes seules face à ce travail.",
-    keywords: ["tri", "desencombrement", "désencombrement", "jeter", "garder", "vider", "faire du tri", "archives a jeter", "archivage"]
-  },
-  {
-    name: "Cartons et étiquetage",
-    status: "En attente",
-    answer: "Le dispositif de distribution des cartons et d’étiquetage est en cours de préparation.\n\nL’objectif est de proposer une méthode simple, commune et facile à suivre pour l’ensemble des équipes, afin d’éviter les erreurs et les pertes au moment du déménagement.",
-    note: "Une note pratique dédiée sera partagée avant la phase de préparation concrète.",
-    keywords: ["carton", "cartons", "etiquetage", "étiquetage", "etiquette", "étiquette", "emballage", "materiel demenagement", "matériel déménagement"]
-  },
-  {
-    name: "Archives papier",
-    status: "Réponse partielle",
-    answer: "Les archives papier devront faire l’objet d’un traitement spécifique en amont du déménagement.\n\nSelon leur statut, elles pourront être conservées, transférées, stockées ou éliminées dans le respect des règles en vigueur. L’enjeu est de ne pas déplacer automatiquement ce qui n’a plus de raison d’être utilisé.",
-    note: "Des consignes complémentaires seront partagées pour aider chacun à faire la différence entre documents actifs, archives utiles et éléments à évacuer.",
-    keywords: ["archives", "archive", "papier", "classeurs", "dossiers papier", "documents papier", "stockage", "archivage"]
-  },
-  {
-    name: "Matériel informatique avant le déménagement",
-    status: "Réponse partielle",
-    answer: "Le matériel informatique fera l’objet d’une préparation spécifique avant le déménagement.\n\nSelon le dispositif retenu, certaines opérations pourront être prises en charge, tandis que d’autres relèveront de consignes individuelles simples. L’objectif est de limiter au maximum les manipulations inutiles ou anxiogènes.",
-    note: "Les modalités pratiques seront précisées en amont pour éviter tout flou sur ce qui doit être fait ou non.",
-    keywords: ["it", "informatique", "ordinateur", "ecran", "écran", "laptop", "cables", "câbles", "clavier", "souris", "materiel informatique", "matériel informatique"]
-  },
-  {
-    name: "Connexion et outils IT à l’arrivée",
-    status: "Réponse confirmée",
-    answer: "Tout est mis en œuvre pour que les accès, la connexion et les outils de travail soient opérationnels à l’arrivée sur le nouveau site.\n\nL’objectif est que les équipes puissent reprendre leur activité dans les meilleures conditions possibles, sans devoir gérer seules un redémarrage technique complexe.",
-    note: "Si certains ajustements devaient intervenir au démarrage, ils seraient signalés clairement et traités en priorité.",
-    keywords: ["wifi", "connexion", "reseau", "réseau", "outlook", "teams", "outils", "it a l arrivee", "informatique a l arrivee", "informatique arrivée", "réseau internet"]
-  },
-  {
-    name: "Badge et accès au nouveau site",
-    status: "En attente",
-    answer: "Les modalités d’accès au nouveau site sont en cours de stabilisation.\n\nCela concerne notamment les badges, les droits d’accès, les modalités d’entrée et, le cas échéant, les règles propres à certaines zones spécifiques.",
-    note: "Une communication dédiée précisera les conditions d’accès avant l’arrivée sur site.",
-    keywords: ["badge", "acces", "accès", "entrer", "entree", "entrée", "controle acces", "contrôle accès", "droits d acces", "droits d'accès"]
-  },
-  {
-    name: "Accueil le premier jour",
-    status: "Réponse partielle",
-    answer: "L’arrivée sur le nouveau site fera l’objet d’une organisation spécifique afin de faciliter l’installation des équipes.\n\nL’objectif n’est pas seulement d’ouvrir les portes, mais de rendre le premier jour lisible, concret et rassurant, avec un niveau d’accompagnement adapté.",
-    note: "Le déroulé précis du premier jour sera communiqué en amont pour que chacun sache à quoi s’attendre.",
-    keywords: ["premier jour", "day 1", "jour j", "accueil", "arrivee", "arrivée", "installation", "comment ca se passe le premier jour", "comment ça se passe le premier jour"]
-  },
-  {
-    name: "Visites du site avant l’arrivée",
-    status: "Réponse confirmée",
-    answer: "Oui, le projet prévoit des temps de découverte du nouveau site avant l’installation définitive.\n\nLe format pourra varier selon les contraintes : visites physiques, parcours commentés, visuels ou supports partagés en amont. L’enjeu est de permettre aux équipes de se projeter avant l’arrivée.",
-    note: "Le calendrier de ces temps sera communiqué dans une prochaine étape.",
-    keywords: ["visite", "visites", "site", "voir", "decouverte", "découverte", "avant", "venir voir", "visiter"]
-  },
-  {
-    name: "Plans et repères dans le site",
-    status: "Réponse partielle",
-    answer: "Des supports de repérage permettront aux collaborateurs de mieux comprendre l’organisation du nouveau site : plans, zones fonctionnelles, espaces communs et principaux points d’usage.\n\nLe but est d’éviter un effet de désorientation à l’arrivée et de faciliter l’appropriation des lieux.",
-    note: "Le niveau de détail des supports sera ajusté pour rester utile sans surcharger d’informations.",
-    keywords: ["plan", "plans", "repere", "repères", "se reperer", "se repérer", "etages", "étages", "ou se trouve", "où se trouve", "orientation"]
-  },
-  {
-    name: "Offre de restauration",
-    status: "En attente",
-    answer: "Les modalités exactes de restauration ne sont pas encore arrêtées à ce stade.\n\nPlusieurs options sont actuellement à l’étude afin de proposer une solution cohérente avec les usages du site et les rythmes de pause des collaborateurs.",
-    note: "Nous reviendrons vers vous dès que des arbitrages plus précis auront été rendus.",
-    keywords: ["restauration", "manger", "mange", "repas", "dejeuner", "déjeuner", "cantine", "food", "restaurant", "pause dejeuner", "pause déjeuner", "ou va t on manger", "où va t-on manger"]
-  },
-  {
-    name: "Espaces de convivialité",
-    status: "Réponse confirmée",
-    answer: "Oui. Le nouveau site intégrera plusieurs espaces pensés pour les temps informels, les pauses et les échanges du quotidien.\n\nL’idée n’est pas de rajouter des espaces “pour faire joli”, mais de créer de véritables points d’usage pour le collectif et les interactions non formelles.",
-    note: "Le détail de ces espaces pourra être présenté plus précisément dans une prochaine communication.",
-    keywords: ["convivialite", "convivialité", "pause", "cafe", "café", "espace informel", "espace convivial", "detente", "détente", "pause cafe", "pause café"]
-  },
-  {
-    name: "Parking voiture",
-    status: "Réponse partielle",
-    answer: "Des solutions de stationnement sont prévues, mais leur périmètre exact et leurs modalités d’accès restent encore à préciser.\n\nCela concerne notamment la capacité, les conditions d’accès et les éventuelles priorités d’usage.",
-    note: "Une information détaillée sera communiquée dès que les règles d’accès seront stabilisées.",
-    keywords: ["parking", "voiture", "stationnement", "se garer", "garage", "place voiture", "parking voiture"]
-  },
-  {
-    name: "Parking vélo et mobilités douces",
-    status: "Réponse partielle",
-    answer: "Le projet prévoit d’intégrer des solutions adaptées aux mobilités douces, notamment pour les collaborateurs venant à vélo.\n\nLes modalités précises d’accès, d’usage et de capacité sont encore en cours de cadrage.",
-    note: "Des précisions seront apportées dès que le dispositif final sera stabilisé.",
-    keywords: ["velo", "vélo", "parking velo", "parking vélo", "mobilite douce", "mobilité douce", "trottinette", "attacher son velo", "attacher son vélo"]
-  },
-  {
-    name: "Douches et vestiaires",
-    status: "En attente",
-    answer: "Les informations relatives aux douches, vestiaires et autres équipements associés sont en cours de confirmation.\n\nCes sujets font partie des attentes concrètes qui comptent au quotidien, donc nous préférons ne pas annoncer d’élément incomplet ou incertain à ce stade.",
-    note: "Nous reviendrons vers vous dès que les arbitrages auront été finalisés.",
-    keywords: ["douche", "douches", "vestiaire", "vestiaires", "se changer", "sport", "velo douche", "vélo douche"]
-  },
-  {
-    name: "Postes attribués ou flex office",
-    status: "Réponse partielle",
-    answer: "Les principes d’occupation des espaces seront précisés en fonction de l’organisation retenue sur le nouveau site.\n\nSelon les cas, cela pourra inclure des postes attribués, des espaces mutualisés ou des logiques plus flexibles d’occupation. L’enjeu est de rendre ces règles compréhensibles et praticables, pas de créer de l’incertitude supplémentaire.",
-    note: "Une communication spécifique expliquera les règles de fonctionnement des espaces de travail.",
-    keywords: ["flex office", "poste", "bureau", "place", "attribution", "desk", "ou je m assieds", "où je m'assieds", "placement", "poste attribue", "poste attribué"]
-  },
-  {
-    name: "Réservation des salles de réunion",
-    status: "Réponse partielle",
-    answer: "Les salles de réunion seront intégrées dans un dispositif de réservation adapté aux usages du site.\n\nL’objectif est de permettre une utilisation lisible, simple et cohérente de ces espaces, sans créer de surcharge ou d’ambiguïté d’usage.",
-    note: "Les modalités pratiques de réservation seront précisées avant la mise en service.",
-    keywords: ["salle", "salles", "reunion", "réunion", "reserver", "réserver", "booking", "outlook salle", "meeting room"]
-  },
-  {
-    name: "Bulles et espaces informels",
-    status: "Réponse partielle",
-    answer: "Le nouveau site intégrera différents types d’espaces, avec des usages distincts : salles de réunion, espaces informels, bulles ou espaces de passage selon la configuration retenue.\n\nL’objectif est que chacun puisse comprendre à quoi sert chaque espace et comment l’utiliser de manière fluide.",
-    note: "Des repères d’usage seront partagés pour éviter les malentendus ou les usages contradictoires.",
-    keywords: ["bulle", "bulles", "espace informel", "box", "petits espaces", "concentration", "appel", "phone booth"]
-  },
-  {
-    name: "Casier ou rangement personnel",
-    status: "Réponse partielle",
-    answer: "Des solutions de rangement personnel sont prévues dans le cadre du projet.\n\nLes modalités exactes d’usage, d’attribution ou de partage seront précisées selon le dispositif retenu. L’idée est que chacun puisse se projeter dans un fonctionnement clair et réaliste.",
-    note: "Une information complémentaire sera communiquée au moment opportun.",
-    keywords: ["casier", "casiers", "rangement", "locker", "affaires personnelles", "ranger ses affaires", "rangement personnel"]
-  },
-  {
-    name: "Télétravail et présence sur site",
-    status: "Réponse partielle",
-    answer: "Les modalités de présence sur site et leur articulation avec les pratiques existantes feront l’objet d’un cadrage ou d’un rappel adapté au nouveau contexte.\n\nLe projet immobilier ne redéfinit pas à lui seul l’ensemble des règles de travail, mais il peut amener à clarifier certains équilibres d’usage.",
-    note: "Les éléments les plus structurants seront communiqués clairement pour éviter les interprétations contradictoires.",
-    keywords: ["teletravail", "télétravail", "presence", "présence", "venir sur site", "jours sur site", "hybride", "travail hybride"]
-  },
-  {
-    name: "Règles de vie et usages des espaces",
-    status: "En attente",
-    answer: "Des repères d’usage et de fonctionnement seront partagés afin de faciliter la vie collective dans les nouveaux espaces.\n\nL’objectif n’est pas de multiplier les interdictions, mais de rendre possibles des usages compatibles entre eux dans un cadre partagé.",
-    note: "Ces éléments pourront être construits ou ajustés avec les équipes selon la démarche retenue.",
-    keywords: ["regles de vie", "règles de vie", "usage", "usages", "charte", "fonctionnement", "bien vivre ensemble", "regles", "règles"]
-  },
-  {
-    name: "Continuité de service",
-    status: "Réponse confirmée",
-    answer: "L’objectif du projet est d’assurer une continuité de service aussi fluide que possible.\n\nCertains ajustements peuvent néanmoins intervenir pendant la phase de transition, en fonction du calendrier de mise en service du nouveau site. Si c’est le cas, ils seront expliqués et anticipés autant que possible.",
-    note: "Une information spécifique sera partagée si des impacts temporaires sont identifiés.",
-    keywords: ["continuité", "service", "impact", "interruption", "activité", "est ce qu on pourra travailler", "est-ce qu'on pourra travailler", "continuer a travailler", "continuer à travailler"]
-  },
-  {
-    name: "Accompagnement managérial",
-    status: "En attente",
-    answer: "Des éléments d’accompagnement à destination des managers sont envisagés afin de faciliter la préparation et l’appropriation du projet par les équipes.\n\nLe rôle des managers est clé dans ce type de séquence, non pas pour “tout expliquer seuls”, mais pour relayer un cadre clair et ouvrir les bons espaces d’échange.",
-    note: "Le format pourra inclure des repères, des supports ou des temps d’échange dédiés.",
-    keywords: ["manager", "managers", "encadrement", "accompagnement manager", "kit manager", "management"]
-  },
-  {
-    name: "Accompagnement des collaborateurs",
-    status: "Réponse partielle",
-    answer: "Le projet prévoit plusieurs modalités d’accompagnement pour faciliter la compréhension du projet et la prise en main du nouveau site.\n\nCela peut inclure des supports d’information, des relais de proximité, des visites ou des contenus pratiques. L’objectif n’est pas d’inonder d’informations, mais de rendre le changement plus lisible et plus praticable.",
-    note: "Le dispositif complet sera précisé au fil de l’avancement du projet.",
-    keywords: ["accompagnement", "collaborateurs", "aide", "soutien", "explications", "on sera accompagnes", "on sera accompagnés", "accompagner le changement"]
-  },
-  {
-    name: "Relais de proximité / ambassadeurs",
-    status: "En attente",
-    answer: "Un dispositif de relais de proximité peut être prévu pour faciliter la circulation de l’information et faire remonter certaines questions du terrain.\n\nCe type de relais permet de compléter la communication projet par des points d’appui plus proches du quotidien des équipes.",
-    note: "Les modalités exactes de ce dispositif seront précisées si elles sont retenues dans la démarche projet.",
-    keywords: ["ambassadeur", "ambassadeurs", "relais", "relais de proximite", "relais de proximité", "referent", "référent", "proximite", "proximité"]
-  },
-  {
-    name: "Situations individuelles particulières",
-    status: "En attente",
-    answer: "Les situations individuelles nécessitant une attention particulière seront prises en compte dans le cadre du projet.\n\nSi vous estimez avoir un besoin spécifique, vous pourrez vous signaler via les relais habituels une fois le dispositif de remontée formalisé. Ce type de situation ne sera pas traité comme un détail annexe.",
-    note: "Les modalités de remontée et de traitement de ces situations seront précisées ultérieurement.",
-    keywords: ["situation individuelle", "situation particuliere", "situation particulière", "handicap", "contrainte", "besoin specifique", "besoin spécifique", "cas particulier", "situation perso"]
-  },
-  {
-    name: "Accessibilité du nouveau site",
-    status: "Réponse partielle",
-    answer: "L’accessibilité constitue un point d’attention du projet.\n\nLes caractéristiques précises du site, ainsi que les modalités d’usage associées, seront précisées dans une communication dédiée ou lors des temps de présentation du site. L’objectif est que ces sujets soient traités concrètement, pas uniquement de manière théorique.",
-    note: "Des précisions complémentaires pourront être apportées selon les besoins exprimés.",
-    keywords: ["accessibilite", "accessibilité", "pmr", "handicap", "acces handicap", "accès handicap", "mobilite reduite", "mobilité réduite"]
-  },
-  {
-    name: "Nettoyage / cleaning day",
-    status: "En attente",
-    answer: "Les modalités de nettoyage, de remise en état et d’éventuelles opérations de type cleaning day sont en cours de cadrage.\n\nLe dispositif final dépendra du calendrier et des besoins identifiés sur les sites concernés.",
-    note: "Des consignes précises seront communiquées si ce dispositif est retenu.",
-    keywords: ["cleaning day", "nettoyage", "vider bureau", "rangement bureau", "tri bureau", "menage", "ménage"]
-  },
-  {
-    name: "Accueil des visiteurs",
-    status: "En attente",
-    answer: "Les modalités d’accueil des visiteurs sur le nouveau site sont en cours de définition.\n\nCela inclut les procédures d’accès, d’accueil et les conditions d’orientation sur site. L’objectif est d’éviter toute ambiguïté dans les usages liés à l’accueil externe.",
-    note: "Une communication spécifique pourra être diffusée si ce point concerne directement les équipes.",
-    keywords: ["visiteur", "visiteurs", "accueil visiteurs", "client", "recevoir quelqu un", "recevoir quelqu'un", "invites", "invités"]
-  },
-  {
-    name: "Objets personnels et effets individuels",
-    status: "Réponse partielle",
-    answer: "Les effets personnels pourront être emportés dans le cadre du déménagement, dans des conditions qui seront précisées en amont.\n\nL’idée est de distinguer ce qui relève du quotidien individuel de ce qui doit être traité dans le cadre logistique général.",
-    note: "Des consignes pratiques permettront d’éviter les malentendus sur ce qui peut ou doit être transféré.",
-    keywords: ["effets personnels", "objets personnels", "plantes", "cadres", "affaires perso", "objets", "emporter ses affaires"]
-  },
-  {
-    name: "Communication à venir",
-    status: "Réponse confirmée",
-    answer: "Toutes les réponses ne peuvent pas être données immédiatement, parce que certains arbitrages dépendent de la maturité réelle du projet.\n\nEn revanche, l’engagement est clair : partager une information fiable, utile et progressive, plutôt que multiplier des messages incomplets ou contradictoires.",
-    note: "Cet espace a justement vocation à évoluer à mesure que le projet avance.",
-    keywords: ["quand aurez vous plus d infos", "quand aurez-vous plus d'infos", "a venir", "à venir", "prochaines communications", "quand saura t on", "quand saura-t-on", "quand aura t on", "quand aura-t-on"]
-  }
-];
-
-    const questionInput = document.getElementById("questionInput");
-    const askBtn = document.getElementById("askBtn");
-    const resultBox = document.getElementById("resultBox");
-    const notFoundBox = document.getElementById("notFoundBox");
-    const resultQuestion = document.getElementById("resultQuestion");
-    const resultStatus = document.getElementById("resultStatus");
-    const resultAnswer = document.getElementById("resultAnswer");
-    const resultNote = document.getElementById("resultNote");
-
-    function normalize(text) {
-      return text
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9\s]/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
+ <script>
+  const intents = [
+    {
+      name: "Date du déménagement",
+      status: "Réponse confirmée",
+      answer: "Le déménagement est actuellement prévu la semaine du 14 octobre.\n\nLa date précise de bascule par équipe sera confirmée dès que le planning logistique sera totalement sécurisé.",
+      note: "Nous préférons partager une date confirmée plutôt qu’un calendrier prématuré qui devrait ensuite être corrigé.",
+      keywords: ["date", "quand", "demenagement", "demenager", "transfert", "installation", "semaine", "arrivee", "jour j"]
+    },
+    {
+      name: "Phasage du déménagement par équipe",
+      status: "En attente",
+      answer: "Le phasage précis par équipe est en cours de finalisation.\n\nToutes les entités ne basculeront pas nécessairement au même moment. L’objectif est de garantir une installation fluide, sans mettre les équipes en difficulté opérationnelle.",
+      note: "Une communication spécifique précisera l’ordre de passage, les dates et les équipes concernées dès que le phasage sera stabilisé.",
+      keywords: ["phasage", "ordre", "ordre passage", "equipe", "equipes", "service", "qui demenage quand", "quand mon equipe"]
+    },
+    {
+      name: "Grandes étapes du déménagement",
+      status: "Réponse partielle",
+      answer: "Le déménagement se prépare généralement en plusieurs temps :\n\n1. Information et cadrage du projet\n2. Préparation logistique et consignes pratiques\n3. Tri, archivage et préparation des postes\n4. Déménagement physique des équipes\n5. Installation sur le nouveau site\n6. Ajustements et accompagnement post-arrivée\n\nToutes ces étapes n’ont pas le même niveau de visibilité au même moment, mais elles seront précisées au fil du projet.",
+      note: "L’enjeu n’est pas seulement de changer de lieu, mais de permettre une appropriation progressive du nouveau cadre de travail.",
+      keywords: ["etapes", "etape", "process", "processus", "deroulement", "phases", "phase", "organisation"]
+    },
+    {
+      name: "Offre de restauration",
+      status: "En attente",
+      answer: "Les modalités exactes de restauration ne sont pas encore arrêtées à ce stade.\n\nPlusieurs options sont actuellement à l’étude afin de proposer une solution cohérente avec les usages du site et les rythmes de pause des collaborateurs.",
+      note: "Nous reviendrons vers vous dès que des arbitrages plus précis auront été rendus.",
+      keywords: ["restauration", "manger", "repas", "dejeuner", "cantine", "food", "restaurant", "pause dejeuner"]
+    },
+    {
+      name: "Visites du site avant l’arrivée",
+      status: "Réponse confirmée",
+      answer: "Oui, le projet prévoit des temps de découverte du nouveau site avant l’installation définitive.\n\nLe format pourra varier selon les contraintes : visites physiques, parcours commentés, visuels ou supports partagés en amont. L’enjeu est de permettre aux équipes de se projeter avant l’arrivée.",
+      note: "Le calendrier de ces temps sera communiqué dans une prochaine étape.",
+      keywords: ["visite", "visites", "voir", "decouverte", "venir voir", "visiter"]
+    },
+    {
+      name: "Badge et accès au nouveau site",
+      status: "En attente",
+      answer: "Les modalités d’accès au nouveau site sont en cours de stabilisation.\n\nCela concerne notamment les badges, les droits d’accès, les modalités d’entrée et, le cas échéant, les règles propres à certaines zones spécifiques.",
+      note: "Une communication dédiée précisera les conditions d’accès avant l’arrivée sur site.",
+      keywords: ["badge", "acces", "entrer", "entree", "controle acces", "droits acces"]
+    },
+    {
+      name: "Connexion et outils IT à l’arrivée",
+      status: "Réponse confirmée",
+      answer: "Tout est mis en œuvre pour que les accès, la connexion et les outils de travail soient opérationnels à l’arrivée sur le nouveau site.\n\nL’objectif est que les équipes puissent reprendre leur activité dans les meilleures conditions possibles.",
+      note: "Si certains ajustements devaient intervenir au démarrage, ils seraient signalés clairement et traités en priorité.",
+      keywords: ["wifi", "connexion", "reseau", "outlook", "teams", "outils", "informatique", "it"]
+    },
+    {
+      name: "Parking voiture",
+      status: "Réponse partielle",
+      answer: "Des solutions de stationnement sont prévues, mais leur périmètre exact et leurs modalités d’accès restent encore à préciser.\n\nCela concerne notamment la capacité, les conditions d’accès et les éventuelles priorités d’usage.",
+      note: "Une information détaillée sera communiquée dès que les règles d’accès seront stabilisées.",
+      keywords: ["parking", "voiture", "stationnement", "se garer", "garage", "place voiture"]
+    },
+    {
+      name: "Parking vélo et mobilités douces",
+      status: "Réponse partielle",
+      answer: "Le projet prévoit d’intégrer des solutions adaptées aux mobilités douces, notamment pour les collaborateurs venant à vélo.\n\nLes modalités précises d’accès, d’usage et de capacité sont encore en cours de cadrage.",
+      note: "Des précisions seront apportées dès que le dispositif final sera stabilisé.",
+      keywords: ["velo", "parking velo", "mobilite douce", "trottinette"]
+    },
+    {
+      name: "Postes attribués ou flex office",
+      status: "Réponse partielle",
+      answer: "Les principes d’occupation des espaces seront précisés en fonction de l’organisation retenue sur le nouveau site.\n\nSelon les cas, cela pourra inclure des postes attribués, des espaces mutualisés ou des logiques plus flexibles d’occupation.",
+      note: "Une communication spécifique expliquera les règles de fonctionnement des espaces de travail.",
+      keywords: ["flex office", "poste", "bureau", "place", "attribution", "desk", "placement", "poste attribue"]
+    },
+    {
+      name: "Réservation des salles de réunion",
+      status: "Réponse partielle",
+      answer: "Les salles de réunion seront intégrées dans un dispositif de réservation adapté aux usages du site.\n\nL’objectif est de permettre une utilisation lisible, simple et cohérente de ces espaces.",
+      note: "Les modalités pratiques de réservation seront précisées avant la mise en service.",
+      keywords: ["salle", "salles", "reunion", "reserver", "booking", "meeting room"]
+    },
+    {
+      name: "Espaces de convivialité",
+      status: "Réponse confirmée",
+      answer: "Oui. Le nouveau site intégrera plusieurs espaces pensés pour les temps informels, les pauses et les échanges du quotidien.\n\nL’idée est de créer de véritables points d’usage pour le collectif et les interactions non formelles.",
+      note: "Le détail de ces espaces pourra être présenté plus précisément dans une prochaine communication.",
+      keywords: ["convivialite", "pause", "cafe", "espace informel", "detente", "pause cafe"]
+    },
+    {
+      name: "Casier ou rangement personnel",
+      status: "Réponse partielle",
+      answer: "Des solutions de rangement personnel sont prévues dans le cadre du projet.\n\nLes modalités exactes d’usage, d’attribution ou de partage seront précisées selon le dispositif retenu.",
+      note: "Une information complémentaire sera communiquée au moment opportun.",
+      keywords: ["casier", "casiers", "rangement", "locker", "affaires personnelles"]
+    },
+    {
+      name: "Situations individuelles particulières",
+      status: "En attente",
+      answer: "Les situations individuelles nécessitant une attention particulière seront prises en compte dans le cadre du projet.\n\nSi vous estimez avoir un besoin spécifique, vous pourrez vous signaler via les relais habituels une fois le dispositif de remontée formalisé.",
+      note: "Les modalités de remontée et de traitement de ces situations seront précisées ultérieurement.",
+      keywords: ["situation individuelle", "situation particuliere", "handicap", "contrainte", "besoin specifique", "cas particulier"]
+    },
+    {
+      name: "Communication à venir",
+      status: "Réponse confirmée",
+      answer: "Toutes les réponses ne peuvent pas être données immédiatement, parce que certains arbitrages dépendent de la maturité réelle du projet.\n\nEn revanche, l’engagement est clair : partager une information fiable, utile et progressive, plutôt que multiplier des messages incomplets ou contradictoires.",
+      note: "Cet espace a justement vocation à évoluer à mesure que le projet avance.",
+      keywords: ["plus d infos", "prochaines communications", "quand saura t on", "quand aura t on", "infos a venir"]
     }
+  ];
 
-    function matchIntent(question) {
-      const normalizedQuestion = normalize(question);
-      const words = normalizedQuestion.split(" ");
-      let bestIntent = null;
-      let bestScore = 0;
+  const questionInput = document.getElementById("questionInput");
+  const askBtn = document.getElementById("askBtn");
+  const resultBox = document.getElementById("resultBox");
+  const notFoundBox = document.getElementById("notFoundBox");
+  const resultQuestion = document.getElementById("resultQuestion");
+  const resultStatus = document.getElementById("resultStatus");
+  const resultAnswer = document.getElementById("resultAnswer");
+  const resultNote = document.getElementById("resultNote");
 
-      intents.forEach(intent => {
-        let score = 0;
+  const stopWords = [
+    "ou", "où", "est", "ce", "que", "qu", "on", "va", "je", "tu", "il", "elle",
+    "nous", "vous", "ils", "elles", "le", "la", "les", "un", "une", "des", "du",
+    "de", "d", "a", "au", "aux", "en", "dans", "sur", "pour", "avec", "et", "ou",
+    "mon", "ma", "mes", "notre", "nos", "votre", "vos", "y", "il", "aura", "a", "t", "il"
+  ];
 
-        intent.keywords.forEach(keyword => {
-          const normalizedKeyword = normalize(keyword);
+  const synonymMap = {
+    cantine: "restauration",
+    manger: "restauration",
+    repas: "restauration",
+    dejeuner: "restauration",
+    restaurant: "restauration",
+    food: "restauration",
 
-          if (normalizedQuestion.includes(normalizedKeyword)) {
-            score += normalizedKeyword.split(" ").length > 1 ? 3 : 2;
-          }
+    date: "demenagement",
+    quand: "demenagement",
+    transfert: "demenagement",
+    arrivee: "demenagement",
+    installation: "demenagement",
 
-          if (words.includes(normalizedKeyword)) {
-            score += 1;
+    visite: "visites",
+    voir: "visites",
+    visiter: "visites",
+    decouverte: "visites",
+
+    badge: "acces",
+    entrer: "acces",
+    entree: "acces",
+    acces: "acces",
+
+    wifi: "informatique",
+    reseau: "informatique",
+    teams: "informatique",
+    outlook: "informatique",
+    it: "informatique",
+
+    parking: "stationnement",
+    voiture: "stationnement",
+    garage: "stationnement",
+
+    velo: "mobilite",
+    trottinette: "mobilite",
+
+    bureau: "poste",
+    place: "poste",
+    desk: "poste",
+    flex: "flexoffice",
+
+    salle: "reunion",
+    salles: "reunion",
+    booking: "reunion",
+
+    casier: "rangement",
+    locker: "rangement"
+  };
+
+  function normalize(text) {
+    return text
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function tokenize(text) {
+    return normalize(text)
+      .split(" ")
+      .filter(word => word && !stopWords.includes(word))
+      .map(word => synonymMap[word] || word);
+  }
+
+  function matchIntent(question) {
+    const tokens = tokenize(question);
+    let bestIntent = null;
+    let bestScore = 0;
+
+    intents.forEach(intent => {
+      let score = 0;
+
+      intent.keywords.forEach(keyword => {
+        const keywordTokens = tokenize(keyword);
+
+        keywordTokens.forEach(k => {
+          if (tokens.includes(k)) {
+            score += 2;
           }
         });
 
-        if (score > bestScore) {
-          bestScore = score;
-          bestIntent = intent;
+        const normalizedKeyword = normalize(keyword);
+        const normalizedQuestion = normalize(question);
+
+        if (normalizedKeyword.length > 3 && normalizedQuestion.includes(normalizedKeyword)) {
+          score += 3;
         }
       });
 
-      return bestScore >= 2 ? bestIntent : null;
-    }
-
-    function showResult(userQuestion, intent) {
-      resultQuestion.textContent = "Question : " + userQuestion;
-      resultStatus.textContent = intent.status;
-      resultAnswer.textContent = intent.answer;
-      resultNote.textContent = intent.note;
-
-      resultBox.style.display = "block";
-      notFoundBox.style.display = "none";
-    }
-
-    function showNotFound() {
-      resultBox.style.display = "none";
-      notFoundBox.style.display = "block";
-    }
-
-    function handleQuestion(question) {
-      const intent = matchIntent(question);
-      if (intent) {
-        showResult(question, intent);
-      } else {
-        showNotFound();
+      if (score > bestScore) {
+        bestScore = score;
+        bestIntent = intent;
       }
-    }
+    });
 
-    askBtn.addEventListener("click", () => {
-      const question = questionInput.value.trim();
-      if (!question) return;
+    return bestScore >= 2 ? bestIntent : null;
+  }
+
+  function showResult(userQuestion, intent) {
+    resultQuestion.textContent = "Question : " + userQuestion;
+    resultStatus.textContent = intent.status;
+    resultAnswer.textContent = intent.answer;
+    resultNote.textContent = intent.note;
+
+    resultBox.style.display = "block";
+    notFoundBox.style.display = "none";
+  }
+
+  function showNotFound() {
+    resultBox.style.display = "none";
+    notFoundBox.style.display = "block";
+  }
+
+  function handleQuestion(question) {
+    const intent = matchIntent(question);
+    if (intent) {
+      showResult(question, intent);
+    } else {
+      showNotFound();
+    }
+  }
+
+  askBtn.addEventListener("click", () => {
+    const question = questionInput.value.trim();
+    if (!question) return;
+    handleQuestion(question);
+  });
+
+  questionInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      askBtn.click();
+    }
+  });
+
+  document.querySelectorAll(".suggestion").forEach(button => {
+    button.addEventListener("click", () => {
+      const question = button.dataset.question;
+      questionInput.value = question;
       handleQuestion(question);
     });
-
-    questionInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        askBtn.click();
-      }
-    });
-
-    document.querySelectorAll(".suggestion").forEach(button => {
-      button.addEventListener("click", () => {
-        const question = button.dataset.question;
-        questionInput.value = question;
-        handleQuestion(question);
-      });
-    });
-  </script>
+  });
+</script>
 </body>
 </html>
