@@ -431,7 +431,7 @@
       color: var(--text);
       background: var(--bg);
       outline: none;
-      transition: border-color 0.15s, background 0.15s;
+      transition: border-color 0.2s, background 0.2s, height 0.22s cubic-bezier(.4,0,.2,1);
     }
 
     .search-input::placeholder { color: var(--muted); font-weight: 300; }
@@ -439,6 +439,7 @@
     .search-input:focus {
       border-color: var(--gold);
       background: #fff;
+      height: 72px;
     }
 
     .btn-primary {
@@ -2783,6 +2784,16 @@ ARCHIVAGE
 
   askBtn.addEventListener("click", () => handleQuestion(questionInput.value.trim()));
   questionInput.addEventListener("keydown", e => { if (e.key==="Enter") { e.preventDefault(); askBtn.click(); } });
+
+  // Expansion de l'input au focus, retour à la taille normale au blur
+  questionInput.addEventListener("focus", () => {
+    askBtn.style.transition = "height 0.22s cubic-bezier(.4,0,.2,1), background 0.15s";
+    askBtn.style.height = "72px";
+  });
+  questionInput.addEventListener("blur", () => {
+    askBtn.style.height = "54px";
+  });
+
   document.querySelectorAll(".suggestion").forEach(btn => {
     btn.addEventListener("click", () => { questionInput.value = btn.dataset.question; handleQuestion(btn.dataset.question); });
   });
