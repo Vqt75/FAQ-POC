@@ -2437,8 +2437,8 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
   // ═══════════════════════════════════════════════════
   // FAQ — CONFIG IA (optionnelle)
   // ═══════════════════════════════════════════════════
-  const ENABLE_GEMINI  = true;
-  const GEMINI_API_KEY = "AIzaSyBSchoBWh6sH8m8rxGnVjsHz_DQn-gt2uU";
+  const ENABLE_GEMINI  = false;
+  const GEMINI_API_KEY = "COLLEZ-VOTRE-CLÉ";
 
   const PROJECT_CONTEXT = `
 Tu es l'assistant d'information du projet de déménagement d'entreprise XYZ.
@@ -2980,7 +2980,557 @@ ARCHIVAGE
       intentSignals: ["informations","communication","quand","prochaine"],
       negativeSignals: ["parking","velo","it"],
       emotionSignals: ["inquiet","impatient"]
+    },
+
+    // ── ENTRÉES COMPLÉMENTAIRES ──────────────────────
+
+    {
+      id: "parking-attribution",
+      category: "mobilite", priority: 8,
+      title: "Attribution des places de parking",
+      status: "partial", statusLabel: "Réponse partielle",
+      shortAnswer: "Le parking dispose de 180 places, attribuées selon un système de priorité défini avec les RH.",
+      answer: "Le nouveau site dispose d'un parking souterrain de 180 places.
+
+L'attribution se fait selon un système de priorité co-défini avec les RH : collaborateurs sans alternative de transport en commun raisonnable, personnes à mobilité réduite, managers de direction. Un système de réservation à la semaine est prévu pour les places non attribuées à titre permanent, accessible via l'intranet.
+
+Les modalités précises et la procédure de demande seront communiquées avant le déménagement.",
+      note: "Si votre situation rend le transport en commun difficile, signalez-le à votre RH avant la date limite de demande.",
+      related: ["parking", "trajet", "velo"],
+      keywords: ["place parking","attribution parking","parking attribue","badge parking","reservation parking","nombre places","places voiture","parking souterrain"],
+      phrases: [
+        "comment obtenir une place de parking",
+        "y a t il assez de places de parking pour tout le monde",
+        "comment sont attribuees les places de parking",
+        "puis je avoir une place de parking fixe",
+        "comment reserver une place de parking"
+      ],
+      intentSignals: ["attribution","place","parking","reserver","priorite"],
+      negativeSignals: ["restauration","badge","teletravail","it"],
+      emotionSignals: ["inquiet","pratique"]
+    },
+
+    {
+      id: "manger-bulles-salles",
+      category: "services", priority: 7,
+      title: "Peut-on manger dans les bulles et les salles de réunion ?",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Les boissons et snacks sont tolérés partout ; les repas complets sont réservés aux espaces de restauration et à l'espace de convivialité.",
+      answer: "La règle est simple et pensée pour respecter tout le monde.
+
+Les boissons (café, eau, thé) et les encas légers sont autorisés dans tous les espaces, y compris les bulles phoniques, les salles de réunion et les zones de focus.
+
+Les repas complets — déjeuner, plats chauds — sont en revanche réservés à l'espace de restauration du rez-de-chaussée et à l'espace de convivialité du R+1. Cette règle s'applique pour des raisons d'odeurs, de propreté et de respect des collègues qui travaillent à proximité.
+
+Ces règles seront co-construites et validées dans les ateliers d'avril.",
+      note: "L'idée n'est pas de réglementer le café. C'est d'éviter que les espaces de travail se transforment en cantines informelles.",
+      related: ["restauration", "convivialite", "regles-vie", "bulles-definition"],
+      keywords: ["manger","repas","dejeuner","bulle","salle reunion","nourriture","encas","snack","cafe","boisson","restauration espaces"],
+      phrases: [
+        "peut on manger dans les bulles",
+        "peut on dejeuner en salle de reunion",
+        "est ce qu on peut manger a son bureau",
+        "les repas sont ils autorises dans les salles",
+        "peut on boire son cafe partout"
+      ],
+      intentSignals: ["manger","dejeuner","repas","bulle","salle","nourriture"],
+      negativeSignals: ["parking","badge","teletravail","it"],
+      emotionSignals: []
+    },
+
+    {
+      id: "bulles-definition",
+      category: "espaces", priority: 8,
+      title: "C'est quoi une bulle ? Combien y en a-t-il ?",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Une bulle est un espace individuel fermé et insonorisé pour travailler seul au calme. Le site en compte 18.",
+      answer: "Une bulle, c'est un espace individuel fermé, insonorisé, conçu pour travailler seul au calme — passer un appel, se concentrer sur un dossier complexe, tenir une visioconférence sans déranger ses collègues.
+
+Le site dispose de 18 bulles réparties sur deux niveaux : 10 au R+1 et 8 au R+2. Chaque bulle est équipée d'un siège ergonomique, d'un écran externe (connexion USB-C), d'une ventilation silencieuse et d'un éclairage à intensité variable. Isolation acoustique : Rw 38 dB.
+
+Accès libre, sans réservation. Un voyant vert/rouge signale la disponibilité depuis le couloir. Durée recommandée : 2 heures maximum par session pour permettre une rotation.",
+      note: "Les bulles ne sont pas des bureaux permanents. Elles sont là pour les moments où vous avez besoin d'un calme absolu.",
+      related: ["concentration", "salles-reunion", "manger-bulles-salles", "regles-vie"],
+      keywords: ["bulle","bulles","bulle phonique","cabine","cabine phonique","espace individuel","espace ferme","insonorise","combien de bulles","bulle de travail"],
+      phrases: [
+        "c est quoi une bulle",
+        "qu est ce qu une bulle phonique",
+        "combien y a t il de bulles",
+        "comment fonctionne une bulle",
+        "peut on reserver une bulle",
+        "les bulles sont elles insonorisees"
+      ],
+      intentSignals: ["bulle","cabine","insonorise","individuel","phonique"],
+      negativeSignals: ["parking","restauration","badge","teletravail"],
+      emotionSignals: ["calme","concentration","stress","bruit"]
+    },
+
+    {
+      id: "salles-reunion-detail",
+      category: "espaces", priority: 8,
+      title: "Combien de salles de réunion ? Quels équipements ?",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Le site compte 24 salles de réunion pour un total de 198 places assises, avec des équipements AV complets.",
+      answer: "Le site dispose de 24 salles de réunion réparties sur l'ensemble des niveaux, pour un total de 198 places assises.
+
+La répartition par capacité :
+— 8 salles de 4 personnes (format huddle, idéal visio)
+— 8 salles de 6 à 8 personnes (réunions d'équipe courantes)
+— 5 salles de 10 à 12 personnes (réunions de projet)
+— 2 salles de 20 personnes (réunions plénières d'équipe)
+— 1 salle de 40 personnes (accessible sans badge depuis le hall)
+
+Équipements standard dans toutes les salles : écran interactif (ou projecteur selon capacité), système de visioconférence intégré (compatible Teams et Zoom), connexion filaire et WiFi, tableau blanc, prise USB-C et HDMI.
+
+Les salles sont réservables via l'outil de booking interne. Une plage de 15 minutes de battement est automatiquement prévue entre chaque réservation.",
+      note: "Le ratio salles/collaborateurs a été calculé sur la base des usages réels observés sur le site actuel, avec une marge de 20 %.",
+      related: ["bulles-definition", "concentration", "manger-bulles-salles", "salles-reunion"],
+      keywords: ["salles reunion","nombre salles","capacite salle","equipement salle","salle 4 personnes","grande salle","petite salle","visio","ecran salle","salle conference","combien salles","places en salle"],
+      phrases: [
+        "combien y a t il de salles de reunion",
+        "quelles sont les tailles des salles",
+        "les salles sont elles equipees pour la visio",
+        "y a t il des grandes salles de reunion",
+        "combien de places au total en salles de reunion",
+        "quel equipement dans les salles"
+      ],
+      intentSignals: ["salles","nombre","capacite","equipement","visio","places"],
+      negativeSignals: ["parking","restauration","badge","teletravail"],
+      emotionSignals: []
     }
+
+    {
+      id: "affaires-personnelles-detail",
+      category: "logistique", priority: 8,
+      title: "Plantes, photos, repose-pieds et objets personnels — que faire ?",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Chaque type d'objet personnel a une solution prévue — rien ne sera perdu ou abandonné faute d'organisation.",
+      answer: "Voici comment ça se passe pour les objets personnels les plus courants.\n\nLes plantes : elles ne peuvent pas être prises en charge par les équipes de déménagement pour des raisons pratiques (fragilité, terre, arrosage). Deux options — les ramener chez vous avant le déménagement, ou les apporter vous-même sur le nouveau site dans les jours qui suivent l'installation. Un espace dédié aux plantes est prévu dans la zone de convivialité pour ceux qui souhaitent les partager.\n\nLes photos personnelles et photos d'équipe : emballez-les vous-même dans un carton nominatif le jour J. Les photos d'équipe encadrées peuvent être démontées et réinstallées sur le nouveau site — signalez-le à votre manager pour coordination avec les services généraux.\n\nLes repose-pieds, coussins lombaires et accessoires ergonomiques fournis par l'entreprise : pris en charge par les équipes de déménagement au même titre que le mobilier. Si le vôtre est personnel, emballez-le dans votre carton.\n\nLes petits objets de bureau (mugs, cadres, papeterie personnelle) : un carton nominatif vous sera fourni. Tout ce qui tient dedans voyage avec vous.\n\nLes objets encombrants ou fragiles hors norme : signalez-les à votre manager avant J-15 pour trouver une solution adaptée.",
+      note: "Le guide de préparation détaillera tout ça noir sur blanc avec un calendrier. Rien ne sera improvisé le jour J.",
+      related: ["affaires-personnelles", "jour-j", "archivage", "casier"],
+      keywords: ["plante","plantes","photo","photos","photo equipe","cadre","poster","repose pied","repose-pied","coussin lombaire","ergonomie","mug","tasse","objet personnel","affaires personnelles","encombrant","fragile","carton","transporter","decoration bureau"],
+      phrases: [
+        "que faire de mes plantes",
+        "comment deplacer mes plantes",
+        "je viens a velo j ai des plantes",
+        "j ai un souci avec mes plantes",
+        "que faire de mes photos personnelles",
+        "que faire des photos d equipe",
+        "mon repose pied sera t il deplace",
+        "puis je amener mon coussin lombaire",
+        "que faire de mes affaires personnelles",
+        "que faire de mes objets de bureau",
+        "que faire de la decoration de mon bureau",
+        "comment emballer mes affaires perso",
+        "qui prend en charge mes affaires"
+      ],
+      intentSignals: ["plante","photo","repose","coussin","mug","objet","affaires","carton","transporter","decoration"],
+      negativeSignals: ["parking","badge","teletravail","restauration","it"],
+      emotionSignals: ["attache","souvenir","inquiet"]
+    },
+
+    {
+      id: "it-equipements-personnels",
+      category: "it", priority: 7,
+      title: "Équipements IT personnels (double écran, dock, périphériques)",
+      status: "partial", statusLabel: "Réponse partielle",
+      shortAnswer: "Les équipements IT fournis par l'entreprise sont pris en charge ; les cas particuliers sont à remonter à la DSI.",
+      answer: "Les équipements informatiques fournis par l'entreprise seront déménagés et reconnectés par les équipes IT.
+
+Si vous disposez d'un équipement spécifique — double écran, station d'accueil, périphérique particulier — signalez-le à votre référent IT avant le déménagement pour qu'il soit intégré dans la planification. Le déménagement peut aussi être l'occasion de mettre à jour certains équipements.",
+      note: "Ne déconnectez pas et n'emballez pas vous-même votre matériel IT sauf consigne explicite de la DSI.",
+      related: ["it", "jour-j", "affaires-personnelles"],
+      keywords: ["double ecran","ecran","dock","station accueil","peripherique","clavier","souris","casque","webcam","materiel it","equipement it","moniteur"],
+      phrases: [
+        "que faire de mon double ecran",
+        "mon dock sera t il deplace",
+        "qui s occupe de mon materiel informatique",
+        "est ce que mes ecrans seront reinstalles",
+        "que faire de mes peripheriques"
+      ],
+      intentSignals: ["ecran","dock","peripherique","materiel","it"],
+      negativeSignals: ["parking","restauration","teletravail","velo"],
+      emotionSignals: []
+    },
+
+    {
+      id: "courrier-colis",
+      category: "services", priority: 6,
+      title: "Courrier et colis pendant la transition",
+      status: "partial", statusLabel: "Réponse partielle",
+      shortAnswer: "Les modalités de réacheminement du courrier pendant la transition seront précisées avant le déménagement.",
+      answer: "La gestion du courrier et des colis pendant la période de transition sera organisée pour éviter toute perte.
+
+Une procédure de réacheminement sera communiquée avant le déménagement. Le nouveau site dispose d'un point colis accessible en dehors des heures de bureau.",
+      note: "Pensez à mettre à jour votre adresse professionnelle auprès de vos contacts et partenaires dès que la date est confirmée.",
+      related: ["jour-j", "affaires-personnelles"],
+      keywords: ["courrier","colis","livraison","adresse","boite aux lettres","recommande","point colis","expedition","envoi","reception"],
+      phrases: [
+        "que faire du courrier pendant le demenagement",
+        "comment recevoir mes colis",
+        "y aura t il un point colis",
+        "mon adresse professionnelle va changer",
+        "comment reachemine t on le courrier"
+      ],
+      intentSignals: ["courrier","colis","livraison","adresse","reception"],
+      negativeSignals: ["parking","badge","teletravail","restauration"],
+      emotionSignals: []
+    },
+
+    {
+      id: "orientation-site",
+      category: "decouverte", priority: 6,
+      title: "Signalétique et orientation sur le nouveau site",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Une signalétique claire et un accueil renforcé faciliteront la prise en main du site dès le premier jour.",
+      answer: "Le nouveau site sera équipé d'une signalétique claire pour vous aider à vous repérer dès votre arrivée.
+
+Lors des premières semaines, une équipe d'accueil sera présente en déambulation pour orienter les collaborateurs. Des plans du site seront également disponibles en ligne et à l'impression.",
+      note: "Se perdre les premiers jours, c'est normal. L'objectif est que ça ne dure pas.",
+      related: ["visites", "jour-j", "badge"],
+      keywords: ["signaletique","orientation","se reperer","plan du site","ou se trouve","etage","acces","trouver","localiser","situer"],
+      phrases: [
+        "comment je vais me reperer",
+        "y aura t il un plan du site",
+        "comment trouver mon bureau",
+        "y a t il une signaletique",
+        "comment s orienter dans le nouveau batiment"
+      ],
+      intentSignals: ["signaletique","orientation","reperer","plan","trouver"],
+      negativeSignals: ["parking","restauration","teletravail","it"],
+      emotionSignals: ["perdu","stress","desoriente"]
+    },
+
+    {
+      id: "espaces-retrait",
+      category: "espaces", priority: 6,
+      title: "Espaces de retrait (prière, repos, calme)",
+      status: "partial", statusLabel: "Réponse partielle",
+      shortAnswer: "Des espaces de retrait sont intégrés dans la réflexion sur l'aménagement du site.",
+      answer: "La question des espaces de retrait — qu'il s'agisse d'un besoin de calme, de repos ou d'un usage cultuel — a été intégrée dans la réflexion sur l'aménagement.
+
+Les modalités précises seront communiquées avant l'installation.",
+      note: "Ces besoins sont légitimes et ont leur place dans un cadre de travail bien pensé.",
+      related: ["concentration", "regles-vie", "ateliers"],
+      keywords: ["priere","culte","religion","repos","sieste","retrait","salle calme","espace prive","meditation","ressourcement"],
+      phrases: [
+        "y aura t il une salle de priere",
+        "est ce qu il y a un espace de retrait",
+        "peut on faire sa priere sur le site",
+        "y a t il un espace calme pour se reposer",
+        "est ce qu il y a un espace de meditation"
+      ],
+      intentSignals: ["priere","retrait","repos","calme","culte"],
+      negativeSignals: ["parking","restauration","it","badge"],
+      emotionSignals: []
+    },
+
+    {
+      id: "garde-enfants",
+      category: "services", priority: 6,
+      title: "Crèche et garde d'enfants",
+      status: "partial", statusLabel: "Réponse partielle",
+      shortAnswer: "La question des services de garde d'enfants est à l'étude dans le cadre des services sur site.",
+      answer: "Les services liés à la parentalité — crèche d'entreprise, place en crèche partenaire, aide à la garde — font partie des réflexions en cours sur les services du nouveau site.
+
+Rapprochez-vous de votre RH pour les situations urgentes ou spécifiques.",
+      note: "Le changement de site peut avoir un impact sur les solutions de garde existantes. Ne laissez pas cette situation se compliquer sans en parler à votre RH.",
+      related: ["teletravail", "horaires", "apprehension"],
+      keywords: ["creche","garde enfants","enfant","parentalite","assistante maternelle","babysitter","ecole","nourrice","bebe","famille"],
+      phrases: [
+        "y aura t il une creche",
+        "que faire pour la garde de mes enfants",
+        "est ce qu il y a des places en creche",
+        "le nouveau site est il proche d une ecole",
+        "j ai des enfants en bas age que faire"
+      ],
+      intentSignals: ["creche","garde","enfant","parentalite","famille"],
+      negativeSignals: ["parking","it","badge","restauration"],
+      emotionSignals: ["inquiet","stress","organisation","famille"]
+    },
+
+    {
+      id: "animaux",
+      category: "services", priority: 4,
+      title: "Animaux de compagnie sur le site",
+      status: "partial", statusLabel: "Réponse partielle",
+      shortAnswer: "La politique concernant les animaux de compagnie sur le nouveau site n'est pas encore arrêtée.",
+      answer: "La question des animaux de compagnie sur le lieu de travail n'a pas encore fait l'objet d'une décision officielle.
+
+Si c'est un sujet important pour vous, remontez-le via le formulaire ou lors des ateliers — les règles de vie seront co-construites avec les équipes.",
+      note: "Certains environnements de travail intègrent des politiques pet-friendly. Ce sera à discuter collectivement.",
+      related: ["regles-vie", "ateliers"],
+      keywords: ["animal","animaux","chien","chat","pet","mascotte","animaux compagnie","pet friendly"],
+      phrases: [
+        "peut on venir avec son chien",
+        "le site est il pet friendly",
+        "les animaux sont ils autorises",
+        "peut on amener son animal de compagnie"
+      ],
+      intentSignals: ["chien","chat","animal","pet"],
+      negativeSignals: ["parking","it","badge","teletravail"],
+      emotionSignals: []
+    },
+
+    {
+      id: "medecine-travail",
+      category: "services", priority: 5,
+      title: "Médecine du travail sur le nouveau site",
+      status: "partial", statusLabel: "Réponse partielle",
+      shortAnswer: "Les modalités de suivi médical sur le nouveau site seront précisées avant le déménagement.",
+      answer: "Le suivi médical du travail continuera à s'appliquer dans les mêmes conditions réglementaires.
+
+Les informations pratiques sur le médecin du travail rattaché au nouveau site et les modalités de rendez-vous seront communiquées avant l'installation.",
+      note: "Si vous avez un suivi médical en cours ou une visite programmée proche de la date de déménagement, signalez-le à votre RH.",
+      related: ["pmr", "apprehension"],
+      keywords: ["medecin travail","medecine travail","visite medicale","suivi medical","infirmerie","sante","inaptitude","handicap sante"],
+      phrases: [
+        "qui est le medecin du travail sur le nouveau site",
+        "comment se passe la medecine du travail",
+        "y a t il une infirmerie",
+        "comment faire ma visite medicale",
+        "le suivi medical va t il changer"
+      ],
+      intentSignals: ["medecin","medical","visite","sante","infirmerie"],
+      negativeSignals: ["parking","restauration","it","badge"],
+      emotionSignals: []
+    },
+
+    {
+      id: "impact-avantages",
+      category: "rh", priority: 7,
+      title: "Impact sur les avantages salariaux et la mutuelle",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Le déménagement n'impacte pas les avantages salariaux ni la mutuelle.",
+      answer: "Le déménagement de site n'entraîne aucun changement sur vos avantages salariaux, votre mutuelle d'entreprise, votre prévoyance ou vos autres avantages collectifs.
+
+Ces éléments sont liés à votre contrat de travail, pas à votre lieu de travail.",
+      note: "Si vous avez un doute sur un avantage spécifique, votre RH est le bon interlocuteur.",
+      related: ["transport-remboursement", "teletravail"],
+      keywords: ["mutuelle","avantages","salaire","remuneration","prevoyance","tickets restaurant","tr","avantages salariaux","contrat","prime"],
+      phrases: [
+        "est ce que ma mutuelle change",
+        "mes avantages sont ils maintenus",
+        "est ce que mon salaire est impacte",
+        "les tickets restaurant changent ils",
+        "mes avantages salariaux restent ils les memes"
+      ],
+      intentSignals: ["mutuelle","avantages","salaire","contrat","prime"],
+      negativeSignals: ["parking","velo","it","badge"],
+      emotionSignals: ["inquiet","financier"]
+    },
+
+    {
+      id: "cdd-alternants-prestataires",
+      category: "rh", priority: 6,
+      title: "CDD, alternants et prestataires",
+      status: "partial", statusLabel: "Réponse partielle",
+      shortAnswer: "Les CDD, alternants et prestataires sont concernés par le déménagement dans les mêmes conditions que les CDI.",
+      answer: "Les collaborateurs en CDD et les alternants sont concernés par le déménagement au même titre que les CDI — ils auront accès au nouveau site et bénéficieront du même accompagnement.
+
+Pour les prestataires et consultants externes, les modalités d'accès seront précisées par leurs interlocuteurs internes respectifs.",
+      note: "Si votre situation contractuelle vous interroge sur les implications du déménagement, parlez-en à votre RH.",
+      related: ["badge", "pilotage"],
+      keywords: ["cdd","alternant","alternance","apprenti","stagiaire","prestataire","consultant externe","freelance","interim","sous traitant"],
+      phrases: [
+        "je suis en cdd est ce que je suis concerne",
+        "les alternants sont ils concernes par le demenagement",
+        "est ce que les prestataires ont acces au nouveau site",
+        "je suis stagiaire que se passe t il pour moi"
+      ],
+      intentSignals: ["cdd","alternant","stagiaire","prestataire","consultant"],
+      negativeSignals: ["parking","restauration","velo"],
+      emotionSignals: ["inquiet"]
+    },
+
+    {
+      id: "arret-maladie-transition",
+      category: "rh", priority: 6,
+      title: "Arrêt maladie ou absence pendant la transition",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Un arrêt maladie pendant la période de déménagement ne vous pénalise pas — un accompagnement à la prise en main sera assuré à votre retour.",
+      answer: "Si vous êtes en arrêt maladie ou absent pendant la période de déménagement, vous ne serez pas pénalisé.
+
+À votre retour, un accompagnement dédié sera prévu pour vous aider à prendre en main le nouveau site : visite guidée, accès, équipements. Votre manager et votre RH seront prévenus pour anticiper votre retour dans les meilleures conditions.",
+      note: "Prévenez votre manager dès que possible si vous savez que vous serez absent pendant la période de bascule.",
+      related: ["jour-j", "apprehension", "medecine-travail"],
+      keywords: ["arret maladie","absent","absence","conge maladie","maladie","conge","hospitalisation","indisponible","pas la"],
+      phrases: [
+        "que se passe t il si je suis en arret maladie le jour du demenagement",
+        "je serai absent pendant le demenagement que faire",
+        "comment se passe le demenagement si je suis en conge",
+        "je ne serai pas la le jour j"
+      ],
+      intentSignals: ["arret","maladie","absent","conge","indisponible"],
+      negativeSignals: ["parking","restauration","it","velo"],
+      emotionSignals: ["inquiet","stress"]
+    },
+
+    {
+      id: "manager-communication",
+      category: "communication", priority: 7,
+      title: "Mon manager ne nous dit rien",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Les managers sont informés en priorité et disposent de ressources dédiées — si l'information ne circule pas, signalez-le.",
+      answer: "Les managers sont les premiers destinataires des communications projet et disposent de ressources dédiées pour relayer l'information à leurs équipes.
+
+Si vous avez le sentiment que l'information ne circule pas dans votre équipe, vous pouvez contacter directement votre ambassadeur de proximité, utiliser ce site, ou remonter la situation via le formulaire de contact.",
+      note: "Une information qui ne circule pas, c'est souvent une priorité qui se perd dans le quotidien — pas une rétention volontaire. N'hésitez pas à signaler.",
+      related: ["ambassadeurs", "communication", "rumeurs"],
+      keywords: ["manager","responsable","encadrement","information","communiquer","pas informe","rien su","silence","transparent","manque information"],
+      phrases: [
+        "mon manager ne nous dit rien",
+        "on n est pas informe",
+        "je n ai aucune information",
+        "mon responsable ne communique pas sur le projet",
+        "personne ne nous dit rien dans mon equipe"
+      ],
+      intentSignals: ["manager","informe","information","silence","communique"],
+      negativeSignals: ["parking","velo","it","restauration"],
+      emotionSignals: ["frustration","inquiet","abandonne","incomprehension"]
+    },
+
+    {
+      id: "opposition-demenagement",
+      category: "accompagnement", priority: 8,
+      title: "Je ne veux pas déménager",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "C'est une réaction légitime. Le projet prévoit des espaces d'écoute pour les situations les plus difficiles.",
+      answer: "Ressentir de la résistance ou du refus face à ce projet, c'est une réaction humaine et légitime. Un déménagement imposé, ça touche à des habitudes profondes, à des repères, parfois à des équilibres de vie entiers.
+
+Vous n'êtes pas obligé d'adhérer. Mais si vous traversez une période difficile en lien avec ce projet, parlez-en — à votre manager, à votre RH, à un ambassadeur, ou via le formulaire. Votre situation sera écoutée.",
+      note: "L'objectif n'est pas que tout le monde soit enthousiaste. C'est que personne ne soit laissé sans réponse.",
+      related: ["apprehension", "ambassadeurs", "teletravail"],
+      keywords: ["pas envie","contre","refus","opposition","ne veut pas","contraint","force","obligé","imposé","pas d accord"],
+      phrases: [
+        "je ne veux pas demenager",
+        "je suis contre ce demenagement",
+        "je n ai pas envie de changer de site",
+        "on nous impose ce demenagement",
+        "je ne suis pas d accord avec ce projet"
+      ],
+      intentSignals: ["refuse","contre","impose","oblige","pas envie"],
+      negativeSignals: ["parking","restauration","it","velo"],
+      emotionSignals: ["colere","frustration","refus","injustice","stress","opposition"]
+    },
+
+    {
+      id: "handicap-non-declare",
+      category: "acces", priority: 8,
+      title: "Situation de handicap ou contrainte de santé",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Toutes les situations individuelles, déclarées ou non, peuvent être remontées à la RH en toute confidentialité.",
+      answer: "Si vous avez une situation de handicap, une contrainte de santé ou une limitation physique — déclarée ou non — vous pouvez en parler à votre RH en toute confidentialité.
+
+Le nouveau site est conforme aux normes PMR, mais au-delà de la conformité réglementaire, chaque situation individuelle peut faire l'objet d'un aménagement spécifique : poste adapté, accès facilité, mobilier ergonomique.",
+      note: "Vous n'avez pas à attendre que votre situation soit officiellement reconnue pour demander un accompagnement.",
+      related: ["pmr", "apprehension"],
+      keywords: ["handicap","situation handicap","RQTH","mobilite reduite","douleur","dos","maladie chronique","fatigue chronique","TMS","trouble","ergonomie","amenagement poste"],
+      phrases: [
+        "j ai un probleme de sante non declare",
+        "j ai une situation de handicap",
+        "j ai des problemes de dos",
+        "mon poste doit etre adapte",
+        "j ai besoin d un amenagement particulier"
+      ],
+      intentSignals: ["handicap","sante","douleur","amenagement","ergonomie"],
+      negativeSignals: ["parking","restauration","it","velo"],
+      emotionSignals: ["inquiet","vulnerabilite","discret","peur"]
+    }
+
+
+    {
+      id: "adresse-site",
+      category: "decouverte", priority: 9,
+      title: "Adresse du nouveau site",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Le nouveau site est situé au 12 avenue du Général Leclerc, 92130 Issy-les-Moulineaux.",
+      answer: "Le nouveau site est situé au :\n\n12 avenue du Général Leclerc\n92130 Issy-les-Moulineaux\n\nAccès transports en commun :\n— Métro ligne 12, station Mairie d'Issy (4 min à pied)\n— Tram T2, station Issy-Val de Seine (6 min à pied)\n— RER C, gare d'Issy (8 min à pied)\n— Bus 39, 126, 189 — arrêt Leclerc-Préfecture\n\nAccès voiture : rocade A86 sortie Issy-les-Moulineaux, parking souterrain accessible depuis le 10 avenue du Général Leclerc.\n\nUn livret d'accueil complet vous sera remis quelques jours avant l'emménagement. Il contiendra l'adresse définitive, les plans d'accès, les codes d'entrée provisoires, les contacts sur place et toutes les informations pratiques pour votre premier jour.",
+      note: "Pensez à mettre à jour votre adresse professionnelle auprès de vos contacts, partenaires et abonnements dès que la date est confirmée.",
+      related: ["trajet", "parking", "velo", "orientation-site", "livret-accueil"],
+      keywords: ["adresse","adresse site","ou est","nouveau site","localisation","issy","issy les moulineaux","leclerc","situe","comment y aller","acces","plan acces"],
+      phrases: [
+        "quelle est l adresse du nouveau site",
+        "ou se trouve le nouveau site",
+        "c est ou le nouveau bureau",
+        "quel est le quartier",
+        "comment trouver le nouveau site",
+        "l adresse du futur site"
+      ],
+      intentSignals: ["adresse","localisation","ou","site","quartier"],
+      negativeSignals: ["restauration","it","badge","teletravail"],
+      emotionSignals: []
+    },
+
+    {
+      id: "voisinage-entreprises",
+      category: "decouverte", priority: 7,
+      title: "Entreprises voisines et environnement du site",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Le site est situé dans un quartier tertiaire dynamique, à proximité de grandes entreprises et d'un tissu de services dense.",
+      answer: "Le nouveau site s'inscrit dans le quartier d'affaires d'Issy-les-Moulineaux, l'un des plus actifs d'Île-de-France hors Paris.
+
+Parmi les entreprises voisines :\n— Microsoft France (siège, à 300 m)\n— Canal+ (siège social, à 400 m)\n— SFR (siège, à 600 m)\n— Bouygues Telecom (campus, à 800 m)\n— Sodexo (siège mondial, à 500 m)\n\nCe voisinage a des avantages concrets : restaurants d'entreprise ouverts au public, offre de services dense, dynamisme du quartier à l'heure du déjeuner, opportunités de networking pour certaines équipes.\n\nToutes ces informations figurent dans le livret d'accueil remis quelques jours avant l'emménagement.",
+      note: "Issy-les-Moulineaux est régulièrement classée parmi les meilleures villes d'Île-de-France pour la qualité de vie au travail.",
+      related: ["adresse-site", "services-quartier", "livret-accueil"],
+      keywords: ["voisins","entreprises voisines","quartier","environnement","issy","microsoft","canal","sfr","bouygues","alentours","voisinage","autour du site"],
+      phrases: [
+        "quelles sont les entreprises voisines",
+        "qui est dans le quartier",
+        "c est quel type de quartier",
+        "y a t il d autres grandes entreprises autour",
+        "quel est l environnement du site"
+      ],
+      intentSignals: ["voisins","entreprises","quartier","environnement","alentours"],
+      negativeSignals: ["badge","it","teletravail","parking"],
+      emotionSignals: []
+    },
+
+    {
+      id: "services-quartier",
+      category: "decouverte", priority: 8,
+      title: "Services disponibles autour du site",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Le quartier offre une offre complète : restauration, commerces, sport, santé, crèches — tout à moins de 10 minutes à pied.",
+      answer: "Le quartier d'Issy-les-Moulineaux autour du site est très bien équipé. Voici ce que vous trouverez à moins de 10 minutes à pied :\n\nRestauration :\n— Une quinzaine de restaurants (cuisine du monde, sandwicheries, boulangeries)\n— 3 restaurants d'entreprise ouverts au public le midi\n— Franprix et Monoprix pour les courses du midi ou du soir\n\nSanté :\n— Pharmacie (2 min)\n— Cabinet médical généraliste et spécialistes (5 min)\n— Centre dentaire (7 min)\n\nSport & bien-être :\n— Salle de sport Basic-Fit (4 min)\n— Piscine municipale d'Issy (8 min)\n— Studios de yoga et pilates (5 min)\n\nServices du quotidien :\n— La Poste (3 min)\n— Pressing (4 min)\n— Banques (Crédit Agricole, BNP, Société Générale)\n— Crèche municipale (6 min)\n\nUn plan détaillé des commerces et services du quartier est inclus dans le livret d'accueil remis quelques jours avant l'emménagement.",
+      note: "Le quartier est nettement plus animé à l'heure du déjeuner que le site actuel. C'est un vrai changement positif pour beaucoup.",
+      related: ["adresse-site", "voisinage-entreprises", "restauration", "livret-accueil"],
+      keywords: ["services","commerces","quartier","restaurant","supermarche","pharmacie","sport","salle sport","piscine","pressing","banque","medecin","creche","autour","proximite","a pied"],
+      phrases: [
+        "qu est ce qu il y a autour du site",
+        "y a t il des restaurants a proximite",
+        "quels sont les services disponibles",
+        "ou faire ses courses a midi",
+        "y a t il une salle de sport a cote",
+        "y a t il une pharmacie a proximite",
+        "qu est ce qu on trouve dans le quartier"
+      ],
+      intentSignals: ["services","commerces","proximite","quartier","autour","pied"],
+      negativeSignals: ["badge","it","teletravail","archivage"],
+      emotionSignals: []
+    },
+
+    {
+      id: "livret-accueil",
+      category: "decouverte", priority: 8,
+      title: "Le livret d'accueil",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Un livret d'accueil complet vous sera remis quelques jours avant l'emménagement avec tout ce qu'il faut savoir pour votre premier jour.",
+      answer: "Un livret d'accueil sera remis à chaque collaborateur quelques jours avant la date de bascule. Il contiendra :\n\n— L'adresse complète et les plans d'accès détaillés (voiture, transports, vélo, à pied depuis chaque gare)\n— Le plan du site par niveau avec localisation de votre équipe\n— Les règles de vie dans les espaces partagés\n— Les codes et procédures d'accès provisoires\n— Les contacts utiles sur place (accueil, IT, services généraux, RH)\n— Le fonctionnement de la restauration et des espaces de convivialité\n— Un guide des commerces et services du quartier\n— Le calendrier des premières semaines (visites, formations, points d'équipe)\n\nLe livret sera disponible en version numérique (PDF) et en version papier remise en main propre.",
+      note: "Si vous ne recevez pas votre livret dans les délais, contactez votre manager ou l'équipe projet.",
+      related: ["adresse-site", "services-quartier", "orientation-site", "jour-j"],
+      keywords: ["livret accueil","livret","guide accueil","document accueil","kit accueil","informations pratiques","premier jour","guide pratique"],
+      phrases: [
+        "y aura t il un livret d accueil",
+        "comment je saurai tout ce qu il faut savoir",
+        "est ce qu on recevra un guide",
+        "quand recevrons nous les informations pratiques",
+        "y a t il un document de bienvenue"
+      ],
+      intentSignals: ["livret","guide","document","accueil","informations","kit"],
+      negativeSignals: ["parking","it","teletravail","restauration"],
+      emotionSignals: ["rassurant","pratique"]
+    },
 
   ];
 
