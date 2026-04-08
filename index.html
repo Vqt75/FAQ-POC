@@ -3100,8 +3100,22 @@ ARCHIVAGE
     // seuil minimum
     if (!best || best.score < 12) return null;
 
-    // anti-collision : si les deux meilleurs sont très proches,
-    // on arbitre par priorité métier
+    // question composite : si 3+ catégories différentes scorent fort,
+    // la question touche plusieurs sujets — on laisse à Gemini
+    const strongCandidates = scored.filter(s => s.score >= 10);
+    const distinctCategories = new Set(strongCandidates.map(s => s.entry.category));
+    if (distinctCategories.size >= 3) return null;
+
+    // gap de confiance insuffisant entre deux catégories différentes
+    if (second && second.score >= 10) {
+      const gap = best.score - second.score;
+      if (gap < 5 && best.entry.category !== second.entry.category) {
+        if ((second.entry.priority || 0) > (best.entry.priority || 0)) return second.entry;
+        if ((best.entry.priority || 0) === (second.entry.priority || 0)) return null;
+      }
+    }
+
+    // anti-collision classique dans la même catégorie
     if (second && Math.abs(best.score - second.score) <= 3) {
       if ((second.entry.priority || 0) > (best.entry.priority || 0)) {
         return second.entry;
