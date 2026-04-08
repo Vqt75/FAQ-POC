@@ -3654,7 +3654,11 @@ Parmi les entreprises voisines :\n— Microsoft France (siège, à 300 m)\n— C
     // la question touche plusieurs sujets — on laisse à Gemini
     const strongCandidates = scored.filter(s => s.score >= 10);
     const distinctCategories = new Set(strongCandidates.map(s => s.entry.category));
-    if (distinctCategories.size >= 3) return null;
+    if (second && Math.abs(best.score - second.score) <= 3) {
+  if ((second.entry.priority || 0) > (best.entry.priority || 0)) {
+    return second.entry;
+  }
+}
 
     // gap de confiance insuffisant entre deux catégories différentes
     if (second && second.score >= 10) {
