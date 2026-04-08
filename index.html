@@ -6,483 +6,1063 @@
   <title>Projet XYZ — Espace collaborateurs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <style>
+    /* ═══════════════════════════════════════════════════
+       VARIABLES
+    ═══════════════════════════════════════════════════ */
     :root {
-      --bg: #f7f7f5;
-      --surface: #ffffff;
-      --text: #111111;
-      --muted: #666666;
-      --line: #ddd8cf;
-      --gold: #9b7a2f;
-      --gold-soft: #f5eddc;
-      --max: 860px;
-      --radius: 16px;
-      --nav-h: 60px;
+      --bg:          #F5F3EE;
+      --surface:     #FFFFFF;
+      --text:        #1A1E23;
+      --text-soft:   #4A5159;
+      --muted:       #72797F;
+      --line:        #E0D9CE;
+      --line-light:  #EDE8E0;
+
+      --gold:        #A6864A;
+      --gold-deep:   #8A6C35;
+      --gold-soft:   #F2EAD8;
+      --gold-rule:   #C8A96E;
+
+      --success-bg:  #E6F2EA;
+      --success:     #2B6840;
+
+      --max:         1200px;
+      --col:         1fr;
+      --nav-h:       64px;
+      --radius:      2px;
+      --radius-md:   6px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: "Roboto", Arial, sans-serif;
+      font-family: "Roboto", sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── NAV ── */
+    button { font-family: inherit; cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ═══════════════════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════════════════ */
     .nav {
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 200;
       background: #fff;
       border-bottom: 1px solid var(--line);
       height: var(--nav-h);
-      display: flex;
-      align-items: stretch;
     }
 
     .nav-inner {
       max-width: var(--max);
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 48px;
+      height: 100%;
       display: flex;
       align-items: stretch;
-      gap: 0;
-      width: 100%;
     }
 
     .nav-brand {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--gold);
-      font-weight: 500;
       display: flex;
       align-items: center;
+      gap: 14px;
+      padding-right: 40px;
+      border-right: 1px solid var(--line);
       margin-right: 32px;
-      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .nav-brand-logotype {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .nav-brand-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .nav-brand-sub {
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      line-height: 1;
+    }
+
+    /* Marque or géométrique */
+    .nav-brand-mark {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .nav-brand-mark::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1.5px solid var(--gold);
+    }
+
+    .nav-brand-mark::after {
+      content: '';
+      position: absolute;
+      top: 6px; left: 6px;
+      width: 20px; height: 20px;
+      background: var(--gold);
     }
 
     .nav-tabs {
       display: flex;
       align-items: stretch;
-      gap: 0;
       flex: 1;
+      overflow-x: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
+    .nav-tabs::-webkit-scrollbar { display: none; }
 
     .nav-tab {
       display: flex;
       align-items: center;
-      padding: 0 20px;
-      font-size: 0.9rem;
+      padding: 0 22px;
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
       color: var(--muted);
-      cursor: pointer;
       border: none;
       background: none;
-      font-family: inherit;
       border-bottom: 2px solid transparent;
       transition: color 0.15s, border-color 0.15s;
       white-space: nowrap;
+      position: relative;
     }
 
     .nav-tab:hover { color: var(--text); }
 
     .nav-tab.active {
       color: var(--text);
-      border-bottom-color: var(--gold);
       font-weight: 500;
+      border-bottom-color: var(--gold);
     }
 
-    /* ── PAGES ── */
+    /* ═══════════════════════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════════════════════ */
     .page { display: none; }
     .page.active { display: block; }
 
     .wrap {
       max-width: var(--max);
       margin: 0 auto;
-      padding: 32px 20px 64px;
+      padding: 0 48px 96px;
     }
 
-    /* ── HEADER COMMUN ── */
-    .page-header {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 28px;
-      margin-bottom: 24px;
+    /* ═══════════════════════════════════════════════════
+       PAGE HERO — grand titre éditorial
+    ═══════════════════════════════════════════════════ */
+    .page-hero {
+      padding: 72px 0 56px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 56px;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 48px;
+      align-items: end;
     }
 
-    .eyebrow {
-      font-size: 0.72rem;
+    .hero-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
       color: var(--gold);
-      margin-bottom: 10px;
-      font-weight: 500;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .page-header h1 {
-      font-size: clamp(1.7rem, 3.5vw, 2.6rem);
-      font-weight: 400;
-      letter-spacing: -0.03em;
-      line-height: 1.08;
-      margin-bottom: 10px;
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--gold-rule);
     }
 
-    .page-header p {
-      color: #444;
-      max-width: 680px;
-      font-size: 0.97rem;
+    .page-hero h1 {
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      color: var(--text);
+      margin-bottom: 0;
     }
 
-    /* ── BOX ── */
-    .box {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 24px;
+    .page-hero h1 .h1-light {
+      font-weight: 300;
+      color: var(--text-soft);
+      display: block;
+    }
+
+    .page-hero h1 .h1-rule {
+      display: block;
+      width: 48px;
+      height: 3px;
+      background: var(--gold);
+      margin-top: 24px;
+    }
+
+    .hero-meta {
+      padding-bottom: 6px;
+    }
+
+    .hero-meta p {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      line-height: 1.7;
+      border-left: 2px solid var(--gold-rule);
+      padding-left: 18px;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       LABELS & BADGES
+    ═══════════════════════════════════════════════════ */
+    .label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
       margin-bottom: 20px;
     }
 
-    .label {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      margin-bottom: 12px;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.62rem;
       font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
     }
 
-    /* ════════════════════════════════════════
-       ONGLET ACTUALITÉS
-    ════════════════════════════════════════ */
+    .badge-gold    { background: var(--gold-soft); color: var(--gold-deep); }
+    .badge-success { background: var(--success-bg); color: var(--success); }
+    .badge-neutral { background: #EBEBEB; color: var(--muted); }
+    .badge-blue    { background: #EAF0F8; color: #2F5088; }
 
-    .articles { display: flex; flex-direction: column; gap: 20px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      background: var(--gold-soft);
+      color: var(--gold-deep);
+    }
 
-    .article {
+    /* ═══════════════════════════════════════════════════
+       FAQ STATUS
+    ═══════════════════════════════════════════════════ */
+    .faq-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 11px 5px 9px;
+      border-radius: 2px;
+      margin-bottom: 20px;
+    }
+
+    .faq-meta::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    .faq-meta.confirmed { background: var(--success-bg); color: var(--success); }
+    .faq-meta.partial,
+    .faq-meta.waiting,
+    .faq-meta.ai       { background: var(--gold-soft); color: var(--gold-deep); }
+
+    /* ═══════════════════════════════════════════════════
+       PAGE FAQ — pièce maîtresse
+    ═══════════════════════════════════════════════════ */
+
+    /* Hero FAQ : pleine largeur, fond sombre, présence forte */
+    .faq-hero {
+      background: var(--text);
+      margin: 0 -48px;
+      padding: 64px 48px 56px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .faq-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 320px; height: 100%;
+      background: linear-gradient(135deg, transparent 40%, rgba(166,134,74,0.08) 100%);
+      pointer-events: none;
+    }
+
+    .faq-hero-grid {
+      max-width: calc(var(--max) - 96px);
+      display: grid;
+      grid-template-columns: 1fr 440px;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .faq-hero-left {}
+
+    .faq-hero-eyebrow {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold-rule);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .faq-hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--gold-rule);
+    }
+
+    .faq-hero h1 {
+      font-size: clamp(2.8rem, 4.5vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.92;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .faq-hero h1 .h1-light {
+      font-weight: 300;
+      color: rgba(255,255,255,0.45);
+      display: block;
+    }
+
+    .faq-hero h1 .h1-rule {
+      display: block;
+      width: 40px;
+      height: 3px;
+      background: var(--gold);
+      margin-top: 28px;
+    }
+
+    .faq-hero-desc {
+      margin-top: 28px;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.7;
+      max-width: 480px;
+    }
+
+    /* Bloc de recherche dans le hero */
+    .faq-search-panel {
+      background: #fff;
+      padding: 32px;
+      position: relative;
+    }
+
+    .faq-search-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 0;
+    }
+
+    .search-input {
+      flex: 1;
+      height: 54px;
+      padding: 0 20px;
+      border: 1.5px solid var(--line);
+      border-right: none;
+      border-radius: 0;
+      font-size: 1rem;
+      font-weight: 400;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .search-input::placeholder { color: var(--muted); font-weight: 300; }
+
+    .search-input:focus {
+      border-color: var(--gold);
+      background: #fff;
+    }
+
+    .btn-primary {
+      height: 54px;
+      padding: 0 28px;
+      background: var(--text);
+      color: #fff;
+      border: none;
+      border-radius: 0;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-primary:hover { background: #2C343E; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 16px;
+    }
+
+    .suggestion {
+      height: 30px;
+      padding: 0 12px;
+      background: var(--bg);
+      color: var(--text-soft);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      font-size: 0.78rem;
+      font-weight: 400;
+      transition: border-color 0.12s, color 0.12s, background 0.12s;
+    }
+
+    .suggestion:hover {
+      border-color: var(--gold);
+      color: var(--gold-deep);
+      background: var(--gold-soft);
+    }
+
+    /* Résultats FAQ */
+    .faq-results-zone { margin-bottom: 0; }
+
+    .faq-loading-box {
+      display: none;
       background: var(--surface);
       border: 1px solid var(--line);
-      border-radius: var(--radius);
+      padding: 24px 32px;
+      margin-bottom: 16px;
+    }
+
+    .loading-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.875rem;
+    }
+
+    .loading-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: ldot 1.2s ease-in-out infinite;
+    }
+
+    .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes ldot {
+      0%,100% { opacity: 0.2; transform: scale(0.8); }
+      50%      { opacity: 1;   transform: scale(1);   }
+    }
+
+    .faq-result-box {
+      display: none;
+      background: var(--surface);
+      border-left: 3px solid var(--gold);
+      border-top: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 32px 36px;
+      margin-bottom: 16px;
+    }
+
+    .faq-question-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .faq-question-label span { color: var(--text-soft); font-style: italic; }
+
+    .faq-answer {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--text);
+      white-space: pre-line;
+      margin-bottom: 24px;
+    }
+
+    .faq-note-block {
+      padding-top: 20px;
+      border-top: 1px solid var(--line-light);
+      font-size: 0.855rem;
+      color: var(--text-soft);
+      line-height: 1.65;
+      padding-left: 16px;
+      border-left: 2px solid var(--gold-rule);
+      margin-left: 0;
+    }
+
+    .faq-notfound-box {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 28px 32px;
+      margin-bottom: 16px;
+    }
+
+    .faq-notfound-box p {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      line-height: 1.65;
+    }
+
+    /* Formulaire contact */
+    .faq-contact-section {
+      margin-top: 56px;
+      padding-top: 40px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .faq-contact-intro {}
+
+    .faq-contact-intro-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .faq-contact-intro p {
+      font-size: 0.855rem;
+      color: var(--text-soft);
+      line-height: 1.7;
+    }
+
+    .form-grid { display: grid; gap: 10px; }
+
+    .form-input {
+      width: 100%;
+      height: 46px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      font-size: 0.9rem;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .form-input:focus { border-color: var(--gold); background: #fff; }
+    .form-input::placeholder { color: var(--muted); }
+
+    textarea.form-input {
+      height: auto;
+      min-height: 96px;
+      padding: 12px 16px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .btn-secondary {
+      height: 46px;
+      padding: 0 24px;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--text);
+      border-radius: 0;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      width: 100%;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .btn-secondary:hover { background: var(--text); color: #fff; }
+
+    .form-note {
+      font-size: 0.775rem;
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       PAGE ACTUALITÉS
+    ═══════════════════════════════════════════════════ */
+
+    /* Timeline — sobre, éditoriale */
+    .timeline-block {
+      margin-bottom: 64px;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 0 64px;
+      align-items: start;
+    }
+
+    .timeline-sidebar {
+      padding-top: 4px;
+      position: sticky;
+      top: calc(var(--nav-h) + 32px);
+    }
+
+    .timeline-sidebar-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .timeline-sidebar-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .timeline-progress-wrap {
+      margin-bottom: 14px;
+    }
+
+    .progress-track {
+      height: 2px;
+      background: var(--line);
+      margin-bottom: 8px;
       overflow: hidden;
-      cursor: pointer;
-      transition: box-shadow 0.15s, border-color 0.15s;
     }
 
-    .article:hover {
-      border-color: #c9b98a;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    .progress-fill {
+      height: 100%;
+      background: var(--gold);
+      transition: width 0.8s cubic-bezier(.4,0,.2,1);
     }
 
-    .article-header {
-      padding: 22px 24px 18px;
+    .timeline-progress-pct {
+      font-size: 0.7rem;
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    /* Milestones */
+    .milestones { display: flex; flex-direction: column; }
+
+    .milestone {
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 0 20px;
+      min-height: 56px;
+    }
+
+    .milestone-spine {
       display: flex;
-      align-items: flex-start;
-      gap: 16px;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .article-meta {
+    .milestone-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: 1.5px solid var(--line);
+      background: var(--surface);
+      flex-shrink: 0;
+      margin-top: 5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .milestone.done .milestone-dot { background: var(--gold); border-color: var(--gold); }
+
+    .milestone.current .milestone-dot {
+      background: var(--surface);
+      border-color: var(--gold);
+      border-width: 2px;
+      box-shadow: 0 0 0 4px rgba(166,134,74,0.15);
+    }
+
+    .milestone-line {
       flex: 1;
+      width: 1px;
+      background: var(--line);
+      margin: 3px 0;
     }
 
-    .article-tags {
+    .milestone.done .milestone-line { background: var(--gold); opacity: 0.3; }
+    .milestone:last-child .milestone-line { display: none; }
+
+    .milestone-content { padding-bottom: 28px; }
+
+    .milestone-date {
+      font-size: 0.68rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-bottom: 2px;
+    }
+
+    .milestone-label {
+      font-size: 0.855rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.35;
       display: flex;
+      align-items: baseline;
       gap: 8px;
-      margin-bottom: 10px;
       flex-wrap: wrap;
     }
 
-    .tag {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      font-weight: 600;
-      color: var(--gold);
-      background: var(--gold-soft);
-      padding: 3px 9px;
-      border-radius: 999px;
+    .milestone.future .milestone-label { color: var(--muted); font-weight: 400; }
+
+    .milestone-desc {
+      font-size: 0.775rem;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.5;
     }
 
-    .tag-muted {
-      font-size: 0.72rem;
+    /* Articles */
+    .articles-block { display: flex; flex-direction: column; }
+
+    .articles-header {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      letter-spacing: 0.09em;
-      font-weight: 500;
       color: var(--muted);
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 0;
+    }
+
+    .article {
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+    }
+
+    .article:last-child { border-bottom: none; }
+
+    .article-header {
+      padding: 28px 0;
+      display: grid;
+      grid-template-columns: 1fr 28px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .article-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .article-date {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 400;
     }
 
     .article-title {
       font-size: 1.15rem;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      line-height: 1.3;
-      margin-bottom: 8px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 10px;
+      transition: color 0.12s;
     }
+
+    .article:hover .article-title { color: var(--gold-deep); }
 
     .article-chapeau {
-      font-size: 0.93rem;
-      color: #444;
-      line-height: 1.55;
+      font-size: 0.875rem;
+      color: var(--text-soft);
+      line-height: 1.65;
     }
 
-    .article-toggle {
-      width: 32px;
-      height: 32px;
+    .article-toggle-btn {
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
-      background: var(--bg);
+      background: none;
       border: 1px solid var(--line);
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      font-size: 1rem;
       color: var(--muted);
-      transition: transform 0.2s, background 0.15s;
-      margin-top: 2px;
+      transition: border-color 0.15s, color 0.15s, transform 0.22s;
+      flex-shrink: 0;
+      margin-top: 4px;
     }
 
-    .article.open .article-toggle {
-      transform: rotate(180deg);
-      background: var(--gold-soft);
-      color: var(--gold);
+    .article-toggle-btn svg {
+      width: 12px; height: 12px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.22s cubic-bezier(.4,0,.2,1);
     }
 
-    .article-body {
-      display: none;
-      padding: 0 24px 24px;
-      border-top: 1px solid var(--line);
-    }
+    .article:hover .article-toggle-btn { border-color: var(--gold); color: var(--gold); }
 
+    .article.open .article-toggle-btn svg { transform: rotate(180deg); }
+
+    .article-body { display: none; }
     .article.open .article-body { display: block; }
 
     .article-body-inner {
-      padding-top: 20px;
-      font-size: 0.96rem;
-      color: #333;
-      line-height: 1.7;
+      padding: 0 0 32px;
+      padding-right: 52px;
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      line-height: 1.8;
       white-space: pre-line;
     }
 
     .article-body-inner strong {
       display: block;
-      margin-top: 18px;
-      margin-bottom: 4px;
+      margin-top: 24px;
+      margin-bottom: 6px;
       color: var(--text);
-      font-size: 0.97rem;
-    }
-
-    .read-time {
-      display: inline-block;
-      margin-top: 16px;
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    /* ════════════════════════════════════════
-       ONGLET FAQ
-    ════════════════════════════════════════ */
-
-    .search-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-    }
-
-    input[type="text"], input[type="email"], textarea {
-      width: 100%;
-      padding: 14px 15px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      font-size: 1rem;
-      font-family: inherit;
-      color: var(--text);
-      background: #fff;
-    }
-
-    input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
-      outline: none;
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(155,122,47,0.08);
-    }
-
-    button.btn-primary {
-      border: 0;
-      background: #111;
-      color: #fff;
-      border-radius: 12px;
-      padding: 14px 18px;
-      font-size: 0.95rem;
-      font-family: inherit;
-      cursor: pointer;
-    }
-
-    button.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .suggestions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .suggestion {
-      background: #fff;
-      color: #111;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 8px 13px;
-      font-size: 0.88rem;
-      cursor: pointer;
-      font-family: inherit;
-      transition: border-color 0.12s, color 0.12s;
-    }
-
-    .suggestion:hover { border-color: var(--gold); color: var(--gold); }
-
-    .faq-result { display: none; }
-
-    .faq-question { font-size: 0.88rem; color: var(--muted); margin-bottom: 10px; }
-
-    .faq-answer {
-      font-size: 0.97rem;
-      white-space: pre-line;
-      margin-bottom: 14px;
-      line-height: 1.65;
-    }
-
-    .faq-meta {
-      display: inline-block;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 5px 11px;
-      font-size: 0.78rem;
-      color: var(--gold);
-      background: var(--gold-soft);
-      margin-bottom: 12px;
-    }
-
-    .faq-note {
-      padding-top: 12px;
-      border-top: 1px solid var(--line);
       font-size: 0.9rem;
-      color: var(--muted);
+      font-weight: 700;
     }
 
-    .faq-loading {
-      display: none;
-      color: var(--muted);
-      font-size: 0.95rem;
-      padding: 16px 0;
+    .article-body-inner strong:first-child { margin-top: 0; }
+
+    /* ═══════════════════════════════════════════════════
+       PAGE PLANS & 3D
+    ═══════════════════════════════════════════════════ */
+    .plans-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
     }
-
-    .loading-dots::after {
-      content: '';
-      animation: dots 1.2s steps(3, end) infinite;
-    }
-
-    @keyframes dots {
-      0%   { content: ''; }
-      33%  { content: '.'; }
-      66%  { content: '..'; }
-      100% { content: '...'; }
-    }
-
-    .faq-notfound { display: none; color: var(--muted); }
-
-    .form-grid { display: grid; gap: 14px; }
-
-    textarea { min-height: 110px; resize: vertical; }
-
-    .small { font-size: 0.88rem; color: var(--muted); margin-top: 8px; }
-
-    /* ════════════════════════════════════════
-       ONGLET PLANS & 3D
-    ════════════════════════════════════════ */
 
     .plans-filters {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 24px;
+      gap: 6px;
     }
 
     .filter-btn {
-      background: #fff;
+      height: 32px;
+      padding: 0 14px;
+      background: var(--surface);
       color: var(--muted);
       border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 7px 14px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      font-family: inherit;
+      border-radius: 2px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
       transition: all 0.12s;
     }
 
-    .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .filter-btn:hover { border-color: var(--gold); color: var(--gold-deep); }
 
     .filter-btn.active {
-      background: var(--gold);
+      background: var(--text);
       color: #fff;
-      border-color: var(--gold);
+      border-color: var(--text);
     }
 
     .plans-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-      gap: 20px;
+      gap: 2px;
+      background: var(--line);
+      border: 1px solid var(--line);
     }
 
     .plan-card {
       background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      overflow: hidden;
-      transition: box-shadow 0.15s, border-color 0.15s;
+      transition: background 0.15s;
+      position: relative;
     }
 
-    .plan-card:hover {
-      border-color: #c9b98a;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
-    }
+    .plan-card:hover { background: #FDFCFA; }
 
     .plan-visual {
       width: 100%;
       aspect-ratio: 16/10;
-      background: #f0ece4;
+      background: #EDE8DF;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       overflow: hidden;
+      cursor: zoom-in;
+      border-bottom: 1px solid var(--line);
     }
 
-    .plan-visual img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .plan-visual img { width: 100%; height: 100%; object-fit: cover; }
 
     .plan-placeholder {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      color: #b5a98a;
+      gap: 14px;
+      color: #B8AF9E;
       text-align: center;
-      padding: 20px;
+      padding: 24px;
+      width: 100%;
+      height: 100%;
     }
 
-    .plan-placeholder-icon {
-      font-size: 2.2rem;
-      opacity: 0.6;
+    /* Icône graphique CSS à la place des emojis */
+    .plan-icon {
+      width: 40px;
+      height: 40px;
+      position: relative;
+      opacity: 0.4;
+    }
+
+    /* Plan */
+    .plan-icon-plan::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1.5px solid currentColor;
+    }
+
+    .plan-icon-plan::after {
+      content: '';
+      position: absolute;
+      top: 8px; left: 8px;
+      right: 8px; bottom: 16px;
+      border: 1px solid currentColor;
+    }
+
+    /* 3D perspective box */
+    .plan-icon-3d::before {
+      content: '';
+      position: absolute;
+      left: 8px; top: 10px;
+      width: 24px; height: 18px;
+      border: 1.5px solid currentColor;
+    }
+
+    .plan-icon-3d::after {
+      content: '';
+      position: absolute;
+      left: 14px; top: 4px;
+      width: 24px; height: 18px;
+      border: 1.5px solid currentColor;
+    }
+
+    /* Focus/headphones */
+    .plan-icon-focus::before {
+      content: '';
+      position: absolute;
+      left: 4px; top: 12px;
+      width: 32px; height: 16px;
+      border-top: 1.5px solid currentColor;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .plan-icon-focus::after {
+      content: '';
+      position: absolute;
+      left: 2px; top: 22px;
+      width: 8px; height: 10px;
+      border: 1.5px solid currentColor;
+      border-radius: 2px;
+      box-shadow: 28px 0 0 currentColor;
+    }
+
+    /* Building */
+    .plan-icon-building::before {
+      content: '';
+      position: absolute;
+      left: 6px; top: 8px;
+      width: 28px; height: 28px;
+      border: 1.5px solid currentColor;
+    }
+
+    .plan-icon-building::after {
+      content: '';
+      position: absolute;
+      left: 15px; top: 24px;
+      width: 10px; height: 12px;
+      border: 1.5px solid currentColor;
     }
 
     .plan-placeholder-label {
-      font-size: 0.8rem;
-      letter-spacing: 0.06em;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      font-weight: 500;
     }
 
     .plan-type-badge {
@@ -490,32 +1070,33 @@
       top: 12px;
       left: 12px;
       background: rgba(255,255,255,0.92);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 0.72rem;
-      font-weight: 600;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 2px;
+      padding: 3px 8px;
+      font-size: 0.6rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       color: var(--text);
     }
 
-    .plan-info { padding: 18px 20px 20px; }
+    .plan-info { padding: 22px 24px 24px; }
 
-    .plan-tags { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+    .plan-tags { display: flex; gap: 6px; margin-bottom: 10px; }
 
     .plan-title {
-      font-size: 1rem;
-      font-weight: 500;
-      letter-spacing: -0.01em;
-      margin-bottom: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
       line-height: 1.3;
+      margin-bottom: 10px;
+      color: var(--text);
     }
 
     .plan-comment {
-      font-size: 0.88rem;
-      color: #555;
-      line-height: 1.6;
+      font-size: 0.825rem;
+      color: var(--text-soft);
+      line-height: 1.65;
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
@@ -529,428 +1110,318 @@
 
     .plan-read-more {
       margin-top: 10px;
-      font-size: 0.82rem;
+      font-size: 0.75rem;
+      font-weight: 600;
       color: var(--gold);
-      cursor: pointer;
-      display: inline-block;
       background: none;
       border: none;
-      font-family: inherit;
       padding: 0;
+      display: inline-block;
+      letter-spacing: 0.04em;
     }
+
+    .plan-read-more:hover { color: var(--gold-deep); }
 
     .plan-upload-note {
       margin-top: 24px;
       padding: 16px 20px;
       background: var(--gold-soft);
-      border: 1px solid #e0cfa0;
-      border-radius: 12px;
-      font-size: 0.88rem;
-      color: #7a6020;
-      line-height: 1.55;
+      border-left: 3px solid var(--gold-rule);
+      font-size: 0.825rem;
+      color: #7A6020;
+      line-height: 1.6;
     }
 
-    .plan-upload-note strong { font-weight: 600; }
-
-    /* ════════════════════════════════════════
-       ENCART CALENDRIER / TIMELINE
-    ════════════════════════════════════════ */
-
-    .timeline-box {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 28px;
-      margin-bottom: 24px;
-    }
-
-    .timeline-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .timeline-header h2 {
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-
-    .timeline-percent {
-      font-size: 0.82rem;
-      color: var(--gold);
-      font-weight: 600;
-    }
-
-    .progress-track {
-      height: 6px;
-      background: #ede8df;
-      border-radius: 999px;
-      margin-bottom: 28px;
-      position: relative;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #c9a84c, var(--gold));
-      border-radius: 999px;
-      transition: width 0.6s ease;
-    }
-
-    .milestones {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .milestone {
-      display: grid;
-      grid-template-columns: 90px 20px 1fr;
-      gap: 0 14px;
-      align-items: stretch;
-      min-height: 52px;
-    }
-
-    .milestone-date {
-      font-size: 0.75rem;
-      color: var(--muted);
-      padding-top: 3px;
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .milestone-spine {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .milestone-dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      border: 2px solid var(--line);
-      background: #fff;
-      flex-shrink: 0;
-      margin-top: 3px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .milestone.done .milestone-dot {
-      background: var(--gold);
-      border-color: var(--gold);
-    }
-
-    .milestone.current .milestone-dot {
-      background: #fff;
-      border-color: var(--gold);
-      border-width: 3px;
-      box-shadow: 0 0 0 3px rgba(155,122,47,0.15);
-    }
-
-    .milestone-line {
-      flex: 1;
-      width: 2px;
-      background: var(--line);
-      margin: 2px 0;
-    }
-
-    .milestone.done .milestone-line { background: var(--gold); }
-    .milestone:last-child .milestone-line { display: none; }
-
-    .milestone-content {
-      padding-bottom: 20px;
-    }
-
-    .milestone-label {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--text);
-      padding-top: 1px;
-    }
-
-    .milestone.future .milestone-label { color: var(--muted); }
-
-    .milestone-desc {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-top: 2px;
-      line-height: 1.4;
-    }
-
-    .milestone-badge {
-      display: inline-block;
-      font-size: 0.68rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 2px 7px;
-      border-radius: 999px;
-      margin-left: 8px;
-      vertical-align: middle;
-    }
-
-    .badge-done    { background: #e8f5e9; color: #2e7d32; }
-    .badge-current { background: var(--gold-soft); color: var(--gold); }
-    .badge-future  { background: #f5f5f5; color: #999; }
-
-    /* ════════════════════════════════════════
+    /* ═══════════════════════════════════════════════════
        PAGE AMBASSADEURS
-    ════════════════════════════════════════ */
-
-    .people-intro {
+    ═══════════════════════════════════════════════════ */
+    .intro-block {
+      padding: 32px;
       background: var(--surface);
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 22px 24px;
-      margin-bottom: 24px;
-      font-size: 0.95rem;
-      color: #444;
-      line-height: 1.7;
+      margin-bottom: 40px;
     }
 
-    .people-intro strong { color: var(--text); }
+    .intro-block-inner {
+      max-width: 680px;
+    }
+
+    .intro-block p {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      line-height: 1.8;
+    }
+
+    .intro-block strong { color: var(--text); font-weight: 600; }
+
+    .people-section-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
 
     .people-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
+      gap: 2px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-bottom: 32px;
     }
 
     .person-card {
       background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 22px 16px 18px;
+      padding: 28px 20px 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      transition: box-shadow 0.15s, border-color 0.15s;
+      transition: background 0.12s;
     }
 
-    .person-card:hover {
-      border-color: #c9b98a;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-    }
+    .person-card:hover { background: #FDFCFA; }
 
     .person-avatar {
-      width: 72px;
-      height: 72px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       background: var(--gold-soft);
-      border: 2px solid #e0cfa0;
+      border: 1.5px solid #D8C89A;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 0.9rem;
       font-weight: 700;
-      color: var(--gold);
-      margin-bottom: 14px;
-      overflow: hidden;
+      color: var(--gold-deep);
+      margin-bottom: 16px;
       flex-shrink: 0;
+      overflow: hidden;
     }
 
-    .person-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .person-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
     .person-name {
-      font-size: 0.92rem;
-      font-weight: 600;
+      font-size: 0.855rem;
+      font-weight: 700;
+      color: var(--text);
       margin-bottom: 4px;
     }
 
     .person-role {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: var(--muted);
       line-height: 1.4;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
-    .person-dept {
-      font-size: 0.72rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--gold);
-      background: var(--gold-soft);
-      padding: 3px 9px;
-      border-radius: 999px;
+    .info-block {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 24px 28px;
     }
 
-    /* ════════════════════════════════════════
-       PAGE ÉQUIPE PROJET
-    ════════════════════════════════════════ */
-
-    .team-section-title {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
+    .info-block-title {
+      font-size: 0.875rem;
       font-weight: 700;
-      color: var(--muted);
-      margin: 28px 0 14px;
+      color: var(--text);
+      margin-bottom: 6px;
     }
 
-    .team-section-title:first-child { margin-top: 0; }
+    .info-block p {
+      font-size: 0.855rem;
+      color: var(--text-soft);
+      line-height: 1.65;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       PAGE ÉQUIPE
+    ═══════════════════════════════════════════════════ */
+    .section-separator {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 40px 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .section-separator::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .section-separator:first-child { padding-top: 0; }
 
     .team-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2px;
+      background: var(--line);
+      border: 1px solid var(--line);
       margin-bottom: 8px;
     }
 
     .team-card {
       background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 18px 18px 16px;
+      padding: 20px 22px;
       display: flex;
-      gap: 14px;
+      gap: 16px;
       align-items: flex-start;
-      transition: box-shadow 0.15s, border-color 0.15s;
+      transition: background 0.12s;
     }
 
-    .team-card:hover {
-      border-color: #c9b98a;
-      box-shadow: 0 3px 14px rgba(0,0,0,0.06);
-    }
+    .team-card:hover { background: #FDFCFA; }
 
     .team-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius);
       background: var(--gold-soft);
-      border: 2px solid #e0cfa0;
+      border: 1.5px solid #D8C89A;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      color: var(--gold);
+      color: var(--gold-deep);
       flex-shrink: 0;
       overflow: hidden;
     }
 
-    .team-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .team-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
     .team-avatar.parella {
-      background: #e8edf5;
-      border-color: #b8c8e0;
-      color: #3a5a8a;
+      background: #EAF0F8;
+      border-color: #B0C4DC;
+      color: #2F5088;
     }
 
-    .team-info { flex: 1; }
+    .team-info { flex: 1; min-width: 0; }
 
     .team-name {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 2px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .team-title {
-      font-size: 0.78rem;
+      font-size: 0.775rem;
       color: var(--muted);
       line-height: 1.4;
-      margin-bottom: 5px;
+      margin-bottom: 7px;
     }
 
     .team-badge {
-      font-size: 0.68rem;
-      font-weight: 600;
+      font-size: 0.6rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.09em;
       padding: 2px 7px;
-      border-radius: 999px;
+      border-radius: 2px;
     }
 
-    .team-badge.xyz {
-      background: var(--gold-soft);
-      color: var(--gold);
+    .team-badge.xyz     { background: var(--gold-soft); color: var(--gold-deep); }
+    .team-badge.parella { background: #EAF0F8; color: #2F5088; }
+
+    .parella-intro {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 22px 24px;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
     }
 
-    .team-badge.parella {
-      background: #e8edf5;
-      color: #3a5a8a;
-    }
-
-    .parella-banner {
-      background: #f0f4fa;
-      border: 1px solid #c8d8ed;
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      margin-bottom: 16px;
+    /* Icône parella sans emoji */
+    .parella-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      background: #EAF0F8;
+      border: 1.5px solid #B0C4DC;
+      border-radius: 2px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: 0.88rem;
-      color: #3a5a8a;
+      justify-content: center;
+      position: relative;
     }
 
-    .parella-logo {
-      font-size: 1.4rem;
-      flex-shrink: 0;
+    .parella-icon::before {
+      content: '';
+      width: 18px;
+      height: 14px;
+      border: 1.5px solid #2F5088;
+      border-bottom: none;
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 640px) {
-      .search-row { grid-template-columns: 1fr; }
-      .plans-grid { grid-template-columns: 1fr; }
-      .nav-brand { display: none; }
-      .nav-tab { padding: 0 10px; font-size: 0.78rem; }
-      .article-header { flex-direction: column; gap: 10px; }
-      .milestone { grid-template-columns: 72px 20px 1fr; }
-      .people-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-      .team-grid { grid-template-columns: 1fr; }
+    .parella-icon::after {
+      content: '';
+      position: absolute;
+      bottom: 9px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      border: 1.5px solid #2F5088;
+      border-bottom: none;
     }
 
-    /* ── LIGHTBOX ZOOM ── */
-    .plan-visual { cursor: zoom-in; }
+    .parella-text {
+      font-size: 0.875rem;
+      color: var(--text-soft);
+      line-height: 1.65;
+    }
 
+    .parella-text strong { color: var(--text); font-weight: 700; }
+
+    /* ═══════════════════════════════════════════════════
+       LIGHTBOX
+    ═══════════════════════════════════════════════════ */
     .lightbox {
       display: none;
       position: fixed;
       inset: 0;
       z-index: 999;
-      background: rgba(0,0,0,0.9);
+      background: rgba(14,16,20,0.97);
       flex-direction: column;
-      animation: lb-in 0.18s ease;
     }
 
-    .lightbox.open { display: flex; }
-
-    @keyframes lb-in {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+    .lightbox.open {
+      display: flex;
+      animation: lb-fade 0.16s ease;
     }
+
+    @keyframes lb-fade { from { opacity: 0; } to { opacity: 1; } }
 
     .lightbox-toolbar {
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 20px;
-      background: rgba(0,0,0,0.6);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 0 24px;
+      height: 54px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
       gap: 12px;
     }
 
     .lightbox-toolbar-title {
-      font-size: 0.88rem;
-      color: rgba(255,255,255,0.85);
-      font-weight: 500;
+      font-size: 0.83rem;
+      color: rgba(255,255,255,0.65);
+      font-weight: 400;
       flex: 1;
       white-space: nowrap;
       overflow: hidden;
@@ -965,14 +1436,13 @@
     }
 
     .lb-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.15);
-      font-size: 1rem;
-      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -980,11 +1450,11 @@
       font-family: inherit;
     }
 
-    .lb-btn:hover { background: rgba(255,255,255,0.2); }
+    .lb-btn:hover { background: rgba(255,255,255,0.14); }
 
     .lb-zoom-label {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.5);
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.35);
       min-width: 40px;
       text-align: center;
     }
@@ -1001,16 +1471,11 @@
 
     .lightbox-media-wrap {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       transform-origin: 0 0;
     }
 
-    .lightbox-img {
-      display: block;
-      max-width: none;
-      pointer-events: none;
-    }
+    .lightbox-img { display: block; max-width: none; pointer-events: none; }
 
     .lightbox-placeholder-lb {
       display: flex;
@@ -1018,29 +1483,80 @@
       align-items: center;
       justify-content: center;
       gap: 14px;
-      color: #b5a98a;
-      width: 600px;
-      height: 400px;
-      background: #1a1810;
-      border-radius: 8px;
+      color: rgba(255,255,255,0.2);
+      width: 560px;
+      height: 380px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .lb-ph-box {
+      width: 48px; height: 40px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+    }
+
+    .lb-ph-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
 
     .lightbox-caption {
       flex-shrink: 0;
-      padding: 14px 20px;
-      background: rgba(0,0,0,0.6);
-      border-top: 1px solid rgba(255,255,255,0.08);
-      font-size: 0.84rem;
-      color: rgba(255,255,255,0.55);
+      padding: 14px 24px;
+      background: rgba(255,255,255,0.02);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
       line-height: 1.55;
-      max-height: 80px;
+      max-height: 70px;
       overflow-y: auto;
     }
 
     .lightbox-hint {
-      font-size: 0.72rem;
-      color: rgba(255,255,255,0.3);
-      margin-top: 4px;
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.18);
+      margin-top: 3px;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .wrap { padding: 0 32px 80px; }
+      .nav-inner { padding: 0 32px; }
+      .faq-hero { margin: 0 -32px; padding: 56px 32px 48px; }
+      .faq-hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .faq-search-panel { max-width: 520px; }
+      .page-hero { grid-template-columns: 1fr; gap: 28px; }
+      .timeline-block { grid-template-columns: 1fr; gap: 0; }
+      .timeline-sidebar { position: static; margin-bottom: 32px; }
+      .faq-contact-section { grid-template-columns: 1fr; gap: 32px; }
+    }
+
+    @media (max-width: 768px) {
+      .wrap { padding: 0 20px 64px; }
+      .nav-inner { padding: 0 16px; }
+      .faq-hero { margin: 0 -20px; padding: 44px 20px 40px; }
+      .nav-brand { padding-right: 16px; margin-right: 12px; }
+      .nav-brand-logotype .nav-brand-sub { display: none; }
+      .nav-tab { padding: 0 12px; font-size: 0.75rem; }
+      .plans-grid { grid-template-columns: 1fr; gap: 0; }
+      .people-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+      .team-grid { grid-template-columns: 1fr; }
+      .article-body-inner { padding-right: 0; }
+      .page-hero h1 { font-size: 2.4rem; }
+      .faq-hero h1  { font-size: 2.4rem; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-brand { display: none; }
+      .nav-tab { padding: 0 10px; font-size: 0.72rem; }
+      .page-hero h1 { font-size: 2rem; }
+      .faq-hero h1  { font-size: 2rem; }
+      .search-row { flex-direction: column; }
+      .search-input { border-right: 1.5px solid var(--line); }
     }
   </style>
 </head>
@@ -1049,10 +1565,16 @@
 <!-- ═══════════════════ NAVIGATION ═══════════════════ -->
 <nav class="nav">
   <div class="nav-inner">
-    <div class="nav-brand">Projet XYZ</div>
+    <div class="nav-brand">
+      <div class="nav-brand-mark"></div>
+      <div class="nav-brand-logotype">
+        <span class="nav-brand-name">Projet XYZ</span>
+        <span class="nav-brand-sub">Espace collaborateurs</span>
+      </div>
+    </div>
     <div class="nav-tabs">
-      <button class="nav-tab" data-page="actu">Actualités</button>
       <button class="nav-tab active" data-page="faq">FAQ</button>
+      <button class="nav-tab" data-page="actu">Actualités</button>
       <button class="nav-tab" data-page="plans">Plans & 3D</button>
       <button class="nav-tab" data-page="ambassadeurs">Ambassadeurs</button>
       <button class="nav-tab" data-page="equipe">Équipe projet</button>
@@ -1060,98 +1582,198 @@
   </div>
 </nav>
 
+
+<!-- ═══════════════════ PAGE : FAQ ═══════════════════ -->
+<div class="page active" id="page-faq">
+
+  <!-- Hero plein écran -->
+  <div class="faq-hero">
+    <div class="faq-hero-grid">
+      <div class="faq-hero-left">
+        <div class="faq-hero-eyebrow">Projet XYZ — Base de connaissance</div>
+        <h1>
+          <span class="h1-light">Retrouvez les informations</span>
+          à jour
+          <span class="h1-rule"></span>
+        </h1>
+        <p class="faq-hero-desc">Posez votre question librement. Les réponses officielles s'affichent instantanément ; pour les questions non couvertes, une IA prend le relais en s'appuyant sur la base de connaissances du projet.</p>
+      </div>
+      <div class="faq-search-panel">
+        <div class="faq-search-label">Posez votre question</div>
+        <div class="search-row">
+          <input type="text" class="search-input" id="questionInput" placeholder="Ex. : Où est-ce qu'on va manger ?">
+          <button type="button" id="askBtn" class="btn-primary">Rechercher</button>
+        </div>
+        <div class="suggestions">
+          <button type="button" class="suggestion" data-question="Quand a lieu le déménagement ?">Date du déménagement</button>
+          <button type="button" class="suggestion" data-question="Où est-ce qu'on va manger ?">Restauration</button>
+          <button type="button" class="suggestion" data-question="Y aura-t-il des visites du site ?">Visites du site</button>
+          <button type="button" class="suggestion" data-question="Est-ce que le télétravail va changer ?">Télétravail</button>
+          <button type="button" class="suggestion" data-question="Comment venir à vélo ?">Mobilités douces</button>
+          <button type="button" class="suggestion" data-question="J'ai peur du changement, c'est normal ?">Appréhension</button>
+          <button type="button" class="suggestion" data-question="Qui pilote le projet ?">Pilotage</button>
+          <button type="button" class="suggestion" data-question="Que faire de mes archives ?">Archivage</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="faq-results-zone">
+      <!-- Loading -->
+      <div class="faq-loading-box" id="loadingBox">
+        <div class="loading-row">
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+          <span>Recherche en cours</span>
+        </div>
+      </div>
+
+      <!-- Résultat -->
+      <div class="faq-result-box" id="resultBox">
+        <div class="label">Réponse</div>
+        <div class="faq-question-label">Question : <span id="resultQuestion"></span></div>
+        <div class="faq-meta" id="resultStatus"></div>
+        <div class="faq-answer" id="resultAnswer"></div>
+        <div class="faq-note-block" id="resultNote"></div>
+      </div>
+
+      <!-- Non trouvé -->
+      <div class="faq-notfound-box" id="notFoundBox">
+        <div class="label">Réponse indisponible</div>
+        <p>Nous n'avons pas encore de réponse précise à cette question. Elle pourra être intégrée dans une prochaine mise à jour de la FAQ.</p>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="faq-contact-section">
+      <div class="faq-contact-intro">
+        <div class="faq-contact-intro-title">Vous n'avez pas trouvé votre réponse ?</div>
+        <p>Transmettez votre question à l'équipe projet. Toutes les demandes sont lues et traitées dans les meilleurs délais.</p>
+      </div>
+      <div>
+        <form action="" method="POST">
+          <div class="form-grid">
+            <input type="text"  name="name"    class="form-input" placeholder="Nom et prénom">
+            <input type="email" name="email"   class="form-input" placeholder="Adresse email">
+            <textarea           name="message" class="form-input" placeholder="Décrivez votre question ou le point qui reste flou."></textarea>
+            <button type="submit" class="btn-secondary">Envoyer la demande</button>
+          </div>
+        </form>
+        <p class="form-note">Le formulaire n'est pas encore branché. Il pourra être relié à une boîte mail projet.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- ═══════════════════ PAGE : ACTUALITÉS ═══════════════════ -->
 <div class="page" id="page-actu">
   <div class="wrap">
-    <div class="page-header">
-      <div class="eyebrow">Projet XYZ — Actualités</div>
-      <h1>Le fil du projet</h1>
-      <p>Retrouvez ici toutes les informations publiées par l'équipe projet, au fur et à mesure des décisions et des étapes franchies. Cette page remplace la newsletter envoyée par email.</p>
+
+    <div class="page-hero">
+      <div>
+        <div class="hero-eyebrow">Projet XYZ — Actualités</div>
+        <h1>
+          <span class="h1-light">Le fil</span>
+          du projet
+          <span class="h1-rule"></span>
+        </h1>
+      </div>
+      <div class="hero-meta">
+        <p>Retrouvez ici toutes les informations publiées par l'équipe projet, au fur et à mesure des décisions et des étapes franchies. Cette page remplace la newsletter envoyée par email.</p>
+      </div>
     </div>
 
-    <!-- ENCART CALENDRIER -->
-    <div class="timeline-box">
-      <div class="timeline-header">
-        <h2>Avancement du projet</h2>
-        <span class="timeline-percent">Étape 3 sur 6 — 42%</span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-fill" style="width: 42%"></div>
+    <!-- Timeline en deux colonnes -->
+    <div class="timeline-block">
+      <div class="timeline-sidebar">
+        <div class="timeline-sidebar-label">Avancement</div>
+        <div class="timeline-sidebar-title">Étape 3<br>sur 6</div>
+        <div class="timeline-progress-wrap">
+          <div class="progress-track">
+            <div class="progress-fill" style="width:42%"></div>
+          </div>
+          <div class="timeline-progress-pct">42 %</div>
+        </div>
       </div>
       <div class="milestones">
 
         <div class="milestone done">
-          <div class="milestone-date">Oct. 2025</div>
           <div class="milestone-spine"><div class="milestone-dot"></div><div class="milestone-line"></div></div>
           <div class="milestone-content">
-            <div class="milestone-label">Lancement du projet <span class="milestone-badge badge-done">Terminé</span></div>
+            <div class="milestone-date">Oct. 2025</div>
+            <div class="milestone-label">Lancement du projet <span class="badge badge-success">Terminé</span></div>
             <div class="milestone-desc">Décision de déménagement actée. Constitution de l'équipe projet. Premiers échanges avec les instances représentatives du personnel.</div>
           </div>
         </div>
 
         <div class="milestone done">
-          <div class="milestone-date">Déc. 2025 – Fév. 2026</div>
           <div class="milestone-spine"><div class="milestone-dot"></div><div class="milestone-line"></div></div>
           <div class="milestone-content">
-            <div class="milestone-label">Cadrage & choix du site <span class="milestone-badge badge-done">Terminé</span></div>
+            <div class="milestone-date">Déc. 2025 – Fév. 2026</div>
+            <div class="milestone-label">Cadrage & choix du site <span class="badge badge-success">Terminé</span></div>
             <div class="milestone-desc">Analyse des sites candidats. Sélection du nouveau site. Validation du programme immobilier et du budget. Information des partenaires sociaux.</div>
           </div>
         </div>
 
         <div class="milestone current">
-          <div class="milestone-date">Mars – Juin 2026</div>
           <div class="milestone-spine"><div class="milestone-dot"></div><div class="milestone-line"></div></div>
           <div class="milestone-content">
-            <div class="milestone-label">Conception & co-construction <span class="milestone-badge badge-current">En cours</span></div>
+            <div class="milestone-date">Mars – Juin 2026</div>
+            <div class="milestone-label">Conception & co-construction <span class="badge badge-gold">En cours</span></div>
             <div class="milestone-desc">Ateliers de personnalisation des espaces. Finalisation des plans de micro-zoning. Lancement du réseau d'ambassadeurs. Premières visites du site.</div>
           </div>
         </div>
 
         <div class="milestone future">
-          <div class="milestone-date">Juil. – Sept. 2026</div>
           <div class="milestone-spine"><div class="milestone-dot"></div><div class="milestone-line"></div></div>
           <div class="milestone-content">
-            <div class="milestone-label">Préparation opérationnelle <span class="milestone-badge badge-future">À venir</span></div>
+            <div class="milestone-date">Juil. – Sept. 2026</div>
+            <div class="milestone-label">Préparation opérationnelle <span class="badge badge-neutral">À venir</span></div>
             <div class="milestone-desc">Travaux d'aménagement intérieur. Préparation logistique des équipes. Communications de bascule. Formations à la prise en main du nouveau site.</div>
           </div>
         </div>
 
         <div class="milestone future">
-          <div class="milestone-date">Sem. du 14 oct. 2026</div>
           <div class="milestone-spine"><div class="milestone-dot"></div><div class="milestone-line"></div></div>
           <div class="milestone-content">
-            <div class="milestone-label">Déménagement <span class="milestone-badge badge-future">À venir</span></div>
+            <div class="milestone-date">Sem. du 14 oct. 2026</div>
+            <div class="milestone-label">Déménagement <span class="badge badge-neutral">À venir</span></div>
             <div class="milestone-desc">Bascule progressive des équipes sur le nouveau site. Accueil renforcé. Support IT et logistique en temps réel. Équipe projet disponible sur place.</div>
           </div>
         </div>
 
         <div class="milestone future">
-          <div class="milestone-date">Nov. 2026+</div>
           <div class="milestone-spine"><div class="milestone-dot"></div><div class="milestone-line"></div></div>
           <div class="milestone-content">
-            <div class="milestone-label">Installation & ajustements <span class="milestone-badge badge-future">À venir</span></div>
+            <div class="milestone-date">Nov. 2026+</div>
+            <div class="milestone-label">Installation & ajustements <span class="badge badge-neutral">À venir</span></div>
             <div class="milestone-desc">Enquête de satisfaction post-installation. Ajustements des espaces et des règles de vie. Bilan du projet et clôture.</div>
           </div>
         </div>
 
       </div>
     </div>
-    <!-- /ENCART CALENDRIER -->
 
-    <div class="articles">
+    <!-- Articles -->
+    <div class="articles-block">
+      <div class="articles-header">Publications — 4 articles</div>
 
-      <!-- Article 1 -->
       <div class="article" data-article="1">
         <div class="article-header">
-          <div class="article-meta">
-            <div class="article-tags">
+          <div>
+            <div class="article-meta-row">
               <span class="tag">Calendrier</span>
-              <span class="tag-muted">2 avril 2026 · 4 min de lecture</span>
+              <span class="article-date">2 avril 2026 · 4 min</span>
             </div>
             <div class="article-title">Le projet entre dans sa phase active — ce qui change concrètement dans les prochaines semaines</div>
             <div class="article-chapeau">Après plusieurs mois de cadrage et de travail en coulisses, le projet de déménagement entre dans une nouvelle phase. Voici ce qui se passe concrètement d'ici fin avril — et ce qui reste encore à confirmer.</div>
           </div>
-          <div class="article-toggle">▾</div>
+          <div class="article-toggle-btn">
+            <svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg>
+          </div>
         </div>
         <div class="article-body">
           <div class="article-body-inner">Vous avez été nombreux à nous poser la même question ces dernières semaines : "Quand est-ce que ça va vraiment commencer ?" La réponse, c'est maintenant.
@@ -1191,18 +1813,19 @@ Ce site est mis à jour à chaque étape franchie.</div>
         </div>
       </div>
 
-      <!-- Article 2 -->
       <div class="article" data-article="2">
         <div class="article-header">
-          <div class="article-meta">
-            <div class="article-tags">
+          <div>
+            <div class="article-meta-row">
               <span class="tag">Écoute</span>
-              <span class="tag-muted">18 mars 2026 · 5 min de lecture</span>
+              <span class="article-date">18 mars 2026 · 5 min</span>
             </div>
             <div class="article-title">Ce que nous avons entendu — retour détaillé sur les premières remontées terrain</div>
             <div class="article-chapeau">Depuis le lancement du projet, plusieurs centaines de questions et de préoccupations ont été collectées. Voici ce que nous en avons retenu — et ce que ça change concrètement.</div>
           </div>
-          <div class="article-toggle">▾</div>
+          <div class="article-toggle-btn">
+            <svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg>
+          </div>
         </div>
         <div class="article-body">
           <div class="article-body-inner">Depuis le lancement du projet, plusieurs centaines de questions, de remarques et de préoccupations ont été collectées — via ce site, via les managers, via les sessions d'écoute organisées en équipe, et via les échanges informels que les ambassadeurs ont remontés. Nous avons lu chacune d'entre elles. Cet article en est le compte-rendu fidèle.
@@ -1239,18 +1862,19 @@ Merci à tous ceux qui ont pris le temps d'écrire et de remonter des retours.</
         </div>
       </div>
 
-      <!-- Article 3 -->
       <div class="article" data-article="3">
         <div class="article-header">
-          <div class="article-meta">
-            <div class="article-tags">
+          <div>
+            <div class="article-meta-row">
               <span class="tag">Espaces</span>
-              <span class="tag-muted">5 mars 2026 · 4 min de lecture</span>
+              <span class="article-date">5 mars 2026 · 4 min</span>
             </div>
             <div class="article-title">Première plongée dans le futur site — plans, ambiances et ce qu'il faut en retenir</div>
             <div class="article-chapeau">Pour la première fois, nous partageons des documents visuels sur le futur site. Plans, vues 3D, zones commentées : voici comment les lire et comment vous en servir avant les ateliers.</div>
           </div>
-          <div class="article-toggle">▾</div>
+          <div class="article-toggle-btn">
+            <svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg>
+          </div>
         </div>
         <div class="article-body">
           <div class="article-body-inner">Pour la première fois depuis le lancement du projet, nous partageons des documents visuels sur le futur site. Nous avons volontairement attendu d'avoir des éléments suffisamment avancés pour que les visuels soient représentatifs de la réalité finale. Ce moment est arrivé.
@@ -1277,18 +1901,19 @@ Si vous avez des remarques sur ce que vous voyez dans ces documents, le formulai
         </div>
       </div>
 
-      <!-- Article 4 -->
       <div class="article" data-article="4">
         <div class="article-header">
-          <div class="article-meta">
-            <div class="article-tags">
+          <div>
+            <div class="article-meta-row">
               <span class="tag">Vision</span>
-              <span class="tag-muted">12 février 2026 · 4 min de lecture</span>
+              <span class="article-date">12 février 2026 · 4 min</span>
             </div>
             <div class="article-title">Pourquoi on déménage — et ce qu'on a voulu faire de ce projet</div>
             <div class="article-chapeau">Avant de parler de cartons et de badges, il nous semblait important de partager le pourquoi. Ce déménagement n'est pas qu'une contrainte logistique — c'est un choix, avec une intention derrière.</div>
           </div>
-          <div class="article-toggle">▾</div>
+          <div class="article-toggle-btn">
+            <svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg>
+          </div>
         </div>
         <div class="article-body">
           <div class="article-body-inner">Avant de parler de cartons, de badges et de plans d'étage, il nous semblait important de partager quelque chose de plus fondamental : le pourquoi. Pas le pourquoi administratif et contractuel — même si celui-là existe — mais l'intention derrière ce projet.
@@ -1319,86 +1944,39 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
         </div>
       </div>
 
-    </div><!-- /articles -->
-  </div>
-</div>
-
-<!-- ═══════════════════ PAGE : FAQ ═══════════════════ -->
-<div class="page active" id="page-faq">
-  <div class="wrap">
-    <div class="page-header">
-      <div class="eyebrow">Projet XYZ — FAQ</div>
-      <h1>Retrouvez les informations à jour sur le projet</h1>
-      <p>Posez votre question librement. Les réponses officielles s'affichent instantanément ; pour les questions non couvertes, une IA prend le relais en s'appuyant sur la base de connaissances du projet.</p>
-    </div>
-
-    <div class="box">
-      <div class="label">Posez votre question</div>
-      <div class="search-row">
-        <input type="text" id="questionInput" placeholder="Ex. : Où est-ce qu'on va manger ?">
-        <button type="button" id="askBtn" class="btn-primary">Rechercher</button>
-      </div>
-      <div class="suggestions">
-        <button type="button" class="suggestion" data-question="Quand a lieu le déménagement ?">Date du déménagement</button>
-        <button type="button" class="suggestion" data-question="Où est-ce qu'on va manger ?">Restauration</button>
-        <button type="button" class="suggestion" data-question="Y aura-t-il des visites du site ?">Visites du site</button>
-        <button type="button" class="suggestion" data-question="Est-ce que le télétravail va changer ?">Télétravail</button>
-        <button type="button" class="suggestion" data-question="Comment venir à vélo ?">Mobilités douces</button>
-        <button type="button" class="suggestion" data-question="J'ai peur du changement, c'est normal ?">Appréhension</button>
-        <button type="button" class="suggestion" data-question="Qui pilote le projet ?">Pilotage</button>
-        <button type="button" class="suggestion" data-question="Que faire de mes archives ?">Archivage</button>
-      </div>
-    </div>
-
-    <div class="box faq-loading" id="loadingBox">
-      <span class="loading-dots">Recherche en cours</span>
-    </div>
-
-    <div class="box faq-result" id="resultBox">
-      <div class="label">Réponse</div>
-      <div class="faq-question" id="resultQuestion"></div>
-      <div class="faq-meta" id="resultStatus"></div>
-      <div class="faq-answer" id="resultAnswer"></div>
-      <div class="faq-note" id="resultNote"></div>
-    </div>
-
-    <div class="box faq-notfound" id="notFoundBox">
-      <div class="label">Réponse indisponible</div>
-      <p>Nous n'avons pas encore de réponse précise à cette question. Elle pourra être intégrée dans une prochaine mise à jour de la FAQ.</p>
-    </div>
-
-    <div class="box">
-      <div class="label">Si vous n'avez pas trouvé votre réponse</div>
-      <form action="" method="POST">
-        <div class="form-grid">
-          <input type="text" name="name" placeholder="Nom et prénom">
-          <input type="email" name="email" placeholder="Adresse email">
-          <textarea name="message" placeholder="Décrivez votre question ou le point qui reste flou."></textarea>
-          <button type="submit" class="btn-primary">Envoyer la demande</button>
-        </div>
-      </form>
-      <p class="small">Le formulaire n'est pas encore branché. Il pourra être relié ensuite à une boîte mail.</p>
     </div>
   </div>
 </div>
+
 
 <!-- ═══════════════════ PAGE : PLANS & 3D ═══════════════════ -->
 <div class="page" id="page-plans">
   <div class="wrap">
-    <div class="page-header">
-      <div class="eyebrow">Projet XYZ — Plans & 3D</div>
-      <h1>Découvrez le futur site</h1>
-      <p>Plans de macro et micro-zoning, vues 3D des espaces, ambiances : tous les documents visuels du projet sont ici, commentés pour vous aider à vous projeter avant les ateliers.</p>
+
+    <div class="page-hero">
+      <div>
+        <div class="hero-eyebrow">Projet XYZ — Documents visuels</div>
+        <h1>
+          <span class="h1-light">Découvrez</span>
+          le futur site
+          <span class="h1-rule"></span>
+        </h1>
+      </div>
+      <div class="hero-meta">
+        <p>Plans de macro et micro-zoning, vues 3D des espaces, ambiances : tous les documents visuels du projet sont ici, commentés pour vous aider à vous projeter avant les ateliers.</p>
+      </div>
     </div>
 
-    <div class="plans-filters">
-      <button class="filter-btn active" data-filter="all">Tous</button>
-      <button class="filter-btn" data-filter="Plan">Plans</button>
-      <button class="filter-btn" data-filter="3D">Vues 3D</button>
-      <button class="filter-btn" data-filter="Macro-zoning">Macro-zoning</button>
-      <button class="filter-btn" data-filter="Micro-zoning">Micro-zoning</button>
-      <button class="filter-btn" data-filter="Ambiance">Ambiances</button>
-      <button class="filter-btn" data-filter="Concentration">Concentration</button>
+    <div class="plans-toolbar">
+      <div class="plans-filters">
+        <button class="filter-btn active" data-filter="all">Tous</button>
+        <button class="filter-btn" data-filter="Plan">Plans</button>
+        <button class="filter-btn" data-filter="3D">Vues 3D</button>
+        <button class="filter-btn" data-filter="Macro-zoning">Macro-zoning</button>
+        <button class="filter-btn" data-filter="Micro-zoning">Micro-zoning</button>
+        <button class="filter-btn" data-filter="Ambiance">Ambiances</button>
+        <button class="filter-btn" data-filter="Concentration">Concentration</button>
+      </div>
     </div>
 
     <div class="plans-grid" id="plansGrid">
@@ -1406,7 +1984,7 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
       <div class="plan-card" data-tags="Plan Macro-zoning">
         <div class="plan-visual">
           <div class="plan-placeholder">
-            <div class="plan-placeholder-icon">📐</div>
+            <div class="plan-icon plan-icon-plan"></div>
             <div class="plan-placeholder-label">Plan · R+1</div>
           </div>
           <div class="plan-type-badge">Plan</div>
@@ -1422,7 +2000,7 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
       <div class="plan-card" data-tags="3D Ambiance">
         <div class="plan-visual">
           <div class="plan-placeholder">
-            <div class="plan-placeholder-icon">🏛️</div>
+            <div class="plan-icon plan-icon-3d"></div>
             <div class="plan-placeholder-label">Vue 3D · Convivialité</div>
           </div>
           <div class="plan-type-badge">3D</div>
@@ -1438,7 +2016,7 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
       <div class="plan-card" data-tags="Plan Micro-zoning">
         <div class="plan-visual">
           <div class="plan-placeholder">
-            <div class="plan-placeholder-icon">📋</div>
+            <div class="plan-icon plan-icon-plan"></div>
             <div class="plan-placeholder-label">Plan · Finance (exemple)</div>
           </div>
           <div class="plan-type-badge">Plan</div>
@@ -1454,7 +2032,7 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
       <div class="plan-card" data-tags="3D Concentration">
         <div class="plan-visual">
           <div class="plan-placeholder">
-            <div class="plan-placeholder-icon">🎧</div>
+            <div class="plan-icon plan-icon-focus"></div>
             <div class="plan-placeholder-label">Vue 3D · Zone de focus</div>
           </div>
           <div class="plan-type-badge">3D</div>
@@ -1470,7 +2048,7 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
       <div class="plan-card" data-tags="Plan Macro-zoning">
         <div class="plan-visual">
           <div class="plan-placeholder">
-            <div class="plan-placeholder-icon">🏢</div>
+            <div class="plan-icon plan-icon-building"></div>
             <div class="plan-placeholder-label">Plan · Rez-de-chaussée</div>
           </div>
           <div class="plan-type-badge">Plan</div>
@@ -1486,7 +2064,7 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
       <div class="plan-card" data-tags="3D Ambiance">
         <div class="plan-visual">
           <div class="plan-placeholder">
-            <div class="plan-placeholder-icon">✨</div>
+            <div class="plan-icon plan-icon-3d"></div>
             <div class="plan-placeholder-label">Vue 3D · Hall d'entrée</div>
           </div>
           <div class="plan-type-badge">3D</div>
@@ -1499,7 +2077,7 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
         </div>
       </div>
 
-    </div><!-- /plans-grid -->
+    </div>
 
     <div class="plan-upload-note">
       <strong>Pour ajouter un visuel :</strong> déposez votre image (PNG, JPG ou PDF) dans le dossier <code>images/</code> de votre repo GitHub, puis référencez-la dans le code en remplaçant le bloc <code>.plan-placeholder</code> par une balise <code>&lt;img src="images/mon-fichier.png"&gt;</code> dans la carte correspondante.
@@ -1508,128 +2086,151 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
   </div>
 </div>
 
+
 <!-- ═══════════════════ PAGE : AMBASSADEURS ═══════════════════ -->
 <div class="page" id="page-ambassadeurs">
   <div class="wrap">
-    <div class="page-header">
-      <div class="eyebrow">Projet XYZ — Réseau</div>
-      <h1>Vos ambassadeurs projet</h1>
-      <p>Ce sont vos collègues. Ils ont accepté volontairement de jouer un rôle de relais entre les équipes et l'équipe projet. Interpellez-les sans hésiter.</p>
+
+    <div class="page-hero">
+      <div>
+        <div class="hero-eyebrow">Projet XYZ — Réseau de proximité</div>
+        <h1>
+          <span class="h1-light">Vos</span>
+          ambassadeurs
+          <span class="h1-rule"></span>
+        </h1>
+      </div>
+      <div class="hero-meta">
+        <p>Ce sont vos collègues. Ils ont accepté volontairement de jouer un rôle de relais entre les équipes et l'équipe projet. Interpellez-les sans hésiter.</p>
+      </div>
     </div>
 
-    <div class="people-intro">
-      <strong>Quel est leur rôle exactement ?</strong><br>
-      Les ambassadeurs ne sont pas des porte-paroles officiels du projet, ni des communicants. Ce sont des collaborateurs comme vous, issus de différentes équipes et niveaux hiérarchiques, qui ont choisi de s'impliquer activement dans la transition.<br><br>
-      Concrètement, ils font trois choses : ils <strong>relaient les informations</strong> du projet au plus près de leurs collègues, ils <strong>remontent les questions et préoccupations</strong> du terrain vers l'équipe projet via un canal dédié, et ils <strong>participent à la co-construction</strong> des usages et des règles de vie sur le nouveau site.<br><br>
-      Si vous avez une question que vous préférez poser à un collègue plutôt qu'à votre RH, si vous avez entendu une rumeur que vous voulez vérifier, ou si vous voulez simplement comprendre où en est le projet — votre ambassadeur est la bonne personne.
+    <div class="intro-block">
+      <div class="intro-block-inner">
+        <p><strong>Quel est leur rôle exactement ?</strong><br><br>
+        Les ambassadeurs ne sont pas des porte-paroles officiels du projet, ni des communicants. Ce sont des collaborateurs comme vous, issus de différentes équipes et niveaux hiérarchiques, qui ont choisi de s'impliquer activement dans la transition.<br><br>
+        Concrètement, ils font trois choses : ils <strong>relaient les informations</strong> du projet au plus près de leurs collègues, ils <strong>remontent les questions et préoccupations</strong> du terrain vers l'équipe projet via un canal dédié, et ils <strong>participent à la co-construction</strong> des usages et des règles de vie sur le nouveau site.<br><br>
+        Si vous avez une question que vous préférez poser à un collègue plutôt qu'à votre RH, si vous avez entendu une rumeur que vous voulez vérifier, ou si vous voulez simplement comprendre où en est le projet — votre ambassadeur est la bonne personne.</p>
+      </div>
     </div>
 
+    <div class="people-section-label">20 ambassadeurs — toutes directions</div>
     <div class="people-grid">
 
       <div class="person-card">
         <div class="person-avatar">SL</div>
         <div class="person-name">Sophie Lecomte</div>
         <div class="person-role">Responsable comptabilité clients</div>
-        <div class="person-dept">Finance</div>
+        <span class="badge badge-gold">Finance</span>
       </div>
 
       <div class="person-card">
         <div class="person-avatar">TM</div>
         <div class="person-name">Thomas Meunier</div>
         <div class="person-role">Chargé de développement RH</div>
-        <div class="person-dept">Ressources humaines</div>
+        <span class="badge badge-gold">Ressources humaines</span>
       </div>
 
       <div class="person-card">
         <div class="person-avatar">AL</div>
         <div class="person-name">Amina Laaroussi</div>
         <div class="person-role">Chef de projet digital</div>
-        <div class="person-dept">Marketing</div>
+        <span class="badge badge-gold">Marketing</span>
       </div>
 
       <div class="person-card">
         <div class="person-avatar">PD</div>
         <div class="person-name">Pierre Dumont</div>
         <div class="person-role">Ingénieur infrastructure</div>
-        <div class="person-dept">DSI</div>
+        <span class="badge badge-gold">DSI</span>
       </div>
 
       <div class="person-card">
         <div class="person-avatar">CR</div>
         <div class="person-name">Claire Renard</div>
         <div class="person-role">Juriste droit des affaires</div>
-        <div class="person-dept">Juridique</div>
+        <span class="badge badge-gold">Juridique</span>
       </div>
 
       <div class="person-card">
         <div class="person-avatar">JB</div>
         <div class="person-name">Julien Berger</div>
         <div class="person-role">Responsable supply chain</div>
-        <div class="person-dept">Opérations</div>
+        <span class="badge badge-gold">Opérations</span>
       </div>
 
       <div class="person-card">
         <div class="person-avatar">NF</div>
         <div class="person-name">Nathalie Ferrand</div>
         <div class="person-role">Assistante de direction</div>
-        <div class="person-dept">Direction générale</div>
+        <span class="badge badge-gold">Direction générale</span>
       </div>
 
       <div class="person-card">
         <div class="person-avatar">KD</div>
         <div class="person-name">Karim Djebbar</div>
         <div class="person-role">Analyste financier senior</div>
-        <div class="person-dept">Contrôle de gestion</div>
+        <span class="badge badge-gold">Contrôle de gestion</span>
       </div>
 
       <div class="person-card">
         <div class="person-avatar">MB</div>
         <div class="person-name">Marie Blanchard</div>
         <div class="person-role">Responsable formation</div>
-        <div class="person-dept">Ressources humaines</div>
+        <span class="badge badge-gold">Ressources humaines</span>
       </div>
 
       <div class="person-card">
         <div class="person-avatar">RP</div>
         <div class="person-name">Romain Petit</div>
         <div class="person-role">Développeur back-end</div>
-        <div class="person-dept">DSI</div>
+        <span class="badge badge-gold">DSI</span>
       </div>
 
       <div class="person-card">
         <div class="person-avatar">LV</div>
         <div class="person-name">Laura Vasseur</div>
         <div class="person-role">Chargée de communication interne</div>
-        <div class="person-dept">Communication</div>
+        <span class="badge badge-gold">Communication</span>
       </div>
 
       <div class="person-card">
         <div class="person-avatar">FB</div>
         <div class="person-name">François Bouchard</div>
         <div class="person-role">Responsable maintenance</div>
-        <div class="person-dept">Services généraux</div>
+        <span class="badge badge-gold">Services généraux</span>
       </div>
 
     </div>
 
-    <div class="box" style="font-size:0.9rem; color:var(--muted); line-height:1.6;">
-      <strong style="color:var(--text); display:block; margin-bottom:6px;">Vous souhaitez devenir ambassadeur ?</strong>
-      Le réseau est ouvert à de nouveaux volontaires jusqu'à fin avril. Si vous êtes motivé(e) pour jouer ce rôle, parlez-en à votre manager ou contactez directement l'équipe projet via le formulaire de la FAQ.
+    <div class="info-block">
+      <div class="info-block-title">Vous souhaitez devenir ambassadeur ?</div>
+      <p>Le réseau est ouvert à de nouveaux volontaires jusqu'à fin avril. Si vous êtes motivé(e) pour jouer ce rôle, parlez-en à votre manager ou contactez directement l'équipe projet via le formulaire de la FAQ.</p>
     </div>
 
   </div>
 </div>
 
+
 <!-- ═══════════════════ PAGE : ÉQUIPE PROJET ═══════════════════ -->
 <div class="page" id="page-equipe">
   <div class="wrap">
-    <div class="page-header">
-      <div class="eyebrow">Projet XYZ — Organisation</div>
-      <h1>L'équipe projet</h1>
-      <p>Retrouvez ici les personnes qui pilotent le projet côté entreprise et les interlocuteurs du cabinet Parella qui accompagne la démarche de transformation des espaces de travail.</p>
+
+    <div class="page-hero">
+      <div>
+        <div class="hero-eyebrow">Projet XYZ — Organisation</div>
+        <h1>
+          <span class="h1-light">L'équipe</span>
+          projet
+          <span class="h1-rule"></span>
+        </h1>
+      </div>
+      <div class="hero-meta">
+        <p>Retrouvez ici les personnes qui pilotent le projet côté entreprise et les interlocuteurs du cabinet Parella qui accompagne la démarche de transformation des espaces de travail.</p>
+      </div>
     </div>
 
-    <div class="team-section-title">Équipe XYZ — Pilotage interne</div>
+    <div class="section-separator">Équipe XYZ — Pilotage interne</div>
 
     <div class="team-grid">
 
@@ -1689,11 +2290,11 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
 
     </div>
 
-    <div class="team-section-title" style="margin-top: 36px;">Cabinet Parella — Conseil & accompagnement</div>
+    <div class="section-separator" style="margin-top:40px;">Cabinet Parella — Conseil & accompagnement</div>
 
-    <div class="parella-banner">
-      <div class="parella-logo">🏛️</div>
-      <div>
+    <div class="parella-intro">
+      <div class="parella-icon"></div>
+      <div class="parella-text">
         <strong>Parella</strong> est le cabinet de conseil en immobilier de travail qui accompagne XYZ dans la conception des espaces, l'animation des ateliers de co-construction et la conduite du changement. Son équipe travaille en binôme avec l'équipe projet interne depuis le début du cadrage.
       </div>
     </div>
@@ -1747,15 +2348,16 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
 
     </div>
 
-    <div class="box" style="font-size:0.9rem; color:var(--muted); line-height:1.6; margin-top:8px;">
-      <strong style="color:var(--text); display:block; margin-bottom:6px;">Une question pour l'équipe projet ?</strong>
-      Vous pouvez contacter l'équipe via le formulaire disponible dans l'onglet FAQ. Toutes les demandes sont lues et traitées dans les meilleurs délais.
+    <div class="info-block" style="margin-top:16px;">
+      <div class="info-block-title">Une question pour l'équipe projet ?</div>
+      <p>Vous pouvez contacter l'équipe via le formulaire disponible dans l'onglet FAQ. Toutes les demandes sont lues et traitées dans les meilleurs délais.</p>
     </div>
 
   </div>
 </div>
 
-<!-- ═══════════════════ LIGHTBOX ZOOM ═══════════════════ -->
+
+<!-- ═══════════════════ LIGHTBOX ═══════════════════ -->
 <div class="lightbox" id="lightbox">
   <div class="lightbox-toolbar">
     <div class="lightbox-toolbar-title" id="lightboxTitle"></div>
@@ -1763,14 +2365,14 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
       <button class="lb-btn" id="lbZoomOut" title="Dézoomer">−</button>
       <span class="lb-zoom-label" id="lbZoomLabel">100%</span>
       <button class="lb-btn" id="lbZoomIn" title="Zoomer">+</button>
-      <button class="lb-btn" id="lbReset" title="Réinitialiser" style="font-size:0.75rem;">⟳</button>
-      <button class="lb-btn" id="lightboxClose" title="Fermer" style="margin-left:6px;">✕</button>
+      <button class="lb-btn" id="lbReset" title="Réinitialiser" style="font-size:0.7rem;">⟳</button>
+      <button class="lb-btn" id="lightboxClose" title="Fermer" style="margin-left:4px;">✕</button>
     </div>
   </div>
   <div class="lightbox-stage" id="lightboxStage">
-      <div class="lightbox-media-wrap" id="lightboxWrap">
-        <div id="lightboxMedia"></div>
-      </div>
+    <div class="lightbox-media-wrap" id="lightboxWrap">
+      <div id="lightboxMedia"></div>
+    </div>
   </div>
   <div class="lightbox-caption">
     <div id="lightboxCaption"></div>
@@ -1778,10 +2380,13 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
   </div>
 </div>
 
+
 <!-- ═══════════════════ SCRIPTS ═══════════════════ -->
 <script>
 
-  // ── NAVIGATION ────────────────────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════
+  // NAVIGATION
+  // ═══════════════════════════════════════════════════
   document.querySelectorAll(".nav-tab").forEach(tab => {
     tab.addEventListener("click", () => {
       document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
@@ -1792,30 +2397,32 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
     });
   });
 
-  // ── ARTICLES (accordéon) ─────────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════
+  // ARTICLES (accordéon)
+  // ═══════════════════════════════════════════════════
   document.querySelectorAll(".article").forEach(article => {
     article.querySelector(".article-header").addEventListener("click", () => {
       article.classList.toggle("open");
     });
   });
 
-  // ── FILTRES PLANS ─────────────────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════
+  // FILTRES PLANS
+  // ═══════════════════════════════════════════════════
   document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       const filter = btn.dataset.filter;
       document.querySelectorAll(".plan-card").forEach(card => {
-        if (filter === "all" || card.dataset.tags.includes(filter)) {
-          card.style.display = "";
-        } else {
-          card.style.display = "none";
-        }
+        card.style.display = (filter === "all" || card.dataset.tags.includes(filter)) ? "" : "none";
       });
     });
   });
 
-  // ── LIRE LA SUITE (plans) ─────────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════
+  // LIRE LA SUITE (plans)
+  // ═══════════════════════════════════════════════════
   document.querySelectorAll(".plan-read-more").forEach(btn => {
     btn.addEventListener("click", e => {
       e.stopPropagation();
@@ -1825,11 +2432,11 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
     });
   });
 
-  // ══════════════════════════════════════════════════════════════════════════════
-  // FAQ — CLÉ API GEMINI
-  // Remplacez cette valeur par votre clé depuis aistudio.google.com
-  const GEMINI_API_KEY = "COLLEZ-VOTRE-CLÉ-ICI";
-  // ══════════════════════════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════
+  // FAQ — CONFIG IA (optionnelle)
+  // ═══════════════════════════════════════════════════
+  const ENABLE_GEMINI  = false;
+  const GEMINI_API_KEY = "COLLEZ-VOTRE-CLÉ";
 
   const PROJECT_CONTEXT = `
 Tu es l'assistant d'information du projet de déménagement d'entreprise XYZ.
@@ -1840,34 +2447,27 @@ Tu ne dois jamais inventer de dates, de décisions ou d'engagements qui ne figur
 Tu réponds toujours en français, en 3 à 6 phrases maximum, de façon directe et utile.
 
 --- BASE DE CONNAISSANCES ---
-
 CALENDRIER
 - Le déménagement est prévu la semaine du 14 octobre.
 - Le phasage par équipe est en cours de finalisation. Toutes les équipes ne basculeront pas au même moment.
 - Les grandes étapes : information/cadrage, préparation logistique, tri/archivage, déménagement physique, installation, accompagnement post-arrivée.
 - Le jour J, une fiche pratique sera remise avec heure d'arrivée, point d'accueil, contacts sur place.
-
 AFFAIRES PERSONNELLES
 - Un guide de préparation sera transmis avant le déménagement : quoi emballer, quoi trier, ce qui est pris en charge.
 - Les objets personnels (photos, plantes) peuvent être apportés le jour J ou dans les jours suivants.
-
 RESTAURATION
 - Les modalités exactes de restauration ne sont pas encore arrêtées. Plusieurs options sont à l'étude.
 - Le dispositif de titres-restaurant ou remboursement repas n'est pas impacté par le déménagement.
-
 TRANSPORTS
 - La prise en charge des abonnements transport en commun reste inchangée.
 - Des solutions de navette ou covoiturage sont à l'étude selon les besoins identifiés.
 - Le temps de trajet est pris en compte. Les situations les plus impactantes feront l'objet d'un accompagnement.
-
 PARKING ET MOBILITÉS DOUCES
 - Des solutions de stationnement voiture sont prévues, périmètre exact à préciser.
 - Des espaces vélo sécurisés sont prévus, potentiellement avec vestiaires/douches. Modalités à préciser.
-
 TÉLÉTRAVAIL ET HORAIRES
 - Les accords de télétravail existants ne sont pas remis en cause par le déménagement.
 - Les politiques d'horaires flexibles continuent à s'appliquer.
-
 ESPACES DE TRAVAIL
 - Le nouveau site intègre des espaces de concentration (bulles, cabines phoniques, zones silencieuses).
 - Des espaces de convivialité sont prévus pour les pauses et échanges informels.
@@ -1875,28 +2475,22 @@ ESPACES DE TRAVAIL
 - Les principes d'occupation (flex office ou postes attribués) seront communiqués.
 - Le système de réservation des salles de réunion sera précisé avant la mise en service.
 - La qualité environnementale (lumière, ventilation, acoustique, température) a été prise en compte.
-
 INFORMATIQUE ET ÉQUIPEMENTS
 - Les accès, connexion et outils IT seront opérationnels à l'arrivée. Une équipe IT sera présente les premiers jours.
 - La continuité des lignes téléphoniques est prise en compte.
 - Le déménagement peut être l'occasion de renouveler une partie du parc informatique.
-
 BADGE ET ACCÈS
 - Les modalités d'accès (badges, droits, zones) sont en cours de finalisation. Un accueil sera prévu le premier matin.
-
 VISITES DU SITE
 - Des temps de découverte du site sont prévus avant l'installation définitive. Formats variés (visites physiques, supports visuels).
-
 SERVICES SUR SITE
 - Des services sont à l'étude : conciergerie, point colis, salle de sport/bien-être, espaces parents.
 - Des espaces dédiés au bien-être physique sont prévus (salle de sport, espace détente ou repos).
-
 SITUATIONS PARTICULIÈRES
 - Les situations individuelles (handicap, mobilité réduite, contrainte de santé) seront prises en compte. Prendre contact avec son RH.
 - Le site est conforme aux normes PMR.
 - Les situations impliquant des enfants ou des contraintes familiales peuvent être remontées aux RH.
 - Des espaces de retrait (prière, repos) sont intégrés dans la réflexion sur l'aménagement.
-
 ACCOMPAGNEMENT AU CHANGEMENT
 - Un plan de communication structuré est prévu : points d'étape réguliers, communications ciblées, supports accessibles.
 - Un réseau d'ambassadeurs volontaires est mis en place pour relayer les informations et remonter les préoccupations.
@@ -1906,174 +2500,295 @@ ACCOMPAGNEMENT AU CHANGEMENT
 - Les managers seront informés en priorité et disposeront de ressources dédiées.
 - Un accompagnement individuel est possible : entretien RH confidentiel, dispositif d'écoute psychologique si disponible.
 - Des enquêtes de satisfaction et retours post-installation sont prévus.
-- Les rumeurs peuvent être posées ici ou via le formulaire. Une réponse factuelle sera apportée.
-
 CONSULTATION ET PILOTAGE
 - Le projet est piloté par une équipe RH, Direction Immobilière et Services Généraux, avec le soutien de la Direction Générale.
 - Les instances représentatives du personnel (CSE/CSSCT) sont informées et consultées selon les obligations légales.
-- Des temps d'écoute et ateliers participatifs ont été ou seront organisés.
-
 ARCHIVAGE
 - Un plan d'archivage avec consignes de tri, numérisation et destruction sera communiqué avant le déménagement.
 - Les archives physiques à conserver seront prises en charge par les équipes de déménagement.
 `;
 
-  // ── INTENTS OFFICIELS ─────────────────────────────────────────────────────────
-  const intents = [
-    { name:"Date du déménagement", status:"Réponse confirmée", answer:"Le déménagement est actuellement prévu la semaine du 14 octobre.\n\nLa date précise de bascule par équipe sera confirmée dès que le planning logistique sera totalement sécurisé.", note:"Nous préférons partager une date confirmée plutôt qu'un calendrier prématuré qui devrait ensuite être corrigé.", keywords:["date","quand","demenagement","demenager","transfert","installation","semaine","arrivee","jour j","calendrier","planning"] },
-    { name:"Phasage du déménagement par équipe", status:"En attente", answer:"Le phasage précis par équipe est en cours de finalisation.\n\nToutes les entités ne basculeront pas nécessairement au même moment. L'objectif est de garantir une installation fluide, sans mettre les équipes en difficulté opérationnelle.", note:"Une communication spécifique précisera l'ordre de passage, les dates et les équipes concernées dès que le phasage sera stabilisé.", keywords:["phasage","ordre","ordre passage","equipe","equipes","service","qui demenage quand","quand mon equipe"] },
-    { name:"Grandes étapes du déménagement", status:"Réponse partielle", answer:"Le déménagement se prépare généralement en plusieurs temps :\n\n1. Information et cadrage du projet\n2. Préparation logistique et consignes pratiques\n3. Tri, archivage et préparation des postes\n4. Déménagement physique des équipes\n5. Installation sur le nouveau site\n6. Ajustements et accompagnement post-arrivée", note:"L'enjeu n'est pas seulement de changer de lieu, mais de permettre une appropriation progressive du nouveau cadre de travail.", keywords:["etapes","etape","process","processus","deroulement","phases","phase","organisation"] },
-    { name:"Que faire le jour J", status:"Réponse confirmée", answer:"Le jour du déménagement, les équipes concernées recevront une fiche pratique détaillant les actions attendues : heure d'arrivée recommandée, point d'accueil dédié, contacts sur place et déroulé de la journée.\n\nUn accompagnement physique sera assuré sur le site.", note:"Ce type de moment peut générer une certaine appréhension. Nous y sommes attentifs.", keywords:["jour j","jour demenagement","que faire","comment ca va se passer","le grand jour","premier jour"] },
-    { name:"Que faire de mes affaires personnelles", status:"Réponse confirmée", answer:"Un guide de préparation sera transmis avant le déménagement, précisant quoi emballer, quoi trier, et ce qui relève de la responsabilité des équipes de déménagement.\n\nLes objets personnels — photos, plantes — pourront être apportés le jour J ou dans les jours suivants.", note:"S'approprier un nouveau lieu prend du temps. Il n'y a pas de bonne ou de mauvaise façon de le faire.", keywords:["affaires","affaires personnelles","objets","plante","photo","decoration","mes affaires","emballer","carton","cartons"] },
-    { name:"Temps de trajet vers le nouveau site", status:"Réponse confirmée", answer:"Nous sommes conscients que le changement de site peut modifier les trajets quotidiens de certains collaborateurs.\n\nUne analyse des temps de trajet a été réalisée pour identifier les situations les plus impactantes. Des solutions d'accompagnement sont à l'étude pour les personnes les plus éloignées.", note:"Le trajet, ça compte. Ce n'est pas un détail.", keywords:["trajet","transport","navette","temps trajet","loin","proche","distance","chemin","route","rer","metro","bus","train","comment venir","acces transports"] },
-    { name:"Télétravail et jours sur site", status:"Réponse confirmée", answer:"Le déménagement n'entraîne pas de remise en cause des accords de télétravail en vigueur.\n\nLes règles applicables restent celles définies dans votre accord ou votre charte d'équipe.", note:"Le télétravail est devenu une composante importante de l'équilibre de nombreux collaborateurs. Nous en sommes conscients.", keywords:["teletravail","remote","travail distance","jours sur site","hybride","presentiel","jours bureau","travail maison","chez moi","home office"] },
-    { name:"Flexibilité des horaires", status:"Réponse confirmée", answer:"Les politiques d'horaires flexibles ne sont pas remises en cause par le déménagement.\n\nSi vous bénéficiez d'aménagements d'horaires dans votre équipe, ceux-ci continuent à s'appliquer.", note:"Nous savons que la rigidité des horaires peut peser lourd quand le trajet change.", keywords:["horaires","horaires flexibles","flexibilite","arriver plus tot","partir plus tard","amenagement horaires","souplesse"] },
-    { name:"Postes attribués ou flex office", status:"Réponse partielle", answer:"Les principes d'occupation des espaces seront précisés en fonction de l'organisation retenue sur le nouveau site.\n\nLe flex office intégral n'est pas le modèle retenu par défaut. Le sujet sera co-construit dans les ateliers d'avril.", note:"Une communication spécifique expliquera les règles de fonctionnement des espaces de travail.", keywords:["flex office","flexoffice","poste","bureau","place","attribution","desk","placement","poste attribue","mon bureau"] },
-    { name:"Espaces de concentration et calme", status:"Réponse confirmée", answer:"Le nouveau site intègre des espaces dédiés à la concentration individuelle — bulles de travail, zones silencieuses, cabines phoniques.", note:"Travailler dans un espace trop bruyant n'est pas une fatalité.", keywords:["concentration","calme","bruit","silence","open space","cabine","bulle","focus","isolement","travailler sereinement","phonique"] },
-    { name:"Réservation des salles de réunion", status:"Réponse partielle", answer:"Les salles de réunion seront intégrées dans un dispositif de réservation adapté aux usages du site.\n\nL'objectif est de permettre une utilisation lisible et cohérente de ces espaces.", note:"Les modalités pratiques de réservation seront précisées avant la mise en service.", keywords:["salle","salles","reunion","reserver","booking","meeting room","salle de reunion"] },
-    { name:"Espaces de convivialité", status:"Réponse confirmée", answer:"Oui. Le nouveau site intégrera plusieurs espaces pensés pour les temps informels, les pauses et les échanges du quotidien.", note:"Le déménagement peut être une occasion de recréer du lien. Nous voulons qu'elle soit réelle.", keywords:["convivialite","pause","cafe","espace informel","detente","pause cafe","conviviaux","communs","terrasse","lounge"] },
-    { name:"Casier ou rangement personnel", status:"Réponse partielle", answer:"Des solutions de rangement personnel sont prévues dans le cadre du projet.\n\nL'idée est que chacun puisse avoir un espace bien à soi, même dans un environnement partagé.", note:"Une information complémentaire sera communiquée au moment opportun.", keywords:["casier","casiers","rangement","locker","affaires personnelles","affaires","stockage","placard","espace personnel"] },
-    { name:"Offre de restauration", status:"En attente", answer:"Les modalités exactes de restauration ne sont pas encore arrêtées à ce stade.\n\nPlusieurs options sont actuellement à l'étude. Nous savons que le déjeuner, c'est aussi un moment de décompression — pas juste un ravitaillement.", note:"Nous reviendrons vers vous dès que des arbitrages plus précis auront été rendus.", keywords:["restauration","manger","repas","dejeuner","cantine","food","restaurant","pause dejeuner","titres restaurant","ticket restaurant","tr","lunch"] },
-    { name:"Remboursement des transports", status:"Réponse confirmée", answer:"La prise en charge des abonnements de transport en commun reste applicable dans les mêmes conditions qu'aujourd'hui.\n\nSi le changement de site entraîne un surcoût, rapprochez-vous de votre RH.", note:"Le coût du trajet ne doit pas devenir une charge supplémentaire.", keywords:["transport","navigo","abonnement transport","remboursement transport","prise en charge transport","frais transport","pass navigo"] },
-    { name:"Parking voiture", status:"Réponse partielle", answer:"Des solutions de stationnement sont prévues, mais leur périmètre exact et leurs modalités d'accès restent encore à préciser.", note:"Une information détaillée sera communiquée dès que les règles d'accès seront stabilisées.", keywords:["parking","voiture","stationnement","se garer","garage","place voiture","place parking"] },
-    { name:"Parking vélo et mobilités douces", status:"Réponse partielle", answer:"Le projet prévoit d'intégrer des solutions adaptées aux mobilités douces, notamment pour les collaborateurs venant à vélo.\n\nCela inclut un espace de stationnement sécurisé, et potentiellement des vestiaires ou des douches.", note:"Des précisions seront apportées dès que le dispositif final sera stabilisé.", keywords:["velo","parking velo","mobilite","mobilite douce","trottinette","deux roues","cycliste","bicyclette","douche","vestiaire"] },
-    { name:"Visites du site avant l'arrivée", status:"Réponse confirmée", answer:"Oui, le projet prévoit des temps de découverte du nouveau site avant l'installation définitive.\n\nVoir un lieu avant d'y travailler aide à se projeter, à poser des questions, à se rassurer.", note:"Le calendrier de ces temps sera communiqué dans une prochaine étape.", keywords:["visite","visites","voir","decouverte","venir voir","visiter","decouvrir le site","avant d arriver"] },
-    { name:"Badge et accès au nouveau site", status:"En attente", answer:"Les modalités d'accès au nouveau site sont en cours de stabilisation.\n\nUn accueil sera organisé pour les premières arrivées afin que personne ne se retrouve bloqué le premier matin.", note:"Une communication dédiée précisera les conditions d'accès avant l'arrivée sur site.", keywords:["badge","acces","entrer","entree","controle acces","droits acces","ouverture","acces site"] },
-    { name:"Connexion et outils IT à l'arrivée", status:"Réponse confirmée", answer:"Tout est mis en œuvre pour que les accès, la connexion et les outils de travail soient opérationnels à l'arrivée.\n\nUne équipe IT sera présente les premiers jours pour traiter les problèmes en temps réel.", note:"Si certains ajustements devaient intervenir au démarrage, ils seraient signalés clairement et traités en priorité.", keywords:["wifi","connexion","reseau","outlook","teams","outils","informatique","it","equipements","equipement","materiel","ordinateur","telephone","poste informatique"] },
-    { name:"J'ai peur du changement", status:"Réponse confirmée", answer:"Ce que vous ressentez est normal. Un déménagement d'entreprise, ce n'est pas juste une adresse qui change — c'est un quotidien qui se recompose.\n\nCe projet a justement été conçu pour que la transition soit accompagnée et progressive.", note:"Si vous traversez une période difficile en lien avec ce projet, parlez-en à votre manager ou à votre RH.", keywords:["peur","angoisse","stress","anxieux","anxiete","inquiet","apprehension","perturbe","bouleverse","destabilise","mal a l aise","pas envie","contre"] },
-    { name:"Ambassadeurs du projet", status:"Réponse confirmée", answer:"Un réseau d'ambassadeurs volontaires est mis en place. Ce sont des collaborateurs issus de différentes équipes qui jouent un rôle de relais de proximité.\n\nPour rejoindre ce réseau ou identifier votre ambassadeur, rapprochez-vous de votre RH.", note:"Les ambassadeurs ne sont pas des communicants. Ce sont des collègues qui ont accepté de jouer un rôle actif dans la transition.", keywords:["ambassadeur","ambassadeurs","relais","referent projet","reseau ambassadeurs","volontaire","correspondant"] },
-    { name:"Ateliers de personnalisation des espaces", status:"Réponse confirmée", answer:"Des ateliers de personnalisation sont prévus pour permettre aux équipes de s'approprier leur futur espace avant l'installation.\n\nCe n'est pas de la consultation cosmétique — les résultats sont intégrés dans l'aménagement final.", note:"Les dates et formats seront communiqués dès que le calendrier sera stabilisé.", keywords:["atelier","ateliers","personnalisation","personnaliser","co construction","workshop","participation","choisir","s exprimer","amenagement"] },
-    { name:"Règles de vie sur le nouveau site", status:"Réponse partielle", answer:"Les règles de vie dans les espaces partagés ne seront pas imposées d'en haut. Elles seront co-construites avec les équipes lors des ateliers d'avril.", note:"Des règles de vie ne fonctionnent que si les personnes concernées se les sont appropriées.", keywords:["regles de vie","regles","charte","charte usage","comportement","vivre ensemble","collectif","normes","bonnes pratiques","respect","espaces partages"] },
-    { name:"Qui pilote le projet", status:"Réponse confirmée", answer:"Le projet est piloté par une équipe dédiée composée de représentants des Ressources Humaines, de la Direction Immobilière et des Services Généraux, avec le soutien de la Direction Générale.", note:"Si vous ne savez pas à qui vous adresser, le formulaire ci-dessous est le bon point d'entrée.", keywords:["qui pilote","qui gere","responsable projet","interlocuteur","chef projet","equipe projet","contact projet","pilotage"] },
-    { name:"Archivage et gestion des documents", status:"Réponse confirmée", answer:"Un plan d'archivage sera communiqué avant le déménagement, avec des consignes précises sur ce qui doit être trié, numérisé ou détruit.\n\nLes archives physiques à conserver seront prises en charge par les équipes de déménagement.", note:"Prenez le temps de passer vos documents en revue avant le déménagement. C'est souvent l'occasion de désencombrer.", keywords:["archives","archivage","documents","papiers","dossiers","classeur","scanner","numerisation","destruction","tri"] },
-    { name:"Accessibilité du site (PMR)", status:"Réponse confirmée", answer:"Le nouveau site est conforme aux normes d'accessibilité en vigueur pour les personnes à mobilité réduite.\n\nCela comprend l'accès aux entrées, aux espaces de travail, aux sanitaires et aux salles de réunion.", note:"L'accessibilité ne se résume pas à la conformité réglementaire. Nous souhaitons que chacun puisse circuler dans des conditions dignes.", keywords:["pmr","accessibilite","fauteuil roulant","handicap moteur","rampe","ascenseur","mobilite reduite","acces handicape"] },
-    { name:"Rumeurs et informations non officielles", status:"Réponse confirmée", answer:"Dans tout projet de cette nature, des rumeurs circulent. Si vous avez entendu quelque chose qui vous préoccupe, posez-le ici ou via le formulaire. Nous nous engageons à répondre factuellement.", note:"L'incertitude génère des récits. Nous préférons les récits fondés sur des faits.", keywords:["rumeur","rumeurs","ouie dire","on dit que","bruit de couloir","entendu dire","vrai ou faux","intox","fake","pas vrai","faux","dementi"] },
-    { name:"Communication à venir", status:"Réponse confirmée", answer:"Toutes les réponses ne peuvent pas être données immédiatement. L'engagement est clair : partager une information fiable et progressive, plutôt que multiplier des messages incomplets.", note:"Cet espace a justement vocation à évoluer à mesure que le projet avance.", keywords:["plus d infos","prochaines communications","quand saura t on","infos a venir","communication","informations"] },
+  // ═══════════════════════════════════════════════════
+  // BASE FAQ
+  // ═══════════════════════════════════════════════════
+  const faqData = [
+    { id:"date-demenagement", title:"Date du déménagement", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Le déménagement est actuellement prévu la semaine du 14 octobre.\n\nLa date précise de bascule par équipe sera confirmée dès que le planning logistique sera totalement sécurisé.",
+      note:"Nous préférons partager une date confirmée plutôt qu'un calendrier prématuré qui devrait ensuite être corrigé.",
+      keywords:["date","quand","demenagement","demenager","transfert","installation","semaine","arrivee","jour j","calendrier","planning"] },
+    { id:"phasage", title:"Phasage par équipe", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Le phasage précis par équipe est en cours de finalisation.\n\nToutes les entités ne basculeront pas nécessairement au même moment. L'objectif est de garantir une installation fluide, sans mettre les équipes en difficulté opérationnelle.",
+      note:"Une communication spécifique précisera l'ordre de passage, les dates et les équipes concernées dès que le phasage sera stabilisé.",
+      keywords:["phasage","ordre","ordre passage","equipe","equipes","service","qui demenage quand","quand mon equipe"] },
+    { id:"etapes", title:"Grandes étapes", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Le déménagement se prépare en plusieurs temps :\n\n1. Information et cadrage du projet\n2. Préparation logistique et consignes pratiques\n3. Tri, archivage et préparation des postes\n4. Déménagement physique des équipes\n5. Installation sur le nouveau site\n6. Ajustements et accompagnement post-arrivée",
+      note:"L'enjeu n'est pas seulement de changer de lieu, mais de permettre une appropriation progressive du nouveau cadre de travail.",
+      keywords:["etapes","etape","process","processus","deroulement","phases","phase","organisation"] },
+    { id:"jour-j", title:"Que faire le jour J", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Le jour du déménagement, les équipes concernées recevront une fiche pratique détaillant les actions attendues : heure d'arrivée recommandée, point d'accueil dédié, contacts sur place et déroulé de la journée.\n\nUn accompagnement physique sera assuré sur le site.",
+      note:"Ce type de moment peut générer une certaine appréhension. Nous y sommes attentifs.",
+      keywords:["jour j","jour demenagement","que faire","comment ca va se passer","le grand jour","premier jour"] },
+    { id:"affaires-personnelles", title:"Affaires personnelles", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Un guide de préparation sera transmis avant le déménagement, précisant quoi emballer, quoi trier, et ce qui relève de la responsabilité des équipes de déménagement.\n\nLes objets personnels — photos, plantes — pourront être apportés le jour J ou dans les jours suivants.",
+      note:"S'approprier un nouveau lieu prend du temps. Il n'y a pas de bonne ou de mauvaise façon de le faire.",
+      keywords:["affaires","affaires personnelles","objets","plante","photo","decoration","mes affaires","emballer","carton","cartons"] },
+    { id:"trajet", title:"Temps de trajet", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Nous sommes conscients que le changement de site peut modifier les trajets quotidiens de certains collaborateurs.\n\nUne analyse des temps de trajet a été réalisée pour identifier les situations les plus impactantes. Des solutions d'accompagnement sont à l'étude pour les personnes les plus éloignées.",
+      note:"Le trajet, ça compte. Ce n'est pas un détail.",
+      keywords:["trajet","transport","navette","temps trajet","loin","proche","distance","chemin","route","rer","metro","bus","train","comment venir","acces transports"] },
+    { id:"teletravail", title:"Télétravail", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Le déménagement n'entraîne pas de remise en cause des accords de télétravail en vigueur.\n\nLes règles applicables restent celles définies dans votre accord ou votre charte d'équipe.",
+      note:"Le télétravail est devenu une composante importante de l'équilibre de nombreux collaborateurs. Nous en sommes conscients.",
+      keywords:["teletravail","remote","travail distance","jours sur site","hybride","presentiel","jours bureau","travail maison","chez moi","home office"] },
+    { id:"horaires", title:"Flexibilité des horaires", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Les politiques d'horaires flexibles ne sont pas remises en cause par le déménagement.\n\nSi vous bénéficiez d'aménagements d'horaires dans votre équipe, ceux-ci continuent à s'appliquer.",
+      note:"Nous savons que la rigidité des horaires peut peser lourd quand le trajet change.",
+      keywords:["horaires","horaires flexibles","flexibilite","arriver plus tot","partir plus tard","amenagement horaires","souplesse"] },
+    { id:"flex-office", title:"Postes attribués ou flex office", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Les principes d'occupation des espaces seront précisés en fonction de l'organisation retenue sur le nouveau site.\n\nLe flex office intégral n'est pas le modèle retenu par défaut. Le sujet sera co-construit dans les ateliers d'avril.",
+      note:"Une communication spécifique expliquera les règles de fonctionnement des espaces de travail.",
+      keywords:["flex office","flexoffice","poste","bureau","place","attribution","desk","placement","poste attribue","mon bureau"] },
+    { id:"concentration", title:"Espaces de concentration", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Le nouveau site intègre des espaces dédiés à la concentration individuelle — bulles de travail, zones silencieuses, cabines phoniques.",
+      note:"Travailler dans un espace trop bruyant n'est pas une fatalité.",
+      keywords:["concentration","calme","bruit","silence","open space","cabine","bulle","focus","isolement","travailler sereinement","phonique"] },
+    { id:"salles-reunion", title:"Salles de réunion", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Les salles de réunion seront intégrées dans un dispositif de réservation adapté aux usages du site.\n\nL'objectif est de permettre une utilisation lisible et cohérente de ces espaces.",
+      note:"Les modalités pratiques de réservation seront précisées avant la mise en service.",
+      keywords:["salle","salles","reunion","reserver","booking","meeting room","salle de reunion"] },
+    { id:"convivialite", title:"Espaces de convivialité", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Oui. Le nouveau site intégrera plusieurs espaces pensés pour les temps informels, les pauses et les échanges du quotidien.",
+      note:"Le déménagement peut être une occasion de recréer du lien. Nous voulons qu'elle soit réelle.",
+      keywords:["convivialite","pause","cafe","espace informel","detente","pause cafe","conviviaux","communs","terrasse","lounge"] },
+    { id:"casier", title:"Casiers et rangements", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Des solutions de rangement personnel sont prévues dans le cadre du projet.\n\nL'idée est que chacun puisse avoir un espace bien à soi, même dans un environnement partagé.",
+      note:"Une information complémentaire sera communiquée au moment opportun.",
+      keywords:["casier","casiers","rangement","locker","affaires personnelles","affaires","stockage","placard","espace personnel"] },
+    { id:"restauration", title:"Offre de restauration", status:"waiting", statusLabel:"En attente de décision",
+      answer:"Les modalités exactes de restauration ne sont pas encore arrêtées à ce stade.\n\nPlusieurs options sont actuellement à l'étude. Nous savons que le déjeuner, c'est aussi un moment de décompression — pas juste un ravitaillement.",
+      note:"Nous reviendrons vers vous dès que des arbitrages plus précis auront été rendus.",
+      keywords:["restauration","manger","repas","dejeuner","cantine","food","restaurant","pause dejeuner","titres restaurant","ticket restaurant","tr","lunch"] },
+    { id:"transport-remboursement", title:"Remboursement des transports", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"La prise en charge des abonnements de transport en commun reste applicable dans les mêmes conditions qu'aujourd'hui.\n\nSi le changement de site entraîne un surcoût, rapprochez-vous de votre RH.",
+      note:"Le coût du trajet ne doit pas devenir une charge supplémentaire.",
+      keywords:["transport","navigo","abonnement transport","remboursement transport","prise en charge transport","frais transport","pass navigo"] },
+    { id:"parking", title:"Parking voiture", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Des solutions de stationnement sont prévues, mais leur périmètre exact et leurs modalités d'accès restent encore à préciser.",
+      note:"Une information détaillée sera communiquée dès que les règles d'accès seront stabilisées.",
+      keywords:["parking","voiture","stationnement","se garer","garage","place voiture","place parking"] },
+    { id:"velo", title:"Parking vélo et mobilités douces", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Le projet prévoit d'intégrer des solutions adaptées aux mobilités douces, notamment pour les collaborateurs venant à vélo.\n\nCela inclut un espace de stationnement sécurisé, et potentiellement des vestiaires ou des douches.",
+      note:"Des précisions seront apportées dès que le dispositif final sera stabilisé.",
+      keywords:["velo","parking velo","mobilite","mobilite douce","trottinette","deux roues","cycliste","bicyclette","douche","vestiaire"] },
+    { id:"visites", title:"Visites du site", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Oui, le projet prévoit des temps de découverte du nouveau site avant l'installation définitive.\n\nVoir un lieu avant d'y travailler aide à se projeter, à poser des questions, à se rassurer.",
+      note:"Le calendrier de ces temps sera communiqué dans une prochaine étape.",
+      keywords:["visite","visites","voir","decouverte","venir voir","visiter","decouvrir le site","avant d arriver"] },
+    { id:"badge", title:"Badge et accès", status:"waiting", statusLabel:"En attente de décision",
+      answer:"Les modalités d'accès au nouveau site sont en cours de stabilisation.\n\nUn accueil sera organisé pour les premières arrivées afin que personne ne se retrouve bloqué le premier matin.",
+      note:"Une communication dédiée précisera les conditions d'accès avant l'arrivée sur site.",
+      keywords:["badge","acces","entrer","entree","controle acces","droits acces","ouverture","acces site"] },
+    { id:"it", title:"Informatique et équipements", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Tout est mis en œuvre pour que les accès, la connexion et les outils de travail soient opérationnels à l'arrivée.\n\nUne équipe IT sera présente les premiers jours pour traiter les problèmes en temps réel.",
+      note:"Si certains ajustements devaient intervenir au démarrage, ils seraient signalés clairement et traités en priorité.",
+      keywords:["wifi","connexion","reseau","outlook","teams","outils","informatique","it","equipements","equipement","materiel","ordinateur","telephone","poste informatique"] },
+    { id:"apprehension", title:"Appréhension face au changement", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Ce que vous ressentez est normal. Un déménagement d'entreprise, ce n'est pas juste une adresse qui change — c'est un quotidien qui se recompose.\n\nCe projet a justement été conçu pour que la transition soit accompagnée et progressive.",
+      note:"Si vous traversez une période difficile en lien avec ce projet, parlez-en à votre manager ou à votre RH.",
+      keywords:["peur","angoisse","stress","anxieux","anxiete","inquiet","apprehension","perturbe","bouleverse","destabilise","mal a l aise","pas envie","contre"] },
+    { id:"ambassadeurs", title:"Ambassadeurs du projet", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Un réseau d'ambassadeurs volontaires est mis en place. Ce sont des collaborateurs issus de différentes équipes qui jouent un rôle de relais de proximité.\n\nPour rejoindre ce réseau ou identifier votre ambassadeur, rapprochez-vous de votre RH.",
+      note:"Les ambassadeurs ne sont pas des communicants. Ce sont des collègues qui ont accepté de jouer un rôle actif dans la transition.",
+      keywords:["ambassadeur","ambassadeurs","relais","referent projet","reseau ambassadeurs","volontaire","correspondant"] },
+    { id:"ateliers", title:"Ateliers de personnalisation", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Des ateliers de personnalisation sont prévus pour permettre aux équipes de s'approprier leur futur espace avant l'installation.\n\nCe n'est pas de la consultation cosmétique — les résultats sont intégrés dans l'aménagement final.",
+      note:"Les dates et formats seront communiqués dès que le calendrier sera stabilisé.",
+      keywords:["atelier","ateliers","personnalisation","personnaliser","co construction","workshop","participation","choisir","s exprimer","amenagement"] },
+    { id:"regles-vie", title:"Règles de vie", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Les règles de vie dans les espaces partagés ne seront pas imposées d'en haut. Elles seront co-construites avec les équipes lors des ateliers d'avril.",
+      note:"Des règles de vie ne fonctionnent que si les personnes concernées se les sont appropriées.",
+      keywords:["regles de vie","regles","charte","charte usage","comportement","vivre ensemble","collectif","normes","bonnes pratiques","respect","espaces partages"] },
+    { id:"pilotage", title:"Pilotage du projet", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Le projet est piloté par une équipe dédiée composée de représentants des Ressources Humaines, de la Direction Immobilière et des Services Généraux, avec le soutien de la Direction Générale.",
+      note:"Si vous ne savez pas à qui vous adresser, le formulaire ci-dessous est le bon point d'entrée.",
+      keywords:["qui pilote","qui gere","responsable projet","interlocuteur","chef projet","equipe projet","contact projet","pilotage"] },
+    { id:"archivage", title:"Archivage et documents", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Un plan d'archivage sera communiqué avant le déménagement, avec des consignes précises sur ce qui doit être trié, numérisé ou détruit.\n\nLes archives physiques à conserver seront prises en charge par les équipes de déménagement.",
+      note:"Prenez le temps de passer vos documents en revue avant le déménagement. C'est souvent l'occasion de désencombrer.",
+      keywords:["archives","archivage","documents","papiers","dossiers","classeur","scanner","numerisation","destruction","tri"] },
+    { id:"pmr", title:"Accessibilité (PMR)", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Le nouveau site est conforme aux normes d'accessibilité en vigueur pour les personnes à mobilité réduite.\n\nCela comprend l'accès aux entrées, aux espaces de travail, aux sanitaires et aux salles de réunion.",
+      note:"L'accessibilité ne se résume pas à la conformité réglementaire. Nous souhaitons que chacun puisse circuler dans des conditions dignes.",
+      keywords:["pmr","accessibilite","fauteuil roulant","handicap moteur","rampe","ascenseur","mobilite reduite","acces handicape"] },
+    { id:"rumeurs", title:"Rumeurs et informations", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Dans tout projet de cette nature, des rumeurs circulent. Si vous avez entendu quelque chose qui vous préoccupe, posez-le ici ou via le formulaire. Nous nous engageons à répondre factuellement.",
+      note:"L'incertitude génère des récits. Nous préférons les récits fondés sur des faits.",
+      keywords:["rumeur","rumeurs","ouie dire","on dit que","bruit de couloir","entendu dire","vrai ou faux","intox","fake","pas vrai","faux","dementi"] },
+    { id:"communication", title:"Communications à venir", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Toutes les réponses ne peuvent pas être données immédiatement. L'engagement est clair : partager une information fiable et progressive, plutôt que multiplier des messages incomplets.",
+      note:"Cet espace a justement vocation à évoluer à mesure que le projet avance.",
+      keywords:["plus d infos","prochaines communications","quand saura t on","infos a venir","communication","informations"] }
   ];
 
-  // ── MOTEUR DE MATCHING ────────────────────────────────────────────────────────
-  const stopWords = new Set(["ou","où","est","ce","que","qu","on","va","je","tu","il","elle","nous","vous","ils","elles","le","la","les","un","une","des","du","de","d","a","au","aux","en","dans","sur","pour","avec","et","mon","ma","mes","notre","nos","votre","vos","y","aura","t","sera","seront","sont","avoir","etre","quels","quelle","quelles","proposes","prevu","prevus"]);
+  // ═══════════════════════════════════════════════════
+  // MOTEUR DE MATCHING
+  // ═══════════════════════════════════════════════════
+  const stopWords = new Set([
+    "ou","où","est","ce","que","qu","on","va","je","tu","il","elle","nous","vous",
+    "ils","elles","le","la","les","un","une","des","du","de","d","a","au","aux",
+    "en","dans","sur","pour","avec","et","mon","ma","mes","notre","nos","votre",
+    "vos","y","aura","t","sera","seront","sont","avoir","etre","quels","quelle",
+    "quelles","proposes","prevu","prevus","comment","quel"
+  ]);
 
   const synonymMap = {
-    cantine:"restauration",manger:"restauration",repas:"restauration",dejeuner:"restauration",restaurant:"restauration",food:"restauration",lunch:"restauration",tr:"restauration",
+    cantine:"restauration",manger:"restauration",repas:"restauration",
+    dejeuner:"restauration",restaurant:"restauration",food:"restauration",lunch:"restauration",tr:"restauration",
     demenager:"demenagement",transfert:"demenagement",calendrier:"demenagement",planning:"demenagement",
     visite:"visites",visiter:"visites",decouverte:"visites",
     badge:"acces",entrer:"acces",entree:"acces",
-    wifi:"informatique",reseau:"informatique",teams:"informatique",outlook:"informatique",it:"informatique",equipement:"informatique",equipements:"informatique",materiel:"informatique",ordinateur:"informatique",telephone:"informatique",outils:"informatique",dsi:"informatique",ecran:"informatique",
+    wifi:"informatique",reseau:"informatique",teams:"informatique",outlook:"informatique",it:"informatique",
+    equipement:"informatique",equipements:"informatique",materiel:"informatique",ordinateur:"informatique",
+    telephone:"informatique",outils:"informatique",
     parking:"stationnement",voiture:"stationnement",garage:"stationnement",
     velo:"mobilite",bicyclette:"mobilite",cycliste:"mobilite",trottinette:"mobilite",douche:"mobilite",vestiaire:"mobilite",
-    navigo:"transport",metro:"transport",rer:"transport",bus:"transport",train:"transport",abonnement:"transport",trajet:"transport",navette:"transport",covoiturage:"transport",
+    navigo:"transport",metro:"transport",rer:"transport",bus:"transport",train:"transport",
+    abonnement:"transport",trajet:"transport",navette:"transport",covoiturage:"transport",
     remote:"teletravail",maison:"teletravail",presentiel:"teletravail",hybride:"teletravail",
     horaire:"horaires",souplesse:"horaires",flexible:"horaires",
     bureau:"poste",place:"poste",desk:"poste",flex:"flexoffice",flexoffice:"flexoffice",
     salle:"reunion",salles:"reunion",booking:"reunion",
     casier:"rangement",casiers:"rangement",locker:"rangement",stockage:"rangement",placard:"rangement",
     bruit:"concentration",silence:"concentration",cabine:"concentration",bulle:"concentration",focus:"concentration",phonique:"concentration",
-    sport:"bienetre",fitness:"bienetre",gym:"bienetre",meditation:"bienetre",yoga:"bienetre",
-    creche:"parentalite",enfant:"parentalite",famille:"parentalite",bebe:"parentalite",
-    pmr:"accessibilite",fauteuil:"accessibilite",handicap:"accessibilite",ascenseur:"accessibilite",rampe:"accessibilite",
     peur:"resistance",angoisse:"resistance",stress:"resistance",anxieux:"resistance",apprehension:"resistance",inquiet:"resistance",
-    collegues:"lien",liens:"lien",relation:"lien",isole:"lien",
-    cse:"consultation",syndicat:"consultation",delegue:"consultation",cssct:"consultation",elu:"consultation",
     ambassadeur:"ambassadeurs",relais:"ambassadeurs",referent:"ambassadeurs",volontaire:"ambassadeurs",
     atelier:"ateliers",workshop:"ateliers",
     charte:"regles",comportement:"regles",normes:"regles",
-    formation:"formation",tutoriel:"formation",onboarding:"formation",
-    manager:"management",managers:"management",encadrement:"management",
-    feedback:"feedback",retour:"feedback",bilan:"feedback",
     rumeur:"rumeurs",intox:"rumeurs",
     archives:"archivage",documents:"archivage",papiers:"archivage",dossiers:"archivage",scanner:"archivage",destruction:"archivage",
+    pmr:"accessibilite",fauteuil:"accessibilite",handicap:"accessibilite",ascenseur:"accessibilite"
   };
 
   function normalize(text) {
-    return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
+    return text.toLowerCase().normalize("NFD")
+      .replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
   }
 
   function tokenize(text) {
-    return normalize(text).split(" ").filter(w => w && !stopWords.has(w)).map(w => synonymMap[w] || w);
+    return normalize(text).split(" ")
+      .filter(w => w && !stopWords.has(w))
+      .map(w => synonymMap[w] || w);
   }
 
-  function matchIntent(question) {
+  function matchFaq(question) {
     const tokens = tokenize(question);
-    const normQ = normalize(question);
+    const normQ  = normalize(question);
     let best = null, bestScore = 0;
-    intents.forEach(intent => {
+    faqData.forEach(entry => {
       let score = 0;
-      intent.keywords.forEach(kw => {
+      entry.keywords.forEach(kw => {
         tokenize(kw).forEach(k => { if (tokens.includes(k)) score += 3; });
         const nk = normalize(kw);
         if (nk.length > 3 && normQ.includes(nk)) score += 4;
       });
-      if (score > bestScore) { bestScore = score; best = intent; }
+      if (score > bestScore) { bestScore = score; best = entry; }
     });
     return bestScore >= 6 ? best : null;
   }
 
-  // ── GEMINI ────────────────────────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════
+  // GEMINI (optionnel)
+  // ═══════════════════════════════════════════════════
   async function askGemini(question) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-    const body = { contents:[{parts:[{text: PROJECT_CONTEXT + "\n\n--- QUESTION DU COLLABORATEUR ---\n" + question}]}], generationConfig:{temperature:0.3,maxOutputTokens:400} };
-    const res = await fetch(url, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body) });
-    if (!res.ok) throw new Error("Erreur API Gemini : " + res.status);
+    const body = {
+      contents:[{parts:[{text: PROJECT_CONTEXT+"\n\n--- QUESTION DU COLLABORATEUR ---\n"+question}]}],
+      generationConfig:{temperature:0.3,maxOutputTokens:400}
+    };
+    const res = await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    if (!res.ok) throw new Error("Erreur Gemini : "+res.status);
     const data = await res.json();
     return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
   }
 
-  // ── FAQ INTERFACE ─────────────────────────────────────────────────────────────
-  const questionInput  = document.getElementById("questionInput");
-  const askBtn         = document.getElementById("askBtn");
-  const resultBox      = document.getElementById("resultBox");
-  const notFoundBox    = document.getElementById("notFoundBox");
-  const loadingBox     = document.getElementById("loadingBox");
-  const resultQuestion = document.getElementById("resultQuestion");
-  const resultStatus   = document.getElementById("resultStatus");
-  const resultAnswer   = document.getElementById("resultAnswer");
-  const resultNote     = document.getElementById("resultNote");
+  // ═══════════════════════════════════════════════════
+  // FAQ INTERFACE
+  // ═══════════════════════════════════════════════════
+  const questionInput = document.getElementById("questionInput");
+  const askBtn        = document.getElementById("askBtn");
+  const resultBox     = document.getElementById("resultBox");
+  const notFoundBox   = document.getElementById("notFoundBox");
+  const loadingBox    = document.getElementById("loadingBox");
+  const resultQ       = document.getElementById("resultQuestion");
+  const resultStatus  = document.getElementById("resultStatus");
+  const resultAnswer  = document.getElementById("resultAnswer");
+  const resultNote    = document.getElementById("resultNote");
 
-  function showLoading(on) {
-    loadingBox.style.display  = on ? "block" : "none";
-    resultBox.style.display   = "none";
-    notFoundBox.style.display = "none";
-    askBtn.disabled           = on;
+  function hideAll() {
+    resultBox.style.display = notFoundBox.style.display = loadingBox.style.display = "none";
   }
 
-  function showResult(userQuestion, answer, status, note) {
-    resultQuestion.textContent = "Question : " + userQuestion;
-    resultStatus.textContent   = status;
-    resultAnswer.textContent   = answer;
-    resultNote.textContent     = note;
-    resultBox.style.display    = "block";
-    notFoundBox.style.display  = "none";
+  function showLoading(on) {
+    hideAll();
+    if (on) loadingBox.style.display = "block";
+    askBtn.disabled = on;
+  }
+
+  function showResult(question, entry) {
+    hideAll();
+    resultQ.textContent = question;
+    resultStatus.className   = "faq-meta " + entry.status;
+    resultStatus.textContent = entry.statusLabel;
+    resultAnswer.textContent = entry.answer;
+    resultNote.textContent   = entry.note || "";
+    resultNote.style.display = entry.note ? "block" : "none";
+    resultBox.style.display  = "block";
+    resultBox.scrollIntoView({ behavior:"smooth", block:"nearest" });
+  }
+
+  function showAiResult(question, answerText) {
+    hideAll();
+    resultQ.textContent = question;
+    resultStatus.className   = "faq-meta ai";
+    resultStatus.textContent = "Réponse générée par IA";
+    resultAnswer.textContent = answerText;
+    resultNote.textContent   = "Cette réponse est produite à partir des informations disponibles sur le projet. Si elle ne répond pas précisément à votre situation, utilisez le formulaire ci-dessous.";
+    resultNote.style.display = "block";
+    resultBox.style.display  = "block";
     resultBox.scrollIntoView({ behavior:"smooth", block:"nearest" });
   }
 
   function showNotFound() {
-    resultBox.style.display   = "none";
+    hideAll();
     notFoundBox.style.display = "block";
     notFoundBox.scrollIntoView({ behavior:"smooth", block:"nearest" });
   }
 
   async function handleQuestion(question) {
     if (!question.trim()) return;
-    const intent = matchIntent(question);
-    if (intent) { showResult(question, intent.answer, intent.status, intent.note); return; }
-    showLoading(true);
-    try {
-      const aiAnswer = await askGemini(question);
-      showLoading(false);
-      if (aiAnswer) {
-        showResult(question, aiAnswer, "Réponse générée", "Cette réponse est produite à partir des informations disponibles sur le projet. Si elle ne répond pas précisément à votre situation, utilisez le formulaire ci-dessous.");
-      } else { showNotFound(); }
-    } catch (err) { showLoading(false); showNotFound(); console.error(err); }
+    const match = matchFaq(question);
+    if (match) { showResult(question, match); return; }
+    if (ENABLE_GEMINI) {
+      showLoading(true);
+      try {
+        const ai = await askGemini(question);
+        showLoading(false);
+        ai ? showAiResult(question, ai) : showNotFound();
+      } catch(e) { showLoading(false); showNotFound(); console.error(e); }
+      return;
+    }
+    showNotFound();
   }
 
   askBtn.addEventListener("click", () => handleQuestion(questionInput.value.trim()));
-  questionInput.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); askBtn.click(); } });
+  questionInput.addEventListener("keydown", e => { if (e.key==="Enter") { e.preventDefault(); askBtn.click(); } });
   document.querySelectorAll(".suggestion").forEach(btn => {
     btn.addEventListener("click", () => { questionInput.value = btn.dataset.question; handleQuestion(btn.dataset.question); });
   });
 
-  // ── LIGHTBOX PAN + ZOOM ───────────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════
+  // LIGHTBOX PAN + ZOOM
+  // ═══════════════════════════════════════════════════
   const lightbox      = document.getElementById("lightbox");
   const lightboxStage = document.getElementById("lightboxStage");
   const lightboxWrap  = document.getElementById("lightboxWrap");
@@ -2086,178 +2801,104 @@ ARCHIVAGE
   const lbReset       = document.getElementById("lbReset");
   const lbZoomLabel   = document.getElementById("lbZoomLabel");
 
-  let scale = 1, tx = 0, ty = 0;
-  let dragging = false, startX = 0, startY = 0, startTx = 0, startTy = 0;
-  const MIN_SCALE = 0.5, MAX_SCALE = 8;
+  let scale=1, tx=0, ty=0, dragging=false, startX=0, startY=0, startTx=0, startTy=0;
+  const MIN_SCALE=0.3, MAX_SCALE=8;
 
   function applyTransform() {
-    lightboxWrap.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-    lbZoomLabel.textContent = Math.round(scale * 100) + "%";
+    lightboxWrap.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
+    lbZoomLabel.textContent = Math.round(scale*100)+"%";
   }
 
   function resetView() {
-    const stage = lightboxStage.getBoundingClientRect();
-    const media = lightboxMedia.firstElementChild;
+    const stage=lightboxStage.getBoundingClientRect();
+    const media=lightboxMedia.firstElementChild;
     if (!media) return;
-    const mw = media.naturalWidth  || media.offsetWidth  || 800;
-    const mh = media.naturalHeight || media.offsetHeight || 500;
-    const sw = stage.width  || window.innerWidth;
-    const sh = stage.height || window.innerHeight * 0.7;
-    scale = Math.min(sw / mw, sh / mh, 1);
-    tx = (sw - mw * scale) / 2;
-    ty = (sh - mh * scale) / 2;
-    lightboxWrap.style.transformOrigin = "0 0";
+    const mw=media.naturalWidth||media.offsetWidth||800;
+    const mh=media.naturalHeight||media.offsetHeight||500;
+    const sw=stage.width||window.innerWidth;
+    const sh=stage.height||window.innerHeight*0.7;
+    scale=Math.min(sw/mw,sh/mh,1);
+    tx=(sw-mw*scale)/2; ty=(sh-mh*scale)/2;
+    lightboxWrap.style.transformOrigin="0 0";
     applyTransform();
   }
 
-  function zoomBy(factor, cx, cy) {
-    const stage = lightboxStage.getBoundingClientRect();
-    const pivotX = (cx !== undefined ? cx - stage.left : stage.width  / 2);
-    const pivotY = (cy !== undefined ? cy - stage.top  : stage.height / 2);
-    const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale * factor));
-    tx = pivotX - (pivotX - tx) * (newScale / scale);
-    ty = pivotY - (pivotY - ty) * (newScale / scale);
-    scale = newScale;
-    applyTransform();
+  function zoomBy(factor,cx,cy) {
+    const stage=lightboxStage.getBoundingClientRect();
+    const px=(cx!==undefined?cx-stage.left:stage.width/2);
+    const py=(cy!==undefined?cy-stage.top:stage.height/2);
+    const ns=Math.min(MAX_SCALE,Math.max(MIN_SCALE,scale*factor));
+    tx=px-(px-tx)*(ns/scale); ty=py-(py-ty)*(ns/scale);
+    scale=ns; applyTransform();
   }
 
-  // Molette
-  lightboxStage.addEventListener("wheel", e => {
-    e.preventDefault();
-    const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
-    zoomBy(factor, e.clientX, e.clientY);
-  }, { passive: false });
+  lightboxStage.addEventListener("wheel",e=>{e.preventDefault();zoomBy(e.deltaY<0?1.15:1/1.15,e.clientX,e.clientY);},{passive:false});
+  lbZoomIn.addEventListener("click",()=>zoomBy(1.4));
+  lbZoomOut.addEventListener("click",()=>zoomBy(1/1.4));
+  lbReset.addEventListener("click",resetView);
 
-  // Boutons zoom
-  lbZoomIn.addEventListener("click",  () => zoomBy(1.4));
-  lbZoomOut.addEventListener("click", () => zoomBy(1 / 1.4));
-  lbReset.addEventListener("click",   resetView);
-
-  // Drag souris
-  lightboxStage.addEventListener("mousedown", e => {
-    if (e.button !== 0) return;
-    dragging = true;
-    startX = e.clientX; startY = e.clientY;
-    startTx = tx; startTy = ty;
+  lightboxStage.addEventListener("mousedown",e=>{
+    if(e.button!==0)return;
+    dragging=true; startX=e.clientX; startY=e.clientY; startTx=tx; startTy=ty;
     lightboxStage.classList.add("dragging");
   });
+  window.addEventListener("mousemove",e=>{if(!dragging)return;tx=startTx+(e.clientX-startX);ty=startTy+(e.clientY-startY);applyTransform();});
+  window.addEventListener("mouseup",()=>{dragging=false;lightboxStage.classList.remove("dragging");});
 
-  window.addEventListener("mousemove", e => {
-    if (!dragging) return;
-    tx = startTx + (e.clientX - startX);
-    ty = startTy + (e.clientY - startY);
-    applyTransform();
-  });
-
-  window.addEventListener("mouseup", () => {
-    dragging = false;
-    lightboxStage.classList.remove("dragging");
-  });
-
-  // Touch (pinch zoom + pan)
-  let lastDist = 0, lastTouchX = 0, lastTouchY = 0;
-
-  lightboxStage.addEventListener("touchstart", e => {
-    if (e.touches.length === 2) {
-      lastDist = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-    } else if (e.touches.length === 1) {
-      lastTouchX = e.touches[0].clientX;
-      lastTouchY = e.touches[0].clientY;
-    }
-  }, { passive: true });
-
-  lightboxStage.addEventListener("touchmove", e => {
+  let lastDist=0,lastTX=0,lastTY=0;
+  lightboxStage.addEventListener("touchstart",e=>{
+    if(e.touches.length===2){lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}
+    else if(e.touches.length===1){lastTX=e.touches[0].clientX;lastTY=e.touches[0].clientY;}
+  },{passive:true});
+  lightboxStage.addEventListener("touchmove",e=>{
     e.preventDefault();
-    if (e.touches.length === 2) {
-      const dist = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-      const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-      const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-      if (lastDist > 0) zoomBy(dist / lastDist, cx, cy);
-      lastDist = dist;
-    } else if (e.touches.length === 1) {
-      tx += e.touches[0].clientX - lastTouchX;
-      ty += e.touches[0].clientY - lastTouchY;
-      lastTouchX = e.touches[0].clientX;
-      lastTouchY = e.touches[0].clientY;
-      applyTransform();
+    if(e.touches.length===2){
+      const dist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+      const cx=(e.touches[0].clientX+e.touches[1].clientX)/2;
+      const cy=(e.touches[0].clientY+e.touches[1].clientY)/2;
+      if(lastDist>0)zoomBy(dist/lastDist,cx,cy); lastDist=dist;
+    } else if(e.touches.length===1){
+      tx+=e.touches[0].clientX-lastTX; ty+=e.touches[0].clientY-lastTY;
+      lastTX=e.touches[0].clientX; lastTY=e.touches[0].clientY; applyTransform();
     }
-  }, { passive: false });
-
-  lightboxStage.addEventListener("touchend", () => { lastDist = 0; });
-
-  // Double-clic pour reset
-  lightboxStage.addEventListener("dblclick", resetView);
+  },{passive:false});
+  lightboxStage.addEventListener("touchend",()=>{lastDist=0;});
+  lightboxStage.addEventListener("dblclick",resetView);
 
   function openLightbox(card) {
     const img   = card.querySelector(".plan-visual img");
     const ph    = card.querySelector(".plan-placeholder");
     const title = card.querySelector(".plan-title").textContent;
     const text  = card.querySelector(".plan-comment").textContent;
-
     lightboxTitle.textContent = title;
     lightboxCap.textContent   = text;
-
-    // Réinitialise la position avant d'ouvrir
-    scale = 1; tx = 0; ty = 0;
-    lightboxWrap.style.transform = "";
+    scale=1; tx=0; ty=0; lightboxWrap.style.transform="";
 
     if (img) {
-      const i = new Image();
-      i.className = "lightbox-img";
-      i.src = img.src;
-      i.alt = title;
-      lightboxMedia.innerHTML = "";
-      lightboxMedia.appendChild(i);
-      // Ouvre d'abord, puis centre une fois que la scène a ses dimensions
-      lightbox.classList.add("open");
-      document.body.style.overflow = "hidden";
-      if (i.complete) {
-        requestAnimationFrame(() => requestAnimationFrame(resetView));
-      } else {
-        i.onload = () => requestAnimationFrame(() => requestAnimationFrame(resetView));
-      }
+      const i=new Image(); i.className="lightbox-img"; i.src=img.src; i.alt=title;
+      lightboxMedia.innerHTML=""; lightboxMedia.appendChild(i);
+      lightbox.classList.add("open"); document.body.style.overflow="hidden";
+      const dr=()=>requestAnimationFrame(()=>requestAnimationFrame(resetView));
+      i.complete?dr():(i.onload=dr);
     } else if (ph) {
-      const icon  = ph.querySelector(".plan-placeholder-icon").textContent;
-      const label = ph.querySelector(".plan-placeholder-label").textContent;
-      lightboxMedia.innerHTML = `
-        <div class="lightbox-placeholder-lb">
-          <div style="font-size:4rem;opacity:0.4;">${icon}</div>
-          <div style="font-size:0.85rem;text-transform:uppercase;letter-spacing:0.08em;font-weight:500;">${label}</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.25);margin-top:4px;">Remplacez le placeholder par une vraie image</div>
-        </div>`;
-      lightbox.classList.add("open");
-      document.body.style.overflow = "hidden";
-      requestAnimationFrame(() => requestAnimationFrame(resetView));
+      const label=ph.querySelector(".plan-placeholder-label").textContent;
+      lightboxMedia.innerHTML=`<div class="lightbox-placeholder-lb"><div class="lb-ph-box"></div><div class="lb-ph-label">${label}</div></div>`;
+      lightbox.classList.add("open"); document.body.style.overflow="hidden";
+      requestAnimationFrame(()=>requestAnimationFrame(resetView));
     }
   }
 
-  function closeLightbox() {
-    lightbox.classList.remove("open");
-    document.body.style.overflow = "";
-  }
+  function closeLightbox() { lightbox.classList.remove("open"); document.body.style.overflow=""; }
 
-  document.querySelectorAll(".plan-visual").forEach(visual => {
-    visual.addEventListener("click", () => openLightbox(visual.closest(".plan-card")));
-  });
-
-  lightboxClose.addEventListener("click", closeLightbox);
-
-  lightbox.addEventListener("click", e => {
-    if (e.target === lightbox) closeLightbox();
-  });
-
-  document.addEventListener("keydown", e => {
-    if (!lightbox.classList.contains("open")) return;
-    if (e.key === "Escape") closeLightbox();
-    if (e.key === "+" || e.key === "=") zoomBy(1.3);
-    if (e.key === "-") zoomBy(1 / 1.3);
-    if (e.key === "0") resetView();
+  document.querySelectorAll(".plan-visual").forEach(v=>{v.addEventListener("click",()=>openLightbox(v.closest(".plan-card")));});
+  lightboxClose.addEventListener("click",closeLightbox);
+  lightbox.addEventListener("click",e=>{if(e.target===lightbox)closeLightbox();});
+  document.addEventListener("keydown",e=>{
+    if(!lightbox.classList.contains("open"))return;
+    if(e.key==="Escape")closeLightbox();
+    if(e.key==="+"||e.key==="=")zoomBy(1.3);
+    if(e.key==="-")zoomBy(1/1.3);
+    if(e.key==="0")resetView();
   });
 
 </script>
