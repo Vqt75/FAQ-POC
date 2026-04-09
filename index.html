@@ -2437,8 +2437,8 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
   // ═══════════════════════════════════════════════════
   // FAQ — CONFIG IA (optionnelle)
   // ═══════════════════════════════════════════════════
-  const ENABLE_GEMINI  = false;
-  const GEMINI_API_KEY = "COLLEZ-VOTRE-CLÉ";
+  const ENABLE_GEMINI  = true;
+  const GEMINI_API_KEY = "AIzaSyBSchoBWh6sH8m8rxGnVjsHz_DQn-gt2uU";
 
   const PROJECT_CONTEXT = `
 Tu es l'assistant d'information du projet de déménagement d'entreprise XYZ.
@@ -3076,7 +3076,7 @@ ARCHIVAGE
 
     {
       id: "affaires-personnelles-detail",
-      category: "logistique", priority: 8,
+      category: "logistique", priority: 10,
       title: "Plantes, photos, repose-pieds et objets personnels — que faire ?",
       status: "confirmed", statusLabel: "Réponse confirmée",
       shortAnswer: "Chaque type d'objet personnel a une solution prévue — rien ne sera perdu ou abandonné faute d'organisation.",
@@ -3599,12 +3599,12 @@ ARCHIVAGE
 
     // question composite : si 3+ catégories différentes scorent fort,
     // la question touche plusieurs sujets — on laisse à Gemini
-    const strongCandidates = scored.filter(s => s.score >= 10);
+    const strongCandidates = scored.filter(s => s.score >= 20);
     const distinctCategories = new Set(strongCandidates.map(s => s.entry.category));
     if (distinctCategories.size >= 3) return null;
 
     // gap de confiance insuffisant entre deux catégories différentes
-    if (second && second.score >= 10) {
+    if (second && second.score >= 18) {
       const gap = best.score - second.score;
       if (gap < 5 && best.entry.category !== second.entry.category) {
         if ((second.entry.priority || 0) > (best.entry.priority || 0)) return second.entry;
