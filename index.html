@@ -3097,7 +3097,7 @@ Les salles sont réservables via l'outil de booking interne. Une plage de 15 min
       intentSignals: ["salles","nombre","capacite","equipement","visio","places"],
       negativeSignals: ["parking","restauration","badge","teletravail"],
       emotionSignals: []
-    }
+    },
 
     {
       id: "affaires-personnelles-detail",
@@ -3436,7 +3436,7 @@ Le nouveau site est conforme aux normes PMR, mais au-delà de la conformité ré
       intentSignals: ["handicap","sante","douleur","amenagement","ergonomie"],
       negativeSignals: ["parking","restauration","it","velo"],
       emotionSignals: ["inquiet","vulnerabilite","discret","peur"]
-    }
+    },
 
 
     {
@@ -3648,17 +3648,13 @@ Parmi les entreprises voisines :\n— Microsoft France (siège, à 300 m)\n— C
     const second = scored[1];
 
     // seuil minimum
-    if (!best || best.score < 6) return null;
+    if (!best || best.score < 12) return null;
 
     // question composite : si 3+ catégories différentes scorent fort,
     // la question touche plusieurs sujets — on laisse à Gemini
     const strongCandidates = scored.filter(s => s.score >= 10);
     const distinctCategories = new Set(strongCandidates.map(s => s.entry.category));
-    if (second && Math.abs(best.score - second.score) <= 3) {
-  if ((second.entry.priority || 0) > (best.entry.priority || 0)) {
-    return second.entry;
-  }
-}
+    if (distinctCategories.size >= 3) return null;
 
     // gap de confiance insuffisant entre deux catégories différentes
     if (second && second.score >= 10) {
